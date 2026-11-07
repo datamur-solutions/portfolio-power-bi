@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DataMur Solutions · Portfólio de BI</title>
+<meta name="description" content="Portfólio de Murillo Jesus (DataMur Solutions): painéis Power BI de funil comercial, contact center e finanças, e a Central de Campanhas.">
+<meta property="og:title" content="DataMur Solutions · Portfólio de BI">
+<meta property="og:description" content="Painéis Power BI de funil comercial, contact center e finanças, com dados fictícios e arquivos para download.">
+<meta property="og:image" content="assets/banner.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314161C'/%3E%3Cpath d='M18 16h14c10 0 16 6.5 16 16s-6 16-16 16H18z' fill='none' stroke='%23F4F1EA' stroke-width='6'/%3E%3Ccircle cx='47' cy='17' r='5' fill='%23E8743B'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F4F1EA;
+    --paper-2: #EBE6DB;
+    --card: #FFFFFF;
+    --ink: #14161C;
+    --ink-2: #3A3D46;
+    --muted: #6B6E77;
+    --line: #DDD7CA;
+    --accent: #E8743B;
+    --accent-ink: #B4501C;
+    --night: #14161C;
+    --radius: 18px;
+    --shadow: 0 1px 2px rgba(20, 22, 28, .06), 0 12px 32px -12px rgba(20, 22, 28, .18);
+    --max: 1180px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font: 400 17px/1.6 Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+  .serif { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; letter-spacing: -.01em; }
+  .eyebrow { font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--accent-ink); }
+
+  /* ---------- navegação ---------- */
+  header.nav {
+    position: sticky; top: 0; z-index: 20;
+    background: color-mix(in srgb, var(--paper) 86%, transparent);
+    backdrop-filter: saturate(1.4) blur(10px);
+    border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+  }
+  .nav .wrap { display: flex; align-items: center; gap: 28px; height: 68px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 700; font-size: 18px; }
+  .brand-mark { width: 30px; height: 30px; border-radius: 8px; background: var(--ink); position: relative; }
+  .brand-mark::before { content: "D"; position: absolute; inset: 0; display: grid; place-items: center; color: var(--paper); font: 400 21px/1 "Instrument Serif", serif; }
+  .brand-mark::after { content: ""; position: absolute; top: -3px; right: -3px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); border: 2px solid var(--paper); }
+  .brand small { font-weight: 500; color: var(--muted); }
+  .nav nav { display: flex; gap: 22px; margin-left: auto; }
+  .nav nav a { text-decoration: none; font-size: 15px; color: var(--ink-2); }
+  .nav nav a:hover { color: var(--ink); }
+
+  /* ---------- botões ---------- */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px; justify-content: center;
+    padding: 12px 20px; border-radius: 999px; font: 600 15px/1 Inter, sans-serif;
+    text-decoration: none; border: 1px solid var(--ink); cursor: pointer; transition: transform .15s ease, background .15s;
+    background: transparent; color: var(--ink);
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn.primary { background: var(--ink); color: var(--paper); }
+  .btn.accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn.small { padding: 9px 14px; font-size: 14px; }
+  .btn svg { width: 16px; height: 16px; flex: none; }
+
+  /* ---------- hero ---------- */
+  .hero { padding: 84px 0 56px; }
+  .hero .wrap:first-child { display: grid; grid-template-columns: 1.05fr .95fr; gap: 56px; align-items: center; }
+  .hero h1 { font-size: clamp(46px, 6.4vw, 84px); line-height: .98; margin: 18px 0 22px; }
+  .hero h1 em { color: var(--accent-ink); }
+  .hero p.lead { font-size: 19px; color: var(--ink-2); max-width: 540px; margin: 0 0 30px; }
+  .hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+  .stack { position: relative; aspect-ratio: 1.1 / 1; }
+  .stack img { position: absolute; width: 78%; border-radius: 14px; box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,.05); }
+  .stack img:nth-child(1) { top: 0; left: 0; transform: rotate(-3deg); }
+  .stack img:nth-child(2) { top: 26%; right: 0; transform: rotate(2.5deg); }
+  .stack img:nth-child(3) { bottom: 0; left: 8%; transform: rotate(-1deg); }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-top: 64px; }
+  .stats div { padding: 22px 0; }
+  .stats div + div { border-left: 1px solid var(--line); padding-left: 24px; }
+  .stats b { display: block; font: 400 44px/1 "Instrument Serif", serif; }
+  .stats span { color: var(--muted); font-size: 14px; }
+
+  /* ---------- seções ---------- */
+  section { padding: 88px 0; }
+  .head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 36px; flex-wrap: wrap; }
+  .head h2 { font-size: clamp(38px, 4.6vw, 58px); line-height: 1; margin: 10px 0 0; }
+  .head p { margin: 0; color: var(--muted); max-width: 420px; }
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 26px; }
+  .chip { border: 1px solid var(--line); background: transparent; border-radius: 999px; padding: 8px 15px; font: 500 14px Inter, sans-serif; color: var(--ink-2); cursor: pointer; }
+  .chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+  /* ---------- cartões de projeto ---------- */
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 26px; }
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; border: 1px solid rgba(0,0,0,.04); }
+  .card.hide { display: none; }
+  .card .cover { aspect-ratio: 2 / 1; background: var(--paper-2); overflow: hidden; border-bottom: 1px solid var(--line); }
+  .card .cover img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+  .card:hover .cover img { transform: scale(1.025); }
+  .card .body { padding: 26px 28px 28px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+  .card h3 { font: 600 24px/1.2 Inter, sans-serif; margin: 0; letter-spacing: -.01em; }
+  .card p { margin: 0; color: var(--ink-2); }
+  .meta { display: flex; gap: 18px; flex-wrap: wrap; font-size: 14px; color: var(--muted); }
+  .meta b { color: var(--ink); font-weight: 600; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tags span { font-size: 12.5px; font-weight: 500; padding: 4px 10px; border-radius: 999px; background: var(--paper); color: var(--ink-2); }
+  .card .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: auto; padding-top: 8px; }
+
+  /* destaque: central de campanhas */
+  .feature { display: grid; grid-template-columns: 1fr 1.15fr; background: var(--night); color: var(--paper); border-radius: 24px; overflow: hidden; box-shadow: var(--shadow); }
+  .feature .txt { padding: 52px 48px; display: flex; flex-direction: column; gap: 18px; }
+  .feature .eyebrow { color: #F2A27A; }
+  .feature h3 { font: 400 50px/1 "Instrument Serif", serif; margin: 0; }
+  .feature p { color: #C9C6BE; margin: 0; }
+  .feature ul { margin: 0; padding-left: 18px; color: #DAD6CD; display: grid; gap: 6px; }
+  .feature .tags span { background: #23262F; color: #DAD6CD; }
+  .feature .shots { position: relative; background: #1D2029; min-height: 420px; }
+  .feature .shots img { position: absolute; width: 82%; border-radius: 12px; box-shadow: 0 24px 48px -16px rgba(0,0,0,.6); }
+  .feature .shots img:first-child { top: 44px; right: -6%; }
+  .feature .shots img:last-child { bottom: 36px; left: 8%; }
+  .feature .btn { border-color: var(--paper); color: var(--paper); }
+  .feature .btn.accent { border-color: var(--accent); }
+
+  /* ---------- como abrir / competências ---------- */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; counter-reset: s; }
+  .steps div { background: var(--card); border-radius: var(--radius); padding: 28px; border: 1px solid rgba(0,0,0,.04); }
+  .steps div::before { counter-increment: s; content: counter(s, decimal-leading-zero); font: 400 40px/1 "Instrument Serif", serif; color: var(--accent-ink); display: block; margin-bottom: 14px; }
+  .steps h4, .skills h4 { margin: 0 0 6px; font-size: 18px; }
+  .steps p, .skills p { margin: 0; color: var(--ink-2); font-size: 15.5px; }
+  .skills { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); }
+  .skills div { padding: 28px 28px 28px 0; border-bottom: 1px solid var(--line); }
+  .skills div:not(:nth-child(3n+1)) { padding-left: 28px; border-left: 1px solid var(--line); }
+
+  /* ---------- contato ---------- */
+  .contact { background: var(--night); color: var(--paper); }
+  .contact .wrap { display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: end; }
+  .contact h2 { font: 400 clamp(44px, 6vw, 76px)/1 "Instrument Serif", serif; margin: 12px 0 0; }
+  .contact h2 em { color: #F2A27A; }
+  .contact .eyebrow { color: #F2A27A; }
+  .contact .links { display: grid; gap: 12px; }
+  .contact .links a { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; border-bottom: 1px solid #2C2F38; text-decoration: none; font-size: 18px; }
+  .contact .links a:hover { color: #F2A27A; }
+  footer { background: var(--night); color: #8C8F98; font-size: 14px; padding: 28px 0 40px; border-top: 1px solid #2C2F38; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  /* ---------- janela de detalhes ---------- */
+  dialog { border: none; border-radius: 22px; padding: 0; max-width: 860px; width: calc(100% - 32px); box-shadow: 0 40px 80px -20px rgba(0,0,0,.45); color: var(--ink); background: var(--card); }
+  dialog::backdrop { background: rgba(20, 22, 28, .55); backdrop-filter: blur(3px); }
+  dialog .top { position: relative; }
+  dialog .top img { width: 100%; aspect-ratio: 2 / 1; object-fit: cover; }
+  dialog .close { position: absolute; top: 14px; right: 14px; width: 40px; height: 40px; border-radius: 50%; border: none; background: rgba(255,255,255,.92); cursor: pointer; font-size: 20px; }
+  dialog .in { padding: 30px 36px 36px; }
+  dialog h3 { font: 400 40px/1.05 "Instrument Serif", serif; margin: 8px 0 12px; }
+  dialog table { width: 100%; border-collapse: collapse; font-size: 15px; margin: 18px 0 8px; }
+  dialog th, dialog td { text-align: left; vertical-align: top; padding: 11px 12px 11px 0; border-bottom: 1px solid var(--line); }
+  dialog th { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  dialog td:first-child { font-weight: 600; white-space: nowrap; }
+  dialog h4 { margin: 24px 0 8px; font-size: 17px; }
+  dialog ul { margin: 0; padding-left: 20px; color: var(--ink-2); display: grid; gap: 6px; }
+  dialog .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 26px; }
+
+  @media (max-width: 900px) {
+    .hero .wrap:first-child, .feature, .contact .wrap { grid-template-columns: 1fr; }
+    .stack { max-width: 520px; }
+    .grid, .steps, .skills { grid-template-columns: 1fr; }
+    .skills div, .skills div:not(:nth-child(3n+1)) { padding: 22px 0; border-left: none; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .stats div:nth-child(3) { border-left: none; padding-left: 0; }
+    .nav nav { display: none; }
+    .nav .btn { margin-left: auto; white-space: nowrap; }
+    .feature .txt { padding: 36px 26px; }
+    .feature .shots { min-height: 300px; }
+    section { padding: 64px 0; }
+    dialog .in { padding: 24px 22px 28px; }
+    dialog td:first-child { white-space: normal; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#topo"><span class="brand-mark" aria-hidden="true"></span>DataMur <small>Solutions</small></a>
+    <nav aria-label="Seções">
+      <a href="#projetos">Projetos</a>
+      <a href="#central">Central de Campanhas</a>
+      <a href="#como-abrir">Como abrir</a>
+      <a href="#competencias">Competências</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <a class="btn small primary" href="https://github.com/datamur-solutions/portfolio-power-bi/archive/refs/heads/main.zip">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 19h16"/></svg>Baixar tudo
+    </a>
+  </div>
+</header>
+
+<main id="topo">
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">Business Intelligence · Power BI · Inteligência comercial</span>
+        <h1 class="serif">Painéis que viram <em>decisão</em>, não só relatório.</h1>
+        <p class="lead">Sou <b>Murillo Jesus</b>, analista de Planejamento e Inteligência Comercial e fundador da DataMur Solutions.
+          Construo painéis de funil de conversão, contact center e finanças e ferramentas de gestão que mostram onde está o gap e qual alavanca move o resultado.</p>
+        <div class="ctas">
+          <a class="btn accent" href="#projetos">Ver projetos</a>
+          <a class="btn" href="https://www.linkedin.com/in/murillo-mateus-832202230/" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="btn" href="mailto:murillomateus@gmail.com">Fale comigo</a>
+        </div>
+      </div>
+      <div class="stack" aria-hidden="true">
+        <img src="assets/capa-financeiro-executivo.png" alt="">
+        <img src="assets/capa-gestao-a-vista.png" alt="">
+        <img src="assets/capa-5w2h-campus.png" alt="">
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="stats">
+        <div><b>5</b><span>projetos publicados</span></div>
+        <div><b>845</b><span>medidas DAX</span></div>
+        <div><b>26</b><span>páginas de relatório</span></div>
+        <div><b>100%</b><span>dados e marcas fictícios</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROJETOS ================= -->
+  <section id="projetos" style="padding-top:40px">
+    <div class="wrap">
+      <div class="head">
+        <div><span class="eyebrow">Projetos Power BI</span><h2 class="serif">Do funil ao DRE.</h2></div>
+        <p>Cada projeto está em formato PBIP, com os dados fictícios embutidos no modelo: baixe, abra no Power BI Desktop e clique em Atualizar.</p>
+      </div>
+      <div class="filters" role="group" aria-label="Filtrar projetos">
+        <button class="chip" aria-pressed="true" data-f="todos">Todos</button>
+        <button class="chip" aria-pressed="false" data-f="comercial">Comercial</button>
+        <button class="chip" aria-pressed="false" data-f="contact">Contact center</button>
+        <button class="chip" aria-pressed="false" data-f="financas">Finanças</button>
+      </div>
+
+      <div class="grid">
+        <article class="card" data-cat="comercial contact">
+          <div class="cover"><img src="assets/capa-gestao-a-vista.png" alt="Capa do projeto Gestão à Vista · Contact Center" loading="lazy"></div>
+          <div class="body">
+            <span class="eyebrow">01 · Contact center</span>
+            <h3>Gestão à Vista · Contact Center</h3>
+            <p>Funil de conversão de inscritos em matrícula por parceira de atendimento, cohort D0–D15+, pace de meta, produtividade e custo por matrícula.</p>
+            <div class="meta"><span><b>6</b> páginas</span><span><b>129</b> medidas</span><span><b>37 mil</b> interações</span></div>
+            <div class="tags"><span>Funil</span><span>Cohort</span><span>Pace de meta</span><span>CPMAT</span><span>Calculation group</span></div>
+            <div class="actions">
+              <button class="btn small primary" data-open="d1">Ver análises</button>
+              <a class="btn small" href="downloads/gestao-a-vista-contact-center.zip" download>Baixar PBIP · 2,1 MB</a>
+              <a class="btn small" href="https://github.com/datamur-solutions/portfolio-power-bi/tree/main/projetos/01-gestao-a-vista-contact-center" target="_blank" rel="noopener">Código</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-cat="comercial">
+          <div class="cover"><img src="assets/capa-5w2h-campus.png" alt="Capa do projeto 5W2H Campus" loading="lazy"></div>
+          <div class="body">
+            <span class="eyebrow">02 · Gestão comercial</span>
+            <h3>5W2H Campus · Plano de Ação</h3>
+            <p>Ações comerciais dos consultores de campus: planejado × executado, custo, inscritos e matrículas gerados, cobertura da equipe e mapa por estado.</p>
+            <div class="meta"><span><b>11</b> páginas</span><span><b>348</b> medidas</span><span><b>1.054</b> ações</span></div>
+            <div class="tags"><span>Power Query avançado</span><span>RLS</span><span>Deneb</span><span>Mapa</span></div>
+            <div class="actions">
+              <button class="btn small primary" data-open="d2">Ver análises</button>
+              <a class="btn small" href="downloads/5w2h-campus-plano-de-acao.zip" download>Baixar PBIP · 1,0 MB</a>
+              <a class="btn small" href="https://github.com/datamur-solutions/portfolio-power-bi/tree/main/projetos/02-5w2h-campus" target="_blank" rel="noopener">Código</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-cat="comercial contact">
+          <div class="cover"><img src="assets/capa-inside-sales.png" alt="Capa do projeto Inside Sales" loading="lazy"></div>
+          <div class="body">
+            <span class="eyebrow">03 · Inside sales</span>
+            <h3>Inside Sales · Funil e Produtividade</h3>
+            <p>Funil do time de inside sales, produtividade por consultor, desempenho por curso e leitura automática das maiores oportunidades.</p>
+            <div class="meta"><span><b>3</b> páginas</span><span><b>151</b> medidas</span><span><b>24 mil</b> registros</span></div>
+            <div class="tags"><span>Funil</span><span>Benchmarks</span><span>Simulador de TMA</span><span>Insights em DAX</span></div>
+            <div class="actions">
+              <button class="btn small primary" data-open="d3">Ver análises</button>
+              <a class="btn small" href="downloads/inside-sales-funil-produtividade.zip" download>Baixar PBIP · 1,1 MB</a>
+              <a class="btn small" href="https://github.com/datamur-solutions/portfolio-power-bi/tree/main/projetos/03-inside-sales" target="_blank" rel="noopener">Código</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-cat="financas">
+          <div class="cover"><img src="assets/capa-financeiro-executivo.png" alt="Capa do projeto Financeiro Executivo" loading="lazy"></div>
+          <div class="body">
+            <span class="eyebrow">04 · Finanças</span>
+            <h3>Financeiro Executivo</h3>
+            <p>DRE gerencial com orçado e forecast, caixa e liquidez, capital de giro, dívida, CAPEX e pessoas, em seis páginas de leitura executiva.</p>
+            <div class="meta"><span><b>6</b> páginas</span><span><b>217</b> medidas</span><span><b>20</b> tabelas</span></div>
+            <div class="tags"><span>DRE</span><span>Orçado × forecast</span><span>DSO · DPO</span><span>Dívida/EBITDA</span></div>
+            <div class="actions">
+              <button class="btn small primary" data-open="d4">Ver análises</button>
+              <a class="btn small" href="downloads/financeiro-executivo-valora.zip" download>Baixar PBIP · 0,9 MB</a>
+              <a class="btn small" href="https://github.com/datamur-solutions/portfolio-power-bi/tree/main/projetos/04-financeiro-executivo" target="_blank" rel="noopener">Código</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CENTRAL DE CAMPANHAS ================= -->
+  <section id="central" style="padding-top:20px">
+    <div class="wrap">
+      <div class="feature">
+        <div class="txt">
+          <span class="eyebrow">05 · Aplicação web</span>
+          <h3>Central de Campanhas</h3>
+          <p>Plataforma de governança de campanhas comerciais de contact center, do cadastro ao encerramento, com apuração automática de resultados.</p>
+          <ul>
+            <li>Dois portais no mesmo backend: o interno (planejamento e comercial) e o das parceiras de atendimento.</li>
+            <li>Fluxo com dono em cada etapa: cadastro, validação, liberação, go-live, execução e encerramento.</li>
+            <li>Robô que apura funil e matrículas por campanha × parceira de hora em hora.</li>
+          </ul>
+          <div class="tags"><span>Python</span><span>FastAPI</span><span>PostgreSQL</span><span>SQL analítico</span><span>Docker</span><span>JavaScript</span></div>
+          <div class="actions" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
+            <a class="btn accent" href="https://datamur-solutions.github.io/central-campanhas/" target="_blank" rel="noopener">Abrir a demonstração</a>
+            <a class="btn" href="https://github.com/datamur-solutions/central-campanhas" target="_blank" rel="noopener">Código no GitHub</a>
+          </div>
+        </div>
+        <div class="shots" aria-hidden="true">
+          <img src="assets/central-portal-interno.png" alt="">
+          <img src="assets/central-portal-eps.png" alt="">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= COMO ABRIR ================= -->
+  <section id="como-abrir">
+    <div class="wrap">
+      <div class="head">
+        <div><span class="eyebrow">Como abrir</span><h2 class="serif">Três passos, nenhum banco de dados.</h2></div>
+        <p>Os dados fictícios estão dentro do próprio modelo. Não há arquivo externo, conexão nem credencial a configurar.</p>
+      </div>
+      <div class="steps">
+        <div><h4>Baixe o projeto</h4><p>Use o botão “Baixar PBIP” do projeto e extraia o .zip numa pasta do seu computador.</p></div>
+        <div><h4>Abra o arquivo .pbip</h4><p>Dê dois cliques no arquivo .pbip. É preciso o Power BI Desktop em versão recente, com suporte a projetos PBIP.</p></div>
+        <div><h4>Clique em Atualizar</h4><p>O modelo carrega os dados embutidos e todas as páginas ficam prontas para explorar.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= COMPETÊNCIAS ================= -->
+  <section id="competencias" style="padding-top:20px">
+    <div class="wrap">
+      <div class="head">
+        <div><span class="eyebrow">Competências</span><h2 class="serif">O que está por trás dos painéis.</h2></div>
+      </div>
+      <div class="skills">
+        <div><h4>Modelagem dimensional</h4><p>Fatos, dimensões, calendário, relacionamentos e tabelas auxiliares desenhados para a pergunta de negócio.</p></div>
+        <div><h4>DAX avançado</h4><p>Inteligência de tempo, cohort, pace, bases comparáveis, calculation groups e textos de leitura com cor condicional.</p></div>
+        <div><h4>Power Query (M)</h4><p>Leitura resiliente de listas, normalização de tipos, grades analíticas e diagnóstico de qualidade da base.</p></div>
+        <div><h4>Indicadores comerciais</h4><p>Funil, alô, efetividade, conversão, produtividade por posição de atendimento, CPMAT e atingimento de meta.</p></div>
+        <div><h4>Indicadores financeiros</h4><p>DRE, EBITDA, orçado × forecast, DSO, DPO, ciclo financeiro, liquidez e dívida/EBITDA.</p></div>
+        <div><h4>Produto e engenharia</h4><p>Design de relatório, RLS, versionamento em PBIP/TMDL no Git e aplicações web em Python.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ================= CONTATO ================= -->
+<section class="contact" id="contato">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Contato</span>
+      <h2>Vamos conversar sobre <em>seus dados?</em></h2>
+    </div>
+    <div class="links">
+      <a href="mailto:murillomateus@gmail.com">murillomateus@gmail.com <span aria-hidden="true">↗</span></a>
+      <a href="https://www.linkedin.com/in/murillo-mateus-832202230/" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a>
+      <a href="https://github.com/datamur-solutions" target="_blank" rel="noopener">GitHub · datamur-solutions <span aria-hidden="true">↗</span></a>
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="wrap">
+    <span>© DataMur Solutions · Murillo Jesus</span>
+    <span>Todos os projetos usam marcas, pessoas e números fictícios.</span>
+  </div>
+</footer>
+
+<!-- ================= DETALHES DOS PROJETOS ================= -->
+<dialog id="d1" aria-label="Gestão à Vista · Contact Center">
+  <div class="top"><img src="assets/capa-gestao-a-vista.png" alt=""><button class="close" aria-label="Fechar">×</button></div>
+  <div class="in">
+    <span class="eyebrow">Aurora Educação · ciclo 27.1</span>
+    <h3>Gestão à Vista · Contact Center</h3>
+    <p>Uma instituição de ensino terceiriza para duas parceiras de contact center o contato com os candidatos inscritos. O painel mostra onde o funil perde conversão, qual parceira entrega mais por posição de atendimento e por real investido, e se a meta do mês fecha no ritmo atual.</p>
+    <table>
+      <tr><th>Página</th><th>O que mostra</th></tr>
+      <tr><td>Funil CC</td><td>Funil por parceira (mailing → trabalhados → atendidos → efetivos → vendas → matrículas), spin, hitrate, conversões, cohort de alô e planejado × realizado.</td></tr>
+      <tr><td>Acumulado ciclo</td><td>Vendas e matrículas acumuladas, pace real × ideal, gap e atingimento da meta.</td></tr>
+      <tr><td>Gerencial</td><td>Custo por matrícula por mês e dia, posições de atendimento, produtividade por dia útil e matrículas por semana.</td></tr>
+      <tr><td>Cohort</td><td>Safras de inscrição × dias até o contato (D0 a D15+): conversão e alô.</td></tr>
+      <tr><td>Vendas e tabulações</td><td>Vendas × planejado, conversão por contato efetivo e motivos de tabulação.</td></tr>
+      <tr><td>Glossário</td><td>Definição, fórmula e regra de negócio de cada indicador.</td></tr>
+    </table>
+    <h4>Destaques técnicos</h4>
+    <ul>
+      <li>Regras de efetividade e de trabalho diferentes por parceira, como na operação real.</li>
+      <li>Calculation group que alterna a leitura entre data de inscrição e data de matrícula.</li>
+      <li>Parâmetros de campo para abrir as análises por canal, curso, unidade, regional e gerente.</li>
+      <li>Pace com feriados e custo mensal rateado pelos dias do período.</li>
+    </ul>
+    <div class="actions">
+      <a class="btn primary" href="downloads/gestao-a-vista-contact-center.zip" download>Baixar PBIP · 2,1 MB</a>
+      <a class="btn" href="https://github.com/datamur-solutions/portfolio-power-bi/tree/main/projetos/01-gestao-a-vista-contact-center" target="_blank" rel="noopener">Ver no GitHub</a>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="d2" aria-label="5W2H Campus">
+  <div class="top"><img src="assets/capa-5w2h-campus.png" alt=""><button class="close" aria-label="Fechar">×</button></div>
+  <div class="in">
+    <span class="eyebrow">EduNova · data de referência 23/10/2026</span>
+    <h3>5W2H Campus · Plano de Ação</h3>
+    <p>Os consultores registram ações comerciais no formato 5W2H, com meta e custo, e lançam o realizado no fechamento. O painel mostra se a equipe está planejando, se as ações são executadas e fechadas, e se dão resultado.</p>
+    <table>
+      <tr><th>Página</th><th>O que mostra</th></tr>
+      <tr><td>Visão executiva</td><td>Projeção × realizado de inscritos e matrículas, custo, plano preenchido e alertas.</td></tr>
+      <tr><td>Cobertura</td><td>Consultores em ação ou sem plano; unidades × produtos sem nenhuma ação.</td></tr>
+      <tr><td>Projeção de inscritos</td><td>Pace, tendência de fechamento e simulador de ganho de ritmo.</td></tr>
+      <tr><td>Conversão e custo</td><td>Matrículas por 100 inscritos, estouro de custo, custo por inscrito e por matrícula.</td></tr>
+      <tr><td>Execução e vencidas</td><td>Status das ações por semana e unidade, e a lista de cobrança das vencidas.</td></tr>
+      <tr><td>Mapa e diagnóstico</td><td>Cobertura por estado e auditoria da qualidade da base.</td></tr>
+    </table>
+    <h4>Destaques técnicos</h4>
+    <ul>
+      <li>Power Query que lê as listas pelo nome interno das colunas e não quebra com renomeações.</li>
+      <li>Grade consultor × semana, agenda por dia útil e abertura das metas por produto e modalidade.</li>
+      <li>Segurança por linha para consultor, coordenador e gerente.</li>
+      <li>Visual Deneb (Vega-Lite) e página de diagnóstico da própria base.</li>
+    </ul>
+    <div class="actions">
+      <a class="btn primary" href="downloads/5w2h-campus-plano-de-acao.zip" download>Baixar PBIP · 1,0 MB</a>
+      <a class="btn" href="https://github.com/datamur-solutions/portfolio-power-bi/tree/main/projetos/02-5w2h-campus" target="_blank" rel="noopener">Ver no GitHub</a>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="d3" aria-label="Inside Sales">
+  <div class="top"><img src="assets/capa-inside-sales.png" alt=""><button class="close" aria-label="Fechar">×</button></div>
+  <div class="in">
+    <span class="eyebrow">EduNova · data base 23/10/2026</span>
+    <h3>Inside Sales · Funil e Produtividade</h3>
+    <p>O painel cruza a base de captação (inscrição, aprovação, pagamento e matrícula) com a de atendimento omnichannel (contatos, tabulações e tempos). Ele mostra onde o funil perde conversão e qual consultor, curso ou alavanca tem mais potencial de matrícula.</p>
+    <table>
+      <tr><th>Página</th><th>O que mostra</th></tr>
+      <tr><td>Funil Inside Sales</td><td>Vendas, pagamentos, matrículas, funil por etapa, cohort e produtividade por consultor.</td></tr>
+      <tr><td>Oportunidades</td><td>Curso com maior oportunidade, dispersão por consultor, alertas, tabulações e conversão por dia da semana.</td></tr>
+      <tr><td>Performance por curso</td><td>Mailing, atendidos, matrículas, conversões, TMA e TME por curso e consultor.</td></tr>
+    </table>
+    <h4>Destaques técnicos</h4>
+    <ul>
+      <li>Benchmarks por percentil entre consultores e potencial de matrículas por alavanca.</li>
+      <li>Simulador "e se" de redução do tempo médio de atendimento.</li>
+      <li>Textos de leitura gerados em DAX.</li>
+    </ul>
+    <div class="actions">
+      <a class="btn primary" href="downloads/inside-sales-funil-produtividade.zip" download>Baixar PBIP · 1,1 MB</a>
+      <a class="btn" href="https://github.com/datamur-solutions/portfolio-power-bi/tree/main/projetos/03-inside-sales" target="_blank" rel="noopener">Ver no GitHub</a>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="d4" aria-label="Financeiro Executivo">
+  <div class="top"><img src="assets/capa-financeiro-executivo.png" alt=""><button class="close" aria-label="Fechar">×</button></div>
+  <div class="in">
+    <span class="eyebrow">Valora Casa &amp; Tecnologia · realizado até 06/2026</span>
+    <h3>Financeiro Executivo</h3>
+    <p>A receita cresce 25% sobre o ano anterior, mas fica 5% abaixo do orçado. A margem EBITDA de 12,4% está abaixo dos 14,5% orçados, e o forecast fecha o ano em 13%. O painel mostra em quais linhas, unidades e meses está o desvio.</p>
+    <table>
+      <tr><th>Página</th><th>Pergunta que responde</th></tr>
+      <tr><td>Visão executiva</td><td>A empresa está entregando o resultado? Receita × orçado × forecast, ponte do resultado, margens e saúde financeira.</td></tr>
+      <tr><td>DRE gerencial</td><td>Onde está o desvio? DRE com orçado comparável, variação, análise vertical e OPEX por natureza e centro de custo.</td></tr>
+      <tr><td>Orçado × forecast</td><td>Vamos bater o ano? Atingimento acumulado, forecast de fechamento e gap por unidade.</td></tr>
+      <tr><td>Caixa e liquidez</td><td>O caixa sustenta a operação? Saldo realizado × projetado e fluxo por atividade.</td></tr>
+      <tr><td>Capital de giro</td><td>O ciclo financeiro está saudável? DSO, DPO, aging e concentração da carteira.</td></tr>
+      <tr><td>Dívida, CAPEX e pessoas</td><td>A estrutura cabe no resultado? Dívida/EBITDA, cobertura, CAPEX e custo de pessoal.</td></tr>
+    </table>
+    <h4>Destaques técnicos</h4>
+    <ul>
+      <li>Orçado e ano anterior comparados nos mesmos meses do realizado.</li>
+      <li>Ponte de resultado e textos de leitura com cor condicional em DAX.</li>
+      <li>Layout em grade 1920 × 1080, com navegação por abas e filtros sincronizados.</li>
+    </ul>
+    <div class="actions">
+      <a class="btn primary" href="downloads/financeiro-executivo-valora.zip" download>Baixar PBIP · 0,9 MB</a>
+      <a class="btn" href="https://github.com/datamur-solutions/portfolio-power-bi/tree/main/projetos/04-financeiro-executivo" target="_blank" rel="noopener">Ver no GitHub</a>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  // janelas de detalhes
+  document.querySelectorAll("[data-open]").forEach(b => b.addEventListener("click", () => document.getElementById(b.dataset.open).showModal()));
+  document.querySelectorAll("dialog").forEach(d => {
+    d.querySelector(".close").addEventListener("click", () => d.close());
+    d.addEventListener("click", e => { if (e.target === d) d.close(); });
+  });
+  // filtro dos projetos
+  const chips = document.querySelectorAll(".chip");
+  chips.forEach(c => c.addEventListener("click", () => {
+    chips.forEach(x => x.setAttribute("aria-pressed", x === c));
+    document.querySelectorAll(".card").forEach(card => {
+      card.classList.toggle("hide", c.dataset.f !== "todos" && !card.dataset.cat.includes(c.dataset.f));
+    });
+  }));
+</script>
+</body>
+</html>

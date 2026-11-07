@@ -4,6 +4,8 @@
 
 # Portfólio de Business Intelligence · Power BI
 
+**🌐 Site do portfólio: [datamur-solutions.github.io/portfolio-power-bi](https://datamur-solutions.github.io/portfolio-power-bi/)** · projetos, análises e downloads
+
 Sou **Murillo Jesus**, analista de Planejamento e Inteligência Comercial e fundador da **DataMur Solutions**.
 Construo painéis que acompanham o funil de conversão (de inscrito a matriculado), a operação de times
 comerciais e de contact center e a saúde financeira da empresa, sempre com foco em **decisão**: o que
@@ -61,6 +63,8 @@ CAPEX e custo de pessoal, em seis páginas de leitura executiva.
 </td>
 </tr>
 </table>
+
+> 🧭 **Também no portfólio:** [Central de Campanhas](https://github.com/datamur-solutions/central-campanhas), uma aplicação web de governança de campanhas de contact center ([demonstração](https://datamur-solutions.github.io/central-campanhas/)).
 
 > 🔜 **Em breve:** *Comercial 360 · Valora Casa & Tecnologia*, com vendas, canais, produtos e
 > vendedores, integrado à receita do Financeiro Executivo.
