@@ -1,0 +1,233 @@
+table PLANEJADO
+	lineageTag: 79ffc2d0-e218-419c-a91d-9cabc8e9703c
+
+	measure 'MAT PLANEJADO' =
+			
+			SUM('PLANEJADO'[Matricula])
+		formatString: #,0
+		lineageTag: 1acc93a7-60bc-4780-a4ef-100a3f54d871
+
+	measure 'VENDA PLANEJADO' =
+			
+			SUM('PLANEJADO'[Venda])
+		formatString: 0
+		lineageTag: a5174752-85b2-43cb-9be5-8c361847b60b
+
+	measure 'MAT ACUM PLANEJADO' =
+			
+			VAR DataInicio =
+			    DATE(2026, 10, 1)
+			
+			VAR DataDoPonto =
+			    MAX('Dim_Data2'[Date])
+			
+			RETURN
+			IF(
+			    DataDoPonto < DataInicio,
+			    BLANK(),
+			    CALCULATE(
+			        [MAT PLANEJADO],
+			        FILTER(
+			            ALL('Dim_Data2'[Date]),
+			            'Dim_Data2'[Date] >= DataInicio
+			                && 'Dim_Data2'[Date] <= DataDoPonto
+			        )
+			    )
+			)
+		formatString: #,0
+		lineageTag: 5ed5466c-994b-4296-b31f-799c01bba585
+
+	measure 'VENDA ACUM PLANEJADO' =
+			
+			VAR DataInicio =
+			    DATE(2026, 10, 1)
+			
+			VAR DataDoPonto =
+			    MAX('Dim_Data2'[Date])
+			
+			RETURN
+			IF(
+			    DataDoPonto < DataInicio,
+			    BLANK(),
+			    CALCULATE(
+			        [VENDA PLANEJADO],
+			        FILTER(
+			            ALL('Dim_Data2'[Date]),
+			            'Dim_Data2'[Date] >= DataInicio
+			                && 'Dim_Data2'[Date] <= DataDoPonto
+			        )
+			    )
+			)
+		formatString: #,0
+		lineageTag: 7bb797f5-f79f-4512-87b9-c456e8be2906
+
+	measure 'VENDAS ACUM PLANEJADO' =
+			
+			VAR DataInicio =
+			    DATE(2026, 10, 1)
+			
+			VAR DataDoPonto =
+			    MAX('Dim_Data2'[Date])
+			
+			RETURN
+			IF(
+			    DataDoPonto < DataInicio,
+			    BLANK(),
+			    CALCULATE(
+			        [VENDAS PLANEJADO],
+			        FILTER(
+			            ALL('Dim_Data2'[Date]),
+			            'Dim_Data2'[Date] >= DataInicio
+			                && 'Dim_Data2'[Date] <= DataDoPonto
+			        )
+			    )
+			)
+		formatString: #,0
+		lineageTag: 7f82d8c8-4529-4264-8727-7c22f5e90413
+
+	measure 'VENDAS PLANEJADO' =
+			
+			SUM('PLANEJADO'[Venda])
+		formatString: #,0
+		lineageTag: 903c7e75-43cd-4dcc-aeee-b30502ac5ff3
+
+	measure 'INS PLANEJADO' =
+			
+			SUM('PLANEJADO'[Mailing])
+		formatString: #,0
+		lineageTag: afcf1a0f-9c29-4ab4-b511-a03032dcfb15
+
+	measure 'INS ACUM PLANEJADO' =
+			
+			VAR DataInicio =
+			    DATE(2026, 10, 1)
+			
+			VAR DataDoPonto =
+			    MAX('Dim_Data'[Date])
+			
+			RETURN
+			IF(
+			    DataDoPonto < DataInicio,
+			    BLANK(),
+			    CALCULATE(
+			        [INS PLANEJADO],
+			        FILTER(
+			            ALL('Dim_Data'[Date]),
+			            'Dim_Data'[Date] >= DataInicio
+			                && 'Dim_Data'[Date] <= DataDoPonto
+			        )
+			    )
+			)
+		formatString: #,0
+		lineageTag: 9955f7b0-1533-465b-9852-9f7f1dea598a
+
+	measure 'CONV VENDA PLANEJADO' = CALCULATE(DIVIDE(PLANEJADO[VENDAS PLANEJADO],PLANEJADO[EFETIVO PLAN]))
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 64739004-ded8-4924-a693-d27255be90b3
+
+	measure 'EFETIVO PLAN' = CALCULATE(SUM(PLANEJADO[Efetivo]))
+		lineageTag: 1c0ab555-ed0d-4235-aef5-6dee510bb850
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SUPERCANAL
+		dataType: string
+		lineageTag: 8c13ace1-2fde-4c3b-a243-c3a80415524c
+		summarizeBy: none
+		sourceColumn: SUPERCANAL
+
+		annotation SummarizationSetBy = Automatic
+
+	column Data
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 7418e456-0b9c-4cbc-9e02-ecd543188c5e
+		summarizeBy: none
+		sourceColumn: Data
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Mailing
+		dataType: double
+		formatString: #,0
+		lineageTag: c93a5343-c4be-40fb-add1-d54a58cedb91
+		summarizeBy: sum
+		sourceColumn: Mailing
+
+		annotation SummarizationSetBy = Automatic
+
+	column Alo
+		dataType: double
+		lineageTag: 32c98b89-b2cd-44cb-9bec-9c9e2cb6407d
+		summarizeBy: sum
+		sourceColumn: Alo
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Efetivo
+		dataType: double
+		lineageTag: a71632fd-8758-42f9-b494-cde412bdc37e
+		summarizeBy: sum
+		sourceColumn: Efetivo
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Venda
+		dataType: double
+		formatString: 0
+		lineageTag: 9ea7eaa6-df55-4b76-a2e0-977c633a1962
+		summarizeBy: sum
+		sourceColumn: Venda
+
+		annotation SummarizationSetBy = Automatic
+
+	column Matricula
+		dataType: double
+		formatString: 0
+		lineageTag: 27acb654-1c77-41af-8781-c9a6da8c2844
+		summarizeBy: sum
+		sourceColumn: Matricula
+
+		annotation SummarizationSetBy = Automatic
+
+	column EPS
+		dataType: string
+		lineageTag: e0860c1c-07eb-4033-8329-269dd5fbbd93
+		summarizeBy: none
+		sourceColumn: EPS
+
+		annotation SummarizationSetBy = Automatic
+
+	column MÊS
+		dataType: string
+		lineageTag: c1294b0f-92ff-4cc0-8ece-ca5942dbc955
+		summarizeBy: none
+		sourceColumn: MÊS
+
+		annotation SummarizationSetBy = Automatic
+
+	partition PLANEJADO = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(Binary.Decompress(Binary.FromText(Text.Combine({
+				        "nZrLbhw3EEX3+YrsQwNNsvlaKrKACIgekGwjWyFRAgGKJpAlf0R+Kz+WW9WvUdKjvjU7AebhvaxmV1fV+Pbz9dnN6cnlyc/u493Lnbu4e3h8ePrDnTzu3Nnv9y8P33buy/3Tb/IvL88Pv74+3rmz61t38c/ft9/99Pr0cv/8/endn3+9fnWhC/mD7z503rXgYnYhOo8/3OnV5dnpp5Mf3NXnT59/vLk6xAXX4sR519NcUq6Y9bJrSbnexhXX8sLxPqty1azXXKsTF3k9rF04g57vXWsuNheSTQ/Lu24CLYIZYDhGsSnYd1YwdDOYBaStBg+wd70fQV4xAEzHgLjUuKkzyFvN+2BvUCwAq+uDk78sYB3AqKDljHiOvjtCMXYDCMX6Pni9Q0Lby1AJZJNbiteYhIJ",
+				        "AcnOiyzSUXPIKiVIkoTxBFqXiUhgh/kz1GKi5hID7ASLPhLV7EKmEJzpCvQFCyJPZHkLem5UQCDyfYIIQ7NleZe1h+RFKuLBlhlilqBCSToI9VgnRq2alolAUiFfChW2zPVapLRAdPaSW3L2ndHH+8fxkP6X4iu3xUdECpmwCiFYtrkQFegLAJ65WV5DlCqeAtN+8AloD1E0AyReVW0mqkAgFJN0G6/jKNO4MSLmogQSoorBpCS+JRxFTiuZewhIuk0f1UqpaYhSS/OlKoxXwuLqogH5atxVgBA+vdgoQloJ8ZoqrnlUI8rVoCugndBvAMpTYdUjKjIKk4agAqYAoyYsdNa8yAK4cQot3iAVwgxDaEUBtvQngOSC0NbMKSAEBoRUgi8IKcLn7tvuKquTp7uFNA4Rzx6BZ3q/ljnUsKBbHcoHGksQgRqtanrBgUisSj9hb1RC9ophNDc+3Tmo8Jje12tWk8UH/kg43kutYmrBwoEBfx9B++nfb5HWsTd216Wy4U2NzfaiJXMf8Xk/Onw3e8F0YW3IDFt901jSW9xprw9nKHtbzavVNO05jTbvqerhVXcWQg8Zm/JDJq9eX592b5IObhQ8sCh2/vTpIfSOrveu2VyfT3llWF11N7F1Me6PyKKNvYnWzOJGao9BOpOAo/N5pWU3snQcniVvdLE7kI1N1NRNByb+yN+dEUlPlncRhNbl3XvYmVpdlb8KJ1LP83s3iO3bv7n1wlFq7cX6Dj7X7cvXL9c35xdn2JLUOMzEbhkpiGsGgB6CxrJiazAa1IuWO/WyoJLR8kz7fYLItmMGkVBJ5HC4ZTErlm+0mpdUsqmYzmaXcmTBeTYuroLnRcDapJDrFTGpSSXRqMlvOJpUEqqRuMMmrRcHsJrOWO53VZJmwYlKrWiV104ePxZr+bmHFpJLAmfxg8vDZ/jsp7efpYCCZsMd4ktHR+DixY3XyzPA6RabMxvPoLFynVLy3JkPpcVpHepOq0OpNZt690RteicUby+RZhz8PYpCM3pBcRCdZvCGz9NmqE9Rbspwn6KhuHAeyOllmaaMOy5SZ4XXqEUwbmcZ7QxLp6zs6/x+K5qQzJuQs5O+t9XgWuep4Rn7ZQ5raAtIewAhIQe0tAghQCTL/kfRJrJe+JMqEX/JzRziSoj2PAowj7U6KDOkllTOANCjNAsiguZPhPAtISR5kxh4DB0jl3CugU6RNQJuVZFCQfgWlVO5kwkUBQafrAgTOUtTpevaq4JGwtoCs0/UcZDBFWZJxfFQgcpakfUG9E1WBsSTj+LIAmwraxLQJCGsKhyaiZRk9BZYKSo3zkshSSab/Q/Nj0MoTZdIqi1biterSnhm02tIL8pQ0MMv/AGAdysc0vNebHRqE1jj/hE9TeaH4GPq9fo7XkvF/mvsymvJTN2eJITLK2DqatOLSAhrONXeA2aKFDrzZHValmpFqU9eYDeeSj66fW9SVyK8MP/txxNJtrw7T/fZrNeDK8LMfR1rE3tm0dzH5np8YtXeb3ixmtY/TzWOc+H5wIjEh9k6Lb2LvPO1N+W6WvaWe4CMY/HT/qL3D9BZSe0eT72zauyy+idU6Upe9mfs9vJOZdDKMRg6e8l8="
+				    }), BinaryEncoding.Base64), Compression.Deflate), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    #"Vazios como Nulos" = Table.TransformColumns(#"Cabeçalhos Promovidos", List.Transform(Table.ColumnNames(#"Cabeçalhos Promovidos"), (c) => {c, (v) => if v = "" then null else v})),
+				    #"Colunas Selecionadas" = Table.SelectColumns(#"Vazios como Nulos", {"SUPERCANAL", "Data", "Mailing", "Alo", "Efetivo", "Venda", "Matricula", "EPS", "MÊS"}, MissingField.UseNull),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Colunas Selecionadas", {{"SUPERCANAL", type text}, {"Data", type date}, {"Mailing", type number}, {"Alo", type number}, {"Efetivo", type number}, {"Venda", type number}, {"Matricula", type number}, {"EPS", type text}, {"MÊS", type text}}, "en-US")
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

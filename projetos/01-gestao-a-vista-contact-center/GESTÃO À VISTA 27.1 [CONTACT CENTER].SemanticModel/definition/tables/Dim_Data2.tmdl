@@ -1,0 +1,953 @@
+table Dim_Data2
+	lineageTag: bd4e4542-b21c-4dc0-82f0-55038c8d21fe
+
+	measure 'DIAS ÚTEIS TRABALHADOS' =
+			
+			VAR DataInicio =
+			    [DATA INÍCIO SELEÇÃO]
+			
+			VAR DataFim =
+			    [DATA FIM SELEÇÃO]
+			
+			VAR DataBase =
+			    [DATA BASE REALIZADO]
+			
+			VAR DataCorte =
+			    MIN(
+			        DataFim,
+			        DataBase
+			    )
+			
+			RETURN
+			IF(
+			    ISBLANK(DataInicio)
+			        || ISBLANK(DataFim)
+			        || ISBLANK(DataBase)
+			        || DataCorte < DataInicio,
+			    0,
+			    NETWORKDAYS(
+			        DataInicio,
+			        DataCorte,
+			        1
+			    )
+			)
+		formatString: 0
+		lineageTag: 009e7257-aea8-41be-9a48-4887d69f35cc
+
+	measure 'PACE REALIZADO' =
+			
+			DIVIDE(
+			    [MATRICULADOSCC],
+			    [DIAS ÚTEIS TRABALHADOS]
+			)
+		formatString: #,0.0
+		lineageTag: 98a4dcc2-e6d9-46ba-858f-b7cd6745338b
+
+	measure 'DIAS ÚTEIS RESTANTES' =
+			
+			VAR DataBase =
+			    [DATA BASE REALIZADO]
+			
+			VAR DataFim =
+			    [DATA FIM PACE]
+			
+			VAR InicioRestante =
+			    DataBase + 1
+			
+			RETURN
+			IF(
+			    ISBLANK(DataBase)
+			        || ISBLANK(DataFim)
+			        || DataFim <= DataBase,
+			    0,
+			    NETWORKDAYS(
+			        InicioRestante,
+			        DataFim,
+			        1
+			    )
+			)
+		formatString: 0
+		lineageTag: a73a21f5-920a-4811-b766-abd37efd6122
+
+	measure 'MAT RESTANTE PARA META' =
+			
+			VAR MetaSelecionada =
+			    [MAT PLANEJADO]
+			
+			VAR RealizadoSelecionado =
+			    [MATRICULADOSCC]
+			
+			RETURN
+			IF(
+			    ISBLANK(MetaSelecionada),
+			    BLANK(),
+			    MAX(
+			        MetaSelecionada - RealizadoSelecionado,
+			        0
+			    )
+			)
+		lineageTag: 70ceea61-1d3c-46ae-96f6-1cbb784670d9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'PACE IDEAL' =
+			
+			VAR MetaSelecionada =
+			    [MAT PLANEJADO]
+			
+			VAR RealizadoSelecionado =
+			    [MATRICULADOSCC]
+			
+			VAR FaltaParaMeta =
+			    MAX(
+			        MetaSelecionada - RealizadoSelecionado,
+			        0
+			    )
+			
+			VAR DiasRestantes =
+			    [DIAS ÚTEIS RESTANTES]
+			
+			VAR DataBase =
+			    [DATA BASE REALIZADO]
+			
+			VAR DataFim =
+			    [DATA FIM PACE]
+			
+			RETURN
+			SWITCH(
+			    TRUE(),
+			
+			    ISBLANK(MetaSelecionada), BLANK(),
+			
+			    -- Mês retroativo já encerrado
+			    DataFim < DataBase, 0,
+			
+			    -- Meta atingida
+			    FaltaParaMeta = 0, 0,
+			
+			    -- Sem dias úteis restantes
+			    DiasRestantes = 0, 0,
+			
+			    DIVIDE(
+			        FaltaParaMeta,
+			        DiasRestantes
+			    )
+			)
+		formatString: #,0.0
+		lineageTag: a4a1edb7-0af8-4f38-a211-48e1cec58ac7
+
+	measure 'STATUS PACE' =
+			
+			VAR PaceRealizado =
+			    [PACE REALIZADO]
+			
+			VAR PaceIdeal =
+			    [PACE IDEAL]
+			
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    [MAT RESTANTE PARA META] = 0, "Meta atingida",
+			    PaceRealizado >= PaceIdeal, "Ritmo suficiente",
+			    PaceRealizado < PaceIdeal, "Aceleração necessária",
+			    BLANK()
+			)
+		lineageTag: ca86394e-61ac-4fa5-9b56-d5a574c523a9
+
+	measure 'ÍNDICE PACE' =
+			
+			DIVIDE(
+			    [PACE REALIZADO],
+			    [PACE IDEAL],
+			    0
+			)
+		lineageTag: 9703fd15-4c74-4a4b-993d-6ecd7f0a78b7
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'HC OPERADORES gerencial' =
+			
+			SUMX(
+			    SUMMARIZE(
+			        'TB CALL CENTER',
+			        Dim_Data2[Ano],
+			        Dim_Data2[Mês],
+			        'TB CALL CENTER'[EPS]
+			    ),
+			    VAR AnoAtual = Dim_Data2[Ano]
+			    VAR MesAtual = Dim_Data2[Mês]
+			    VAR EPSAtual = 'TB CALL CENTER'[EPS]
+			    RETURN
+			        SWITCH(
+			            TRUE(),
+			            AnoAtual = 2026 && MesAtual = 10 && EPSAtual = "CONECTA+", 22,
+			            AnoAtual = 2026 && MesAtual = 10 && EPSAtual = "VOXPRIME", 16,
+			
+			            AnoAtual = 2026 && MesAtual = 11 && EPSAtual = "CONECTA+", 24,
+			            AnoAtual = 2026 && MesAtual = 11 && EPSAtual = "VOXPRIME", 18,
+			
+			            AnoAtual = 2026 && MesAtual = 12 && EPSAtual = "CONECTA+", 18,
+			            AnoAtual = 2026 && MesAtual = 12 && EPSAtual = "VOXPRIME", 14,
+			
+			            BLANK()
+			        )
+			)
+		formatString: 0
+		lineageTag: 14c9fb85-95b5-4d71-bc5d-c20ef650eee4
+
+	measure 'ÚLTIMA DATA REALIZADA' =
+			
+			CALCULATE(
+			    MAX('TB CALL CENTER'[DATA_MATRICULA]),
+			    REMOVEFILTERS('Dim_Data2')
+			)
+		formatString: General Date
+		lineageTag: 04eab19b-5b06-41b8-931f-3c092c5a2957
+
+	measure 'DIAS ÚTEIS TRABALHADOS CICLO' =
+			
+			VAR DataInicio =
+			    DATE(2026, 10, 1)
+			
+			VAR DataCorte =
+			    [ÚLTIMA DATA REALIZADA]
+			
+			RETURN
+			CALCULATE(
+			    COUNTROWS('Dim_Data2'),
+			    FILTER(
+			        ALL('Dim_Data2'),
+			        'Dim_Data2'[Date] >= DataInicio
+			            && 'Dim_Data2'[Date] <= DataCorte
+			            && 'Dim_Data2'[É Dia Útil] = 1
+			    )
+			)
+		formatString: 0
+		lineageTag: 758e57a2-cbd0-4ef9-bd60-ad4ea8d57f88
+
+	measure 'MAT REALIZADO CICLO' =
+			
+			VAR DataInicio =
+			    DATE(2026, 10, 1)
+			
+			VAR DataCorte =
+			    [ÚLTIMA DATA REALIZADA]
+			
+			RETURN
+			CALCULATE(
+			    [MATRICULADOSCC],
+			    FILTER(
+			        ALL('Dim_Data2'),
+			        'Dim_Data2'[Date] >= DataInicio
+			            && 'Dim_Data2'[Date] <= DataCorte
+			    )
+			)
+		formatString: 0
+		lineageTag: 42a9c730-4f5b-4385-8bd4-6a26b015d184
+
+	measure 'PACE REALIZADO CICLO' =
+			
+			DIVIDE(
+			    [MAT REALIZADO CICLO],
+			    [DIAS ÚTEIS TRABALHADOS CICLO]
+			)
+		formatString: #,0
+		lineageTag: c0fb3119-e2c2-4465-ae06-c20dcda205db
+
+	measure 'ÚLTIMA DATA COM META' =
+			
+			CALCULATE(
+			    MAX('PLANEJADO'[Data]),
+			    REMOVEFILTERS('Dim_Data2'),
+			    'PLANEJADO'[Matricula] > 0
+			)
+		formatString: General Date
+		lineageTag: c8b6b3c6-4821-4040-8574-be40d3159162
+
+	measure 'DIAS ÚTEIS RESTANTES CICLO' =
+			
+			VAR DataCorte =
+			    [ÚLTIMA DATA REALIZADA]
+			
+			VAR DataFinalMeta =
+			    [ÚLTIMA DATA COM META]
+			
+			VAR PrimeiroDiaFuturo =
+			    DataCorte + 1
+			
+			RETURN
+			IF(
+			    ISBLANK(DataCorte)
+			        || ISBLANK(DataFinalMeta)
+			        || PrimeiroDiaFuturo > DataFinalMeta,
+			    0,
+			    NETWORKDAYS(
+			        PrimeiroDiaFuturo,
+			        DataFinalMeta,
+			        1
+			    )
+			)
+		formatString: 0
+		lineageTag: 87e0a610-efff-48fa-9e8b-21735758cf53
+
+	measure 'META MAT CICLO' =
+			
+			VAR DataInicio =
+			    DATE(2026, 10, 1)
+			
+			VAR DataFinalMeta =
+			    [ÚLTIMA DATA COM META]
+			
+			RETURN
+			CALCULATE(
+			    [MAT PLANEJADO],
+			    REMOVEFILTERS('Dim_Data2'),
+			    FILTER(
+			        ALL('PLANEJADO'[Data]),
+			        'PLANEJADO'[Data] >= DataInicio
+			            && 'PLANEJADO'[Data] <= DataFinalMeta
+			    )
+			)
+		formatString: #,0
+		lineageTag: 85f9e566-7590-480f-9ad7-f8a6a4c6b800
+
+	measure 'MAT RESTANTE CICLO' =
+			
+			MAX(
+			    [META MAT CICLO] - [MAT REALIZADO CICLO],
+			    0
+			)
+		lineageTag: 01aa51ad-8133-470a-8e5f-e4e7153c0809
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'PACE IDEAL CICLO' =
+			
+			VAR MatRestante =
+			    [MAT RESTANTE CICLO]
+			
+			VAR DiasRestantes =
+			    [DIAS ÚTEIS RESTANTES CICLO]
+			
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    MatRestante = 0, 0,
+			    DiasRestantes = 0, BLANK(),
+			    DIVIDE(
+			        MatRestante,
+			        DiasRestantes
+			    )
+			)
+		formatString: #,0
+		lineageTag: ba9b29a9-3870-4c01-86b4-c5409dad77b8
+
+	measure 'ATINGIMENTO META MÊS %' =
+			
+			VAR DataReferencia =
+			    MAX('Dim_Data2'[Date])
+			
+			VAR InicioMes =
+			    DATE(
+			        YEAR(DataReferencia),
+			        MONTH(DataReferencia),
+			        1
+			    )
+			
+			VAR FimMes =
+			    EOMONTH(DataReferencia, 0)
+			
+			VAR MetaMes =
+			    CALCULATE(
+			        [MAT PLANEJADO],
+			        FILTER(
+			            ALL('Dim_Data2'),
+			            'Dim_Data2'[Date] >= InicioMes
+			                && 'Dim_Data2'[Date] <= FimMes
+			        )
+			    )
+			
+			VAR RealizadoMes =
+			    CALCULATE(
+			        [MATRICULADOSCC],
+			        FILTER(
+			            ALL('Dim_Data2'),
+			            'Dim_Data2'[Date] >= InicioMes
+			                && 'Dim_Data2'[Date] <= FimMes
+			        )
+			    )
+			
+			RETURN
+			DIVIDE(
+			    RealizadoMes,
+			    MetaMes,
+			    0
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: e582d46d-a954-407d-8bfa-0a195513daea
+
+	measure 'CUSTO EPS' =
+			
+			-- Custo mensal da operação (HC x custo por posição), rateado pelos dias do mês no contexto
+			SUMX(
+			    SUMMARIZE(
+			        'TB CALL CENTER',
+			        Dim_Data2[Ano],
+			        Dim_Data2[Mês],
+			        'TB CALL CENTER'[EPS]
+			    ),
+			    VAR AnoAtual = Dim_Data2[Ano]
+			    VAR MesAtual = Dim_Data2[Mês]
+			    VAR EPSAtual = 'TB CALL CENTER'[EPS]
+			
+			    VAR CustoMes =
+			        SWITCH(
+			            TRUE(),
+			
+			            -- OUTUBRO/2026
+			            AnoAtual = 2026
+			                && MesAtual = 10
+			                && EPSAtual = "CONECTA+", 118800,
+			
+			            AnoAtual = 2026
+			                && MesAtual = 10
+			                && EPSAtual = "VOXPRIME", 92800,
+			
+			            -- NOVEMBRO/2026
+			            AnoAtual = 2026
+			                && MesAtual = 11
+			                && EPSAtual = "CONECTA+", 129600,
+			
+			            AnoAtual = 2026
+			                && MesAtual = 11
+			                && EPSAtual = "VOXPRIME", 104400,
+			
+			            -- DEZEMBRO/2026
+			            AnoAtual = 2026
+			                && MesAtual = 12
+			                && EPSAtual = "CONECTA+", 97200,
+			
+			            AnoAtual = 2026
+			                && MesAtual = 12
+			                && EPSAtual = "VOXPRIME", 81200,
+			
+			            BLANK()
+			        )
+			
+			    VAR DiasNoContexto =
+			        CALCULATE(
+			            COUNTROWS(Dim_Data2),
+			            Dim_Data2[Ano] = AnoAtual,
+			            Dim_Data2[Mês] = MesAtual
+			        )
+			
+			    VAR DiasDoMes =
+			        DAY(EOMONTH(DATE(AnoAtual, MesAtual, 1), 0))
+			
+			    RETURN
+			        CustoMes * DIVIDE(DiasNoContexto, DiasDoMes)
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 8f41b854-afdf-4381-9567-2c667be78d56
+
+	measure CPMAT =
+			
+			DIVIDE(
+			    [CUSTO EPS],
+			    [MATRICULADOSCC],
+			    BLANK()
+			)
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 04201768-099c-4211-a7a7-336cc5fdb31d
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'DATA BASE REALIZADO' =
+			
+			CALCULATE(
+			    MAX('TB CALL CENTER'[DATA_MATRICULA]),
+			    REMOVEFILTERS('Dim_Data2')
+			)
+		formatString: General Date
+		lineageTag: 65902281-47a7-4aa4-a25c-d380dc021684
+
+	measure 'DATA INÍCIO SELEÇÃO' =
+			
+			MINX(
+			    ALLSELECTED('Dim_Data2'[Date]),
+			    'Dim_Data2'[Date]
+			)
+		formatString: General Date
+		lineageTag: d7402778-2d2e-43cd-b52c-3a146cb85cbe
+
+	measure 'DATA FIM SELEÇÃO' =
+			
+			MAXX(
+			    ALLSELECTED('Dim_Data2'[Date]),
+			    'Dim_Data2'[Date]
+			)
+		formatString: General Date
+		lineageTag: 2200a1fa-b606-442a-b7a3-d6360a3e5ef8
+
+	measure 'DATA FIM PACE' =
+			
+			VAR DataSelecionada =
+			    MAX('Dim_Data2'[Date])
+			
+			RETURN
+			EOMONTH(
+			    DataSelecionada,
+			    0
+			)
+		formatString: General Date
+		lineageTag: 1b4a29a5-00af-42ed-8e7e-15ddc92cd6b6
+
+	measure 'CPMAT CONECTA+' =
+			
+			DIVIDE(
+			    CALCULATE(
+			        [CUSTO EPS],
+			        DIM_EPS[EPS] = "CONECTA+"
+			    ),
+			    CALCULATE(
+			        [MATRICULADOSCC],
+			        DIM_EPS[EPS] = "CONECTA+"
+			    ),
+			    BLANK()
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 8eee7847-a7e8-432f-8b81-ee540c12ed2f
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'CPMAT VOXPRIME' =
+			
+			DIVIDE(
+			    CALCULATE(
+			        [CUSTO EPS],
+			        DIM_EPS[EPS] = "VOXPRIME"
+			    ),
+			    CALCULATE(
+			        [MATRICULADOSCC],
+			        DIM_EPS[EPS] = "VOXPRIME"
+			    ),
+			    BLANK()
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: a08c84eb-d2fd-497f-b0de-0a0c6bf923a5
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'META MAT MÊS' =
+			
+			VAR EPSSelecionada =
+			    SELECTEDVALUE('TB CALL CENTER'[EPS])
+			
+			VAR SuperCanalSelecionado =
+			    SELECTEDVALUE('TB CALL CENTER'[SUPER_CANAL_DE_PARA])
+			
+			VAR MesesNoContexto =
+			    SUMMARIZE(
+			        Dim_Data2,
+			        Dim_Data2[Ano],
+			        Dim_Data2[Mês]
+			    )
+			
+			RETURN
+			SUMX(
+			    MesesNoContexto,
+			
+			    VAR AnoAtual =
+			        Dim_Data2[Ano]
+			
+			    VAR MesAtual =
+			        Dim_Data2[Mês]
+			
+			    VAR MetaConecta =
+			        SWITCH(
+			            TRUE(),
+			
+			            /* OUTUBRO */
+			            AnoAtual = 2026 && MesAtual = 10 && SuperCanalSelecionado = "Hunter Campus", 76,
+			            AnoAtual = 2026 && MesAtual = 10 && SuperCanalSelecionado = "Hunter Polo", 50,
+			            AnoAtual = 2026 && MesAtual = 10 && UPPER(SuperCanalSelecionado) = "MIDIA", 162,
+			            AnoAtual = 2026 && MesAtual = 10 && SuperCanalSelecionado = "Novos Canais", 66,
+			            AnoAtual = 2026 && MesAtual = 10 && SuperCanalSelecionado = "Outros", 14,
+			            AnoAtual = 2026 && MesAtual = 10, 368,
+			
+			            BLANK()
+			        )
+			
+			    VAR MetaVox =
+			        SWITCH(
+			            TRUE(),
+			
+			            /* OUTUBRO */
+			            AnoAtual = 2026 && MesAtual = 10 && SuperCanalSelecionado = "Hunter Campus", 73,
+			            AnoAtual = 2026 && MesAtual = 10 && SuperCanalSelecionado = "Hunter Polo", 37,
+			            AnoAtual = 2026 && MesAtual = 10 && UPPER(SuperCanalSelecionado) = "MIDIA", 126,
+			            AnoAtual = 2026 && MesAtual = 10 && SuperCanalSelecionado = "Novos Canais", 56,
+			            AnoAtual = 2026 && MesAtual = 10 && SuperCanalSelecionado = "Outros", 11,
+			            AnoAtual = 2026 && MesAtual = 10, 303,
+			
+			            BLANK()
+			        )
+			
+			    RETURN
+			        SWITCH(
+			            TRUE(),
+			            EPSSelecionada = "CONECTA+", MetaConecta,
+			            EPSSelecionada = "VOXPRIME", MetaVox,
+			            MetaConecta + MetaVox
+			        )
+			)
+		lineageTag: 860c8d64-fc26-4115-b035-5c9ddc04389d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% ATING META MÊS' =
+			
+			DIVIDE(
+			    [MATRICULADOSCC],
+			    [META MAT MÊS],
+			    BLANK()
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 0185ed28-577d-450f-8524-75c2bc2c9ec9
+
+	column Date
+		formatString: dd/mm/yyyy
+		lineageTag: 1a14a490-7fcc-4e49-8786-4e878dcd3d90
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column Ano
+		formatString: 0
+		lineageTag: df01260b-85ec-4ea2-93b2-aeb677654892
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Ano]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mês
+		formatString: 0
+		lineageTag: 68d11004-01a7-4e56-9d01-831366f0fc7d
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Mês]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nome Mês'
+		lineageTag: edb4cbfa-f05f-475c-bb67-8dfd4fff3dc3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Nome Mês]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ano-Mês
+		lineageTag: 4795a24e-6b85-4061-a4c6-e5d5a65a9f62
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Ano-Mês]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nome Mês-Ano'
+		lineageTag: 7f29099a-59ad-45e8-a737-2be356c94f40
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Nome Mês-Ano]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trimestre
+		lineageTag: b6eb4f0f-7c9e-47a1-95a2-b405b6f39b7a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Trimestre]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dia da Semana'
+		formatString: 0
+		lineageTag: 04398591-64b0-49ab-a9e7-0f32d9927086
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Dia da Semana]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nome Dia'
+		lineageTag: c9619268-7eb7-48a0-ae53-0304dd83c9f6
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Nome Dia]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'É Dia Útil'
+		formatString: 0
+		lineageTag: 0f7f3a27-fa66-4071-b0c3-8841fbdf0e76
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [É Dia Útil]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Dia/Mês
+		lineageTag: 004e3c93-b450-4953-b402-0f776b7a7d24
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Dia/Mês]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ano Ciclo'
+		formatString: 0
+		lineageTag: 0eda1b6d-e6e8-4131-9b7f-a3b334f4cd30
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Ano Ciclo]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ordem Ciclo'
+		formatString: 0
+		lineageTag: 6f9b4b9e-c62d-44e4-a384-95613b64cedd
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Ordem Ciclo]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Semana Mês'
+		lineageTag: 1dc26dc5-2738-4350-8bd5-b8e164b801ad
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Semana Mês]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ordem Semana Mês'
+		formatString: 0
+		lineageTag: 20e55848-f20c-42a4-8c21-d4b7b4b4b53f
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Ordem Semana Mês]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'NÚMERO SEMANA CICLO' =
+			
+			VAR DataInicioCiclo =
+			    DATE(2026, 5, 17)
+			
+			VAR DataAtual =
+			    'Dim_Data2'[Date]
+			
+			RETURN
+			IF(
+			    DataAtual < DataInicioCiclo,
+			    BLANK(),
+			    INT(
+			        DIVIDE(
+			            DataAtual - DataInicioCiclo,
+			            7
+			        )
+			    ) + 1
+			)
+		formatString: 0
+		lineageTag: 8dffbec9-b432-443e-9f65-df4763dcdd5d
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'SEMANA CICLO' =
+			
+			VAR NumeroSemana =
+			    'Dim_Data2'[NÚMERO SEMANA CICLO]
+			
+			RETURN
+			IF(
+			    ISBLANK(NumeroSemana),
+			    BLANK(),
+			    "Semana " & FORMAT(NumeroSemana, "00")
+			)
+		lineageTag: 6d3f4cdf-f5e6-418f-baa9-212aae30a26d
+		summarizeBy: none
+		sortByColumn: 'NÚMERO SEMANA CICLO'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'SEMANA CICLO PERÍODO' =
+			
+			VAR DataInicioCiclo =
+			    DATE(2026, 5, 17)
+			
+			VAR NumeroSemana =
+			    'Dim_Data2'[NÚMERO SEMANA CICLO]
+			
+			VAR InicioSemana =
+			    DataInicioCiclo + ((NumeroSemana - 1) * 7)
+			
+			VAR FimSemana =
+			    InicioSemana + 6
+			
+			RETURN
+			IF(
+			    ISBLANK(NumeroSemana),
+			    BLANK(),
+			    FORMAT(InicioSemana, "dd")
+			        & " a "
+			        & FORMAT(FimSemana, "dd/MM")
+			)
+		lineageTag: bedf599d-c3c6-4940-aa59-cdf872d97d1f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'É Feriado'
+		formatString: 0
+		lineageTag: 5326a878-8165-4aea-bd70-d1d55f653c3e
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [É Feriado]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Data2 = calculated
+		mode: import
+		source =
+				
+				VAR FeriadosSP2026 =
+				    UNION(
+				        ROW("DataFeriado", DATE(2026, 1, 1)),   -- Confraternização Universal
+				        ROW("DataFeriado", DATE(2026, 1, 25)),  -- Aniversário de São Paulo
+				        ROW("DataFeriado", DATE(2026, 4, 3)),   -- Paixão de Cristo
+				        ROW("DataFeriado", DATE(2026, 4, 21)),  -- Tiradentes
+				        ROW("DataFeriado", DATE(2026, 5, 1)),   -- Dia do Trabalho
+				        ROW("DataFeriado", DATE(2026, 6, 4)),   -- Corpus Christi
+				        ROW("DataFeriado", DATE(2026, 7, 9)),   -- Data Magna do Estado de São Paulo
+				        ROW("DataFeriado", DATE(2026, 9, 7)),   -- Independência do Brasil
+				        ROW("DataFeriado", DATE(2026, 10, 12)), -- Nossa Senhora Aparecida
+				        ROW("DataFeriado", DATE(2026, 11, 2)),  -- Finados
+				        ROW("DataFeriado", DATE(2026, 11, 15)), -- Proclamação da República
+				        ROW("DataFeriado", DATE(2026, 11, 20)), -- Consciência Negra
+				        ROW("DataFeriado", DATE(2026, 12, 25))  -- Natal
+				    )
+				
+				RETURN
+				ADDCOLUMNS(
+				    CALENDAR(
+				        DATE(2026, 10, 01),
+				        DATE(2026, 10, 23)
+				    ),
+				
+				    "Ano", YEAR([Date]),
+				    "Mês", MONTH([Date]),
+				    "Nome Mês", FORMAT([Date], "mmmm"),
+				    "Ano-Mês", FORMAT([Date], "yyyy-MM"),
+				    "Nome Mês-Ano", FORMAT([Date], "mmm yyyy"),
+				    "Trimestre", "T" & FORMAT(QUARTER([Date]), "0"),
+				
+				    "Dia da Semana",
+				        WEEKDAY([Date], 2),
+				
+				    "Nome Dia",
+				        FORMAT([Date], "dddd"),
+				
+				    "É Dia Útil",
+				        VAR DataAtual = [Date]
+				
+				        VAR EhFinalDeSemana =
+				            WEEKDAY(DataAtual, 2) > 5
+				
+				        VAR EhFeriado =
+				            COUNTROWS(
+				                FILTER(
+				                    FeriadosSP2026,
+				                    [DataFeriado] = DataAtual
+				                )
+				            ) > 0
+				
+				        RETURN
+				            IF(
+				                EhFinalDeSemana || EhFeriado,
+				                0,
+				                1
+				            ),
+				
+				    "É Feriado",
+				        VAR DataAtualFeriado = [Date]
+				        RETURN
+				            IF(
+				                COUNTROWS(
+				                    FILTER(
+				                        FeriadosSP2026,
+				                        [DataFeriado] = DataAtualFeriado
+				                    )
+				                ) > 0,
+				                1,
+				                0
+				            ),
+				
+				    "Dia/Mês",
+				        FORMAT([Date], "dd/MM"),
+				
+				    "Ano Ciclo",
+				        IF(
+				            MONTH([Date]) >= 10,
+				            YEAR([Date]),
+				            YEAR([Date]) - 1
+				        ),
+				
+				    "Ordem Ciclo",
+				        SWITCH(
+				            MONTH([Date]),
+				            10, 1,
+				            11, 2,
+				            12, 3,
+				            1, 4,
+				            2, 5,
+				            3, 6,
+				            4, 7,
+				            5, 8,
+				            6, 9,
+				            7, 10,
+				            8, 11,
+				            9, 12
+				        ),
+				
+				    "Semana Mês",
+				        SWITCH(
+				            TRUE(),
+				            DAY([Date]) <= 7, "1 a 7",
+				            DAY([Date]) <= 14, "8 a 14",
+				            DAY([Date]) <= 21, "15 a 21",
+				            DAY([Date]) <= 28, "22 a 28",
+				            "29 a 31"
+				        ),
+				
+				    "Ordem Semana Mês",
+				        SWITCH(
+				            TRUE(),
+				            DAY([Date]) <= 7, 1,
+				            DAY([Date]) <= 14, 2,
+				            DAY([Date]) <= 21, 3,
+				            DAY([Date]) <= 28, 4,
+				            5
+				        )
+				)
+
+	annotation PBI_Id = 17b69e6f392042b3b45541d173aa4870
+

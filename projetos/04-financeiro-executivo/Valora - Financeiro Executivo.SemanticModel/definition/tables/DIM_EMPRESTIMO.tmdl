@@ -1,0 +1,90 @@
+table DIM_EMPRESTIMO
+	lineageTag: 0e5c38c6-676d-420a-9d1b-cd72211acca4
+
+	column EmprestimoID
+		dataType: string
+		lineageTag: 8e05058b-2e78-4f3d-8d78-455a17eb3b0a
+		summarizeBy: none
+		sourceColumn: EmprestimoID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Finalidade
+		dataType: string
+		lineageTag: 97f4cb6d-8016-4530-acf4-0b3723d25d78
+		summarizeBy: none
+		sourceColumn: Finalidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column InstituicaoFinanceira
+		dataType: string
+		lineageTag: 8cc4a6fc-11d9-48e6-8232-01822fc4553d
+		summarizeBy: none
+		sourceColumn: InstituicaoFinanceira
+
+		annotation SummarizationSetBy = Automatic
+
+	column DataContratacao
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 1b17b0ff-3f6b-4d2d-9df7-99fee85d0910
+		summarizeBy: none
+		sourceColumn: DataContratacao
+
+		variation Variation
+			isDefault
+			relationship: 8e92358b-e50f-4175-817c-4b7c370b1a96
+			defaultHierarchy: LocalDateTable_d9668cfe-56cb-471f-a159-331502751de6.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ValorContratado
+		dataType: int64
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 90b111a4-1146-476d-b6c6-781e2415c729
+		summarizeBy: sum
+		sourceColumn: ValorContratado
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column PrazoMeses
+		dataType: int64
+		formatString: 0
+		lineageTag: 243bb368-cf73-4518-baa5-340009e56010
+		summarizeBy: sum
+		sourceColumn: PrazoMeses
+
+		annotation SummarizationSetBy = Automatic
+
+	column TaxaJurosMes
+		dataType: double
+		formatString: 0.00
+		lineageTag: 1c1df295-1e9c-4140-9b61-0f9141e445bc
+		summarizeBy: sum
+		sourceColumn: TaxaJurosMes
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_EMPRESTIMO = m
+		mode: import
+		source =
+				let
+				    // DIM_EMPRESTIMO: base fictícia embutida no modelo (csv compactado)
+				    Bin = Binary.Decompress(Binary.FromText(Text.Combine({
+				        "Nc9BasMwEAXQfSB30AFGRZbt1N5WdmkKhkBL90OklgFbYyS5hFynq54jF6uM09mI+YLHn36ag4uJJj528EweR7JoHRx9DtNCZ+Q19WdHAaHDhIZ9CvnNP/CBI4f/wDKcAl55cNFFeMcLvi6BY173u344qQIMzpRwFNaJLwoMT9llMbhAltAzaKUrqVpZKNCVWgfKAxQPZbsJGvrLjD7eflhYFqYTBqc514t36oUDXXMdt1K1VI3Umag36qAyVTQbVcJ2FuHkfOK10mfghGCYZ5fPoW8Ub8soTLj9Wkp8F0upamg3sGoyqB/3uz8="
+				    }), BinaryEncoding.Base64), Compression.Deflate),
+				    Fonte = Csv.Document(Bin, [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Cabecalhos = Table.PromoteHeaders(Fonte, [PromoteAllScalars = true]),
+				    Nulos = Table.TransformColumns(Cabecalhos, List.Transform(Table.ColumnNames(Cabecalhos), (c) => {c, (v) => if v = "" then null else v})),
+				    Colunas = Table.SelectColumns(Nulos, {"EmprestimoID", "Finalidade", "InstituicaoFinanceira", "DataContratacao", "ValorContratado", "PrazoMeses", "TaxaJurosMes"}, MissingField.UseNull),
+				    Tipos = Table.TransformColumnTypes(Colunas, {{"EmprestimoID", type text}, {"Finalidade", type text}, {"InstituicaoFinanceira", type text}, {"DataContratacao", type datetime}, {"ValorContratado", Int64.Type}, {"PrazoMeses", Int64.Type}, {"TaxaJurosMes", type number}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

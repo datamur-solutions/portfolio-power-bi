@@ -1,0 +1,26 @@
+table Config
+	isHidden
+	lineageTag: fe25c6b0-6746-5152-99ba-2d256241e739
+
+	column 'Data de Referência'
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: ff729997-9f3f-5c93-b8cc-80cbdacc94e2
+		summarizeBy: none
+		sourceColumn: Data de Referência
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition Config = m
+		mode: import
+		source =
+				let
+				    Ref = try Date.FromText(DataReferencia, [Culture = "pt-BR"]) otherwise null,
+				    Tabela = #table(type table [#"Data de Referência" = nullable date], {{Ref}})
+				in
+				    Tabela
+
+	annotation PBI_ResultType = Table
+

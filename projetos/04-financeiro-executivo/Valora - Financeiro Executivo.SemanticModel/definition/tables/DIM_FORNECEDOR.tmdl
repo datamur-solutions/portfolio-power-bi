@@ -1,0 +1,62 @@
+table DIM_FORNECEDOR
+	lineageTag: c0980318-e9e4-4c64-ab8a-32478b14bfb6
+
+	column FornecedorID
+		dataType: string
+		lineageTag: c991a0b1-f99a-4dbf-8c86-e7f9a8a18f06
+		summarizeBy: none
+		sourceColumn: FornecedorID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Fornecedor
+		dataType: string
+		lineageTag: 257934c2-049d-4960-aa3a-3ccd7e5f67fa
+		summarizeBy: none
+		sourceColumn: Fornecedor
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategoriaFornecedor
+		dataType: string
+		lineageTag: 16b2ff6e-a8ce-44bc-81de-fa397a29cfb4
+		summarizeBy: none
+		sourceColumn: CategoriaFornecedor
+
+		annotation SummarizationSetBy = Automatic
+
+	column PrazoPadraoDias
+		dataType: int64
+		formatString: 0
+		lineageTag: 3f770a58-6c98-44f1-8b5b-d9f4669c0477
+		summarizeBy: none
+		sourceColumn: PrazoPadraoDias
+
+		annotation SummarizationSetBy = Automatic
+
+	column Estrategico
+		dataType: string
+		lineageTag: d8292a46-0126-4956-b7ce-107e03aa0121
+		summarizeBy: none
+		sourceColumn: Estrategico
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_FORNECEDOR = m
+		mode: import
+		source =
+				let
+				    // DIM_FORNECEDOR: base fictícia embutida no modelo (csv compactado)
+				    Bin = Binary.Decompress(Binary.FromText(Text.Combine({
+				        "nVdNj9MwEL0j8R/8A6xVk9hpeux+FIp2oaKodzcxxSK1F8cBaf/NsgeklbjBhWv+GE6b7treJnF6bOXnmXnz5nkyE5LTlGZCzi/h7OkHvCCKboRkxPhvIcmdWJBMEnHJSAGvCiXrYywVr1/NPoxGAbwWm+p3oVhKwEKyLflOJQHXKiPwkyS8uBVSEX0VgeEIvq8eGlxo4m4EVxRMcyXA8mx6BudbsWY5q+51MjAwYZEJm99Wj00kmnKRiw0jgIJCfFY/iKQwMpEIvpHlrQBvdYV3u3i7UB5IDJciL6tf1V9agGumdC35HjwjqU5TMf0/BVvCS0W5PvcgYIiNC2I451n1T1Ono9wwzYqOvsu7vdBxk+65IGDFCtVQOt1UjzzV12R1QPmVKsY3drqJme60lDrdfbYe2ImJXZGcghWVGe1tp07dKHGq8uon1y0Se+CMrKXuV121vovmVElR31PdK8oKiEZwybb7eyw5uQn40R2EZhEfGUm/iCHtCqKG+nf0W6lPr6v7PfxquyY52VBewDAxzqNj+vDsVoDhJatZW5esZhUsmOCUeUxQELdQ3j1BwdiEXVAp9dUHel60qfrD9ZW6Rfi5RUlbxj2BJw5uWccG07syHxJeU2CwvdDHCT/Q3dKgMDAhhtd0j2BoWZRjG57JRibZljT8ZyJEQy45lgU2C7EMrF+gYdyqFw/w2GqWJe123hMz3XPCM9pY5t6w20cidCX2JI8B46/zN8LX7x3N+7Qd2a+g7whHocmt4XaeL1N0cCrXcPs7EyEz49NGMcJHXhrf+Jasnodr4GxElpsZZXhuBVFyeGZdmXlS0Kq4bo3rEmycs1b41o+CJn/X1fpLR2EDdeTaD4xaVDvAkhBy6vd8a5Elud3+13k87qbZxw+QJbHndazPjJC1hzm4AR2eWOENmXpOGnaldrA0z3bjwMGftpXhzoXfTzU46iylvRcYtey1nu8Yxp07T1fk+NQ9Ho9fjvYQrpIXk9LL0uTgCJaJ9acajxrgQGnFQe9K6COteKi0WkYttj4uXUfqIC62HtMTdurYsjX/r+i4zd98Gzd2Oz6UsqTXHLyvmjgi6jL2cef7eQz0Hw=="
+				    }), BinaryEncoding.Base64), Compression.Deflate),
+				    Fonte = Csv.Document(Bin, [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Cabecalhos = Table.PromoteHeaders(Fonte, [PromoteAllScalars = true]),
+				    Nulos = Table.TransformColumns(Cabecalhos, List.Transform(Table.ColumnNames(Cabecalhos), (c) => {c, (v) => if v = "" then null else v})),
+				    Colunas = Table.SelectColumns(Nulos, {"FornecedorID", "Fornecedor", "CategoriaFornecedor", "PrazoPadraoDias", "Estrategico"}, MissingField.UseNull),
+				    Tipos = Table.TransformColumnTypes(Colunas, {{"FornecedorID", type text}, {"Fornecedor", type text}, {"CategoriaFornecedor", type text}, {"PrazoPadraoDias", Int64.Type}, {"Estrategico", type text}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

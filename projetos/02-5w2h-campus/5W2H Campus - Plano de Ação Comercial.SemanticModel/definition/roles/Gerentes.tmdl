@@ -1,0 +1,9 @@
+role Gerentes
+	modelPermission: read
+
+	tablePermission Semanas = Semanas[Email Gerente] = LOWER ( USERPRINCIPALNAME () )
+
+	tablePermission Consultores = Consultores[Email Gerente] = LOWER ( USERPRINCIPALNAME () )
+
+	annotation PBI_Id = 87a9c8b7fafa5be5901e3a2f87e22eb5
+

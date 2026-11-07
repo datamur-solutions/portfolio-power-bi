@@ -1,0 +1,23 @@
+table DIM_REGIONAL
+	lineageTag: 450d6626-a72c-40d1-8d6c-3808ffcb0c9d
+
+	column nome_regional_ic
+		lineageTag: 195a7647-14a8-4718-a112-3b70ba381238
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: CAPCOM[nome_regional_ic]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_REGIONAL = calculated
+		mode: import
+		source =
+				
+				FILTER(
+				    DISTINCT('CAPCOM'[nome_regional_ic]),
+				    NOT(ISBLANK('CAPCOM'[nome_regional_ic]))
+				        && 'CAPCOM'[nome_regional_ic] <> ""
+				)
+
+	annotation PBI_Id = dac9fa9194a54fd3bec2ac6233005f2d
+

@@ -1,0 +1,87 @@
+table DIM_CONTA_CONTABIL
+	lineageTag: 1a674313-6d30-4880-a223-6f20bb8ec621
+
+	column ContaID
+		dataType: string
+		lineageTag: c471783e-af6d-464b-99a1-2df205feef62
+		summarizeBy: none
+		sourceColumn: ContaID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ContaContabil
+		dataType: string
+		lineageTag: 05092620-6c6d-4a2d-9023-db7aef3bab43
+		summarizeBy: none
+		sourceColumn: ContaContabil
+
+		annotation SummarizationSetBy = Automatic
+
+	column LinhaDRE
+		dataType: string
+		lineageTag: bb78191c-6bef-4a8d-ba1c-c17cb572a7ec
+		summarizeBy: none
+		sortByColumn: OrdemDRE
+		sourceColumn: LinhaDRE
+
+		annotation SummarizationSetBy = Automatic
+
+	column GrupoDRE
+		dataType: string
+		lineageTag: 380066dc-c0e3-46aa-829c-42991bf6833d
+		summarizeBy: none
+		sourceColumn: GrupoDRE
+
+		annotation SummarizationSetBy = Automatic
+
+	column Natureza
+		dataType: string
+		lineageTag: c201ee80-892e-4b8b-9343-7657056b733e
+		summarizeBy: none
+		sourceColumn: Natureza
+
+		annotation SummarizationSetBy = Automatic
+
+	column ClassificacaoCusto
+		dataType: string
+		lineageTag: 0cd16a26-61ad-415c-9bb9-7b7de331524e
+		summarizeBy: none
+		sourceColumn: ClassificacaoCusto
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrdemDRE
+		dataType: int64
+		formatString: 0
+		lineageTag: 759e4291-e366-4232-a170-2ccbf451fdcb
+		summarizeBy: sum
+		sourceColumn: OrdemDRE
+
+		annotation SummarizationSetBy = Automatic
+
+	column GrupoFluxoCaixa
+		dataType: string
+		lineageTag: 3186afb1-5c37-4e70-a09d-6acde6f679b3
+		summarizeBy: none
+		sourceColumn: GrupoFluxoCaixa
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_CONTA_CONTABIL = m
+		mode: import
+		source =
+				let
+				    // DIM_CONTA_CONTABIL: base fictícia embutida no modelo (csv compactado)
+				    Bin = Binary.Decompress(Binary.FromText(Text.Combine({
+				        "rZTLTttAFIb3lfoO8wAjWpxw2aYOqUDhIlKhbg/2wT3qXKyZcYR4G9QF6qLLPoFfrGfsmNjFKhWwSDwX+zv/uabWBDieyzQ+m79rUnJJ5hvML4/kZ1eVNi7OIFQO70CmCrynG8ogA5tWPlh57nLUj28vVHVrU6BbeP9usrO783FXXqHJQeQoNLoMcusIvLzEDCmA+OSqAN3u8Xn2YSZ35XmJDjKyBtQGlsgVujXVD9YLFAU4MIFAoA9sg3J4CTaJGufoM3afsfzIkFnW82Fe1Q/1b/SCHegg29Nu+cPKK3BU369RyWSEn8hjXVof8d5eOxTrGJI3NDDhN9dWdTAUGbAXCjRGn97EzrRNZpNzpvh+Nht/KHqUnl61v6Y0trDJELbXwlag6ntHTTLRZOCKRqwv0UPMhBYX6L0FJc8vjr52N3LB1SWnI8SEC1mT962nvTBviHzLognID4FbnWPUiVw4DNiKDA6L1yOn8hTcdwxkCqbq+ldO8DxzhZrW/+TuyS9wC43vHM3ACY34xlSpIMNX6W4aZaaqokIVS8ya3LJ0Q3aLneWaDPngILBUP5K3vRFsIo8MuiJ2sqgCKS6lHP1/UodRGcNP5Io/Rg0xhQEzY5Ut+gF/meppbxjlEey4r5x9E937bYPMsXTIWWp6k8WDti7QXbsf3j7Z9dTvD+EHLXwzB7y4IRPHBblmLvtKBe5rsehOrewt+6P0YHNB7ZzZgBN5UrlBS8fooC5d/dMH0vZ5IwPxT6wctvKPLy9O2Ei6Wi7/Hq/LKmNKdzhS24fDgPwB"
+				    }), BinaryEncoding.Base64), Compression.Deflate),
+				    Fonte = Csv.Document(Bin, [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Cabecalhos = Table.PromoteHeaders(Fonte, [PromoteAllScalars = true]),
+				    Nulos = Table.TransformColumns(Cabecalhos, List.Transform(Table.ColumnNames(Cabecalhos), (c) => {c, (v) => if v = "" then null else v})),
+				    Colunas = Table.SelectColumns(Nulos, {"ContaID", "ContaContabil", "LinhaDRE", "GrupoDRE", "Natureza", "ClassificacaoCusto", "OrdemDRE", "GrupoFluxoCaixa"}, MissingField.UseNull),
+				    Tipos = Table.TransformColumnTypes(Colunas, {{"ContaID", type text}, {"ContaContabil", type text}, {"LinhaDRE", type text}, {"GrupoDRE", type text}, {"Natureza", type text}, {"ClassificacaoCusto", type text}, {"OrdemDRE", Int64.Type}, {"GrupoFluxoCaixa", type text}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,245 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.3.0/schema.json",
+  "themeCollection": {
+    "baseTheme": {
+      "name": "CY26SU05",
+      "reportVersionAtImport": {
+        "visual": "2.9.0",
+        "report": "3.3.0",
+        "page": "2.3.1"
+      },
+      "type": "SharedResources"
+    },
+    "customTheme": {
+      "name": "AuroraEducacao.json",
+      "reportVersionAtImport": {
+        "visual": "2.9.0",
+        "report": "3.3.0",
+        "page": "2.3.1"
+      },
+      "type": "RegisteredResources"
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "a2974893739dd2690e32",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "DIM_EPS"
+              }
+            },
+            "Property": "EPS"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "d",
+              "Entity": "DIM_EPS",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "Not": {
+                  "Expression": {
+                    "In": {
+                      "Expressions": [
+                        {
+                          "Column": {
+                            "Expression": {
+                              "SourceRef": {
+                                "Source": "d"
+                              }
+                            },
+                            "Property": "EPS"
+                          }
+                        }
+                      ],
+                      "Values": [
+                        [
+                          {
+                            "Literal": {
+                              "Value": "'ATENA BOT'"
+                            }
+                          }
+                        ]
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "howCreated": "User",
+        "isHiddenInViewMode": true,
+        "isLockedInViewMode": true,
+        "objects": {
+          "general": [
+            {
+              "properties": {
+                "isInvertedSelectionMode": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "true"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "objects": {
+    "section": [
+      {
+        "properties": {
+          "verticalAlignment": {
+            "expr": {
+              "Literal": {
+                "Value": "'Top'"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspacePane": [
+      {
+        "properties": {
+          "expanded": {
+            "expr": {
+              "Literal": {
+                "Value": "false"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "publicCustomVisuals": [
+    "textSearchSlicerF85E2E78BE4A4D7D9F99ED75B5D71C85",
+    "ZebraBITablesBAE31B370F254F808553548EFB35BFA5",
+    "InforiverCharts582F6C55AB6442EF8FA129089285CB47",
+    "FunnelChartA96234ADB8D143D1837FEC426BB34781",
+    "HorizontalFunnel1449177164235",
+    "deneb7E15AEF80B9E4D4F8E12924291ECE89A"
+  ],
+  "resourcePackages": [
+    {
+      "name": "SharedResources",
+      "type": "SharedResources",
+      "items": [
+        {
+          "name": "CY26SU05",
+          "path": "BaseThemes/CY26SU05.json",
+          "type": "BaseTheme"
+        }
+      ]
+    },
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "administracao8178257408723983.png",
+          "path": "administracao8178257408723983.png",
+          "type": "Image"
+        },
+        {
+          "name": "AuroraEducacao271026.png",
+          "path": "AuroraEducacao271026.png",
+          "type": "Image"
+        },
+        {
+          "name": "contact-form1865807640998417.png",
+          "path": "contact-form1865807640998417.png",
+          "type": "Image"
+        },
+        {
+          "name": "dashboard5245419338572268.png",
+          "path": "dashboard5245419338572268.png",
+          "type": "Image"
+        },
+        {
+          "name": "dashboard5318467119360122.png",
+          "path": "dashboard5318467119360122.png",
+          "type": "Image"
+        },
+        {
+          "name": "dashboard5533664992998365.png",
+          "path": "dashboard5533664992998365.png",
+          "type": "Image"
+        },
+        {
+          "name": "dashboard8278901593184508.png",
+          "path": "dashboard8278901593184508.png",
+          "type": "Image"
+        },
+        {
+          "name": "dictionary_(1)5317179585652689.png",
+          "path": "dictionary_(1)5317179585652689.png",
+          "type": "Image"
+        },
+        {
+          "name": "funil_contorno_branco_sem_fund849469987540259.png",
+          "path": "funil_contorno_branco_sem_fund849469987540259.png",
+          "type": "Image"
+        },
+        {
+          "name": "Icone_Limpar_Filtros_Cinza8417463036598254.png",
+          "path": "Icone_Limpar_Filtros_Cinza8417463036598254.png",
+          "type": "Image"
+        },
+        {
+          "name": "icons8-filtro-50_(2)7333768941160314.png",
+          "path": "icons8-filtro-50_(2)7333768941160314.png",
+          "type": "Image"
+        },
+        {
+          "name": "icons8-kpi-647426114230419063.png",
+          "path": "icons8-kpi-647426114230419063.png",
+          "type": "Image"
+        },
+        {
+          "name": "icons8-limpar-filtros-50_1_5521553482541498.png",
+          "path": "icons8-limpar-filtros-50_1_5521553482541498.png",
+          "type": "Image"
+        },
+        {
+          "name": "icons8-registros-4807656887009139901.png",
+          "path": "icons8-registros-4807656887009139901.png",
+          "type": "Image"
+        },
+        {
+          "name": "icons8-tabela-502547121058578572.png",
+          "path": "icons8-tabela-502547121058578572.png",
+          "type": "Image"
+        },
+        {
+          "name": "AuroraEducacao.json",
+          "path": "AuroraEducacao.json",
+          "type": "CustomTheme"
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "useStylableVisualContainerHeader": true,
+    "exportDataMode": "AllowSummarized",
+    "defaultDrillFilterOtherVisuals": true,
+    "allowChangeFilterTypes": true,
+    "useEnhancedTooltips": true,
+    "useDefaultAggregateDisplayName": true
+  }
+}

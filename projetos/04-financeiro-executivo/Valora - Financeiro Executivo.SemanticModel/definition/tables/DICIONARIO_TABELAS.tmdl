@@ -1,0 +1,55 @@
+table DICIONARIO_TABELAS
+	lineageTag: 7e0f3d15-f1f9-4a5a-b7d0-d5a27627b623
+
+	column Tabela
+		dataType: string
+		lineageTag: 56e801c6-f77f-4b84-af37-88481b6b98ee
+		summarizeBy: none
+		sourceColumn: Tabela
+
+		annotation SummarizationSetBy = Automatic
+
+	column Descricao
+		dataType: string
+		lineageTag: e5f521d9-75ef-469c-9e0b-ab2bdabb3acb
+		summarizeBy: none
+		sourceColumn: Descricao
+
+		annotation SummarizationSetBy = Automatic
+
+	column QtdLinhas
+		dataType: int64
+		formatString: 0
+		lineageTag: f05299df-8a9c-4611-830a-c9908fe4effc
+		summarizeBy: sum
+		sourceColumn: QtdLinhas
+
+		annotation SummarizationSetBy = Automatic
+
+	column QtdColunas
+		dataType: int64
+		formatString: 0
+		lineageTag: 3983addf-3856-4e64-a871-08defdbde163
+		summarizeBy: sum
+		sourceColumn: QtdColunas
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DICIONARIO_TABELAS = m
+		mode: import
+		source =
+				let
+				    // DICIONARIO_TABELAS: base fictícia embutida no modelo (csv compactado)
+				    Bin = Binary.Decompress(Binary.FromText(Text.Combine({
+				        "ZVNNb5tAEL1Hyn9Y5dRKU8lgEuLjGnBLZRsXkyg3awwbZyVg6e5SVfk3VQ9RK/XYS6/8sQ7gOml7sbCY92beBxnuRYkQCpNrmaOCD7ZYyvoBTf8UqLKt0ZyfhfFqF/KMQ4ClqIvui5aK5apihUTDul9WSMMEuxdaYqEMqzGXqkZpwJ9OwJmMDDfrOORhBBcrtFo+AgtCYPeylDigxRtirITOxQX4cDligmidpckuuNlmCQSitproC8Hy1lhFIDzotsGKXigD1zA9opJ1xsffebyETYm1GlCqtnRwfzkyYaxubauRFcjCNAJnBtcv8XO+Dngak+oRtsc676XTIyGsMIrA9Bc88P7glnyepDxMUrKqQNpw3FviXmnyRgsDMxdm52cLniW7RbJ8x2GhygdkJMJgyRqlX86D482m4LhHQMA30R3wj600snvqforBDbTyk+o9LESjRS6RXn1VMJ2evI9WmzTaZvEqGdRotKOPomp0981YWdE4+MctYXxLUUGgVa0OGivsRxukaEoS/2pDXRGv6TJv4B8hZOAS6+7pGAbTAkv5ONRhlFQ1wnbfa7oOpr571Xs9IDdLvo7e8xUlnUCiiaHok70nr3Jy8H+0f+l6p6SWMeEiCEpJa8WYbaPxsafQ0uSj/6SxkFaB601OItMoiObxbRRvIet+2LakS5HOzsVe6KFasj6Af3VJKo9tXCTpmlB9vAulaxodEqXhYSXVfdIXd5TF3/J/yRs84DO16zsOmXhKNr7ju1VyCyv1SfYm4nPAOcrPODqBVhxU3zrHu/LBcf6ChzEVNoEtluRhIccPdTSQ+J4bDK5z7fVO/AY="
+				    }), BinaryEncoding.Base64), Compression.Deflate),
+				    Fonte = Csv.Document(Bin, [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Cabecalhos = Table.PromoteHeaders(Fonte, [PromoteAllScalars = true]),
+				    Nulos = Table.TransformColumns(Cabecalhos, List.Transform(Table.ColumnNames(Cabecalhos), (c) => {c, (v) => if v = "" then null else v})),
+				    Colunas = Table.SelectColumns(Nulos, {"Tabela", "Descricao", "QtdLinhas", "QtdColunas"}, MissingField.UseNull),
+				    Tipos = Table.TransformColumnTypes(Colunas, {{"Tabela", type text}, {"Descricao", type text}, {"QtdLinhas", Int64.Type}, {"QtdColunas", Int64.Type}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

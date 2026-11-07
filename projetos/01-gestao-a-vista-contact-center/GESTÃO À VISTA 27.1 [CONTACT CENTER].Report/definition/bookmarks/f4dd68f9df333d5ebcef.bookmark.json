@@ -1,0 +1,104 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/2.1.0/schema.json",
+  "displayName": "OPORT",
+  "name": "f4dd68f9df333d5ebcef",
+  "options": {
+    "targetVisualNames": [
+      "e21cc390200eed26d738"
+    ],
+    "suppressData": true
+  },
+  "explorationState": {
+    "version": "1.3",
+    "activeSection": "c5a4875f5c0065603a32",
+    "filters": {
+      "byName": {
+        "3f7237325a1a46c2c14e": {
+          "name": "3f7237325a1a46c2c14e",
+          "type": "Categorical",
+          "filter": {
+            "Version": 2,
+            "From": [
+              {
+                "Name": "t",
+                "Entity": "TB CALL CENTER",
+                "Type": 0
+              }
+            ],
+            "Where": [
+              {
+                "Condition": {
+                  "Not": {
+                    "Expression": {
+                      "In": {
+                        "Expressions": [
+                          {
+                            "Column": {
+                              "Expression": {
+                                "SourceRef": {
+                                  "Source": "t"
+                                }
+                              },
+                              "Property": "TIPO_CURSO"
+                            }
+                          }
+                        ],
+                        "Values": [
+                          [
+                            {
+                              "Literal": {
+                                "Value": "null"
+                              }
+                            }
+                          ]
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "expression": {
+            "Column": {
+              "Expression": {
+                "SourceRef": {
+                  "Entity": "TB CALL CENTER"
+                }
+              },
+              "Property": "TIPO_CURSO"
+            }
+          },
+          "howCreated": 1
+        }
+      }
+    },
+    "sections": {
+      "c5a4875f5c0065603a32": {
+        "visualContainers": {},
+        "visualContainerGroups": {
+          "541d7663fd7b99e62ae4": {
+            "isHidden": false
+          }
+        }
+      }
+    },
+    "objects": {
+      "merge": {
+        "outspacePane": [
+          {
+            "properties": {
+              "expanded": {
+                "expr": {
+                  "Literal": {
+                    "Value": "false"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

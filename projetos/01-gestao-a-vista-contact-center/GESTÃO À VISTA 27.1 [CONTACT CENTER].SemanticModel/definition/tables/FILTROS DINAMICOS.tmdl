@@ -1,0 +1,56 @@
+table 'FILTROS DINAMICOS'
+	lineageTag: 091d8bb8-c9d9-4d66-8d1d-670db067b5b9
+
+	column 'FILTROS DINAMICOS'
+		lineageTag: 824f5dd8-ccfa-4433-adbb-200ff5f4c47a
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'FILTROS DINAMICOS Pedido'
+
+		relatedColumnDetails
+			groupByColumn: 'FILTROS DINAMICOS Campos'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'FILTROS DINAMICOS Campos'
+		isHidden
+		lineageTag: 362ef688-3ae6-429e-810e-6fe17cf5c4da
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'FILTROS DINAMICOS Pedido'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'FILTROS DINAMICOS Pedido'
+		isHidden
+		formatString: 0
+		lineageTag: d04cc063-2a0c-4ea4-9dba-5d9150192c85
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'FILTROS DINAMICOS' = calculated
+		mode: import
+		source =
+				{
+				    ("SUPER CANAL", NAMEOF('TB CALL CENTER'[SUPER_CANAL]), 0),
+				    ("MODALIDADE", NAMEOF('TB CALL CENTER'[MODALIDADE]), 1),
+				    ("CURSO", NAMEOF('TB CALL CENTER'[CURSO]), 2),
+				    ("UNIDADE", NAMEOF('TB CALL CENTER'[NOME_SIGA]), 3),
+				    ("GERENTE", NAMEOF('TB CALL CENTER'[GERENTE]), 4),
+				    ("REGIONAL", NAMEOF('TB CALL CENTER'[NOME_REGIONAL]), 5),
+				    ("DIRETOR", NAMEOF('TB CALL CENTER'[DIRETOR]), 6),
+				    ("EPS", NAMEOF('TB CALL CENTER'[EPS]), 7),
+				    ("DATA", NAMEOF('Dim_Data'[Date]), 8),
+				    ("PRODUTO", NAMEOF('TB CALL CENTER'[TIPO_CURSO]), 9),
+				    ("CANAL", NAMEOF('TB CALL CENTER'[CANAL]), 10)}
+
+	annotation PBI_Id = 3c46ac50030c4e80b0fba2e9b1331e3e
+

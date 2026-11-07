@@ -1,0 +1,199 @@
+relationship b00d24ea-9e79-450d-8e2e-5fab6cc96233
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DIM_COLABORADOR.DataAdmissao
+	toColumn: LocalDateTable_7f743ca3-cad7-4f18-b97b-6256e4deb064.Date
+
+relationship d49aa7a9-d6ea-4f0e-8187-7c47b6138b5e
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DIM_COLABORADOR.DataDesligamento
+	toColumn: LocalDateTable_2a06ecb9-35bc-47ca-a1b6-a6d78462d8ee.Date
+
+relationship 6a18438c-fb52-44c9-8324-2905aeb646e8
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DIM_DATA.Data
+	toColumn: LocalDateTable_80738c3d-96df-433e-8d2d-25bf3ff620b7.Date
+
+relationship 80bbc5f4-7c18-4636-9c78-49697f380ef9
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DIM_DATA.AnoMes
+	toColumn: LocalDateTable_e2086683-24e8-4f79-8e1a-37d599903a05.Date
+
+relationship 8e92358b-e50f-4175-817c-4b7c370b1a96
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DIM_EMPRESTIMO.DataContratacao
+	toColumn: LocalDateTable_d9668cfe-56cb-471f-a159-331502751de6.Date
+
+relationship a77b8db0-250a-4cf9-b13c-6ad653686b64
+	joinOnDateBehavior: datePartOnly
+	fromColumn: FATO_CAPEX.DataAquisicao
+	toColumn: LocalDateTable_f11efd99-fff0-4556-abca-58c7dbb9f850.Date
+
+relationship ce4193cf-7ee1-4c2c-ba5a-bbbf9c41025f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: FATO_CAPEX.Competencia
+	toColumn: LocalDateTable_652b0682-0d62-44ed-9c53-db1349d42db0.Date
+
+relationship 5b173cc5-3ae1-4b63-8b7b-709bde69850d
+	joinOnDateBehavior: datePartOnly
+	fromColumn: FATO_DIVIDA.DataVencimento
+	toColumn: LocalDateTable_6443cd43-a072-478d-8a9c-e23f5166d26e.Date
+
+relationship 9e746212-94cf-477d-a7f0-bdad57bd0ce5
+	joinOnDateBehavior: datePartOnly
+	fromColumn: FATO_DIVIDA.DataPagamento
+	toColumn: LocalDateTable_af4faa8e-8ab5-43fd-842e-b14f9b2d4ceb.Date
+
+relationship AutoDetected_d78c17ec-bb17-4eaa-b4aa-600cc810ccdf
+	fromColumn: FATO_DIVIDA.EmprestimoID
+	toColumn: DIM_EMPRESTIMO.EmprestimoID
+
+relationship AutoDetected_fdee4828-38f8-4c0f-a8ac-c332b14661e1
+	fromColumn: FATO_DRE.ContaID
+	toColumn: DIM_CONTA_CONTABIL.ContaID
+
+relationship 02b09d07-ed55-425d-b4c4-ecb279ac23e7
+	joinOnDateBehavior: datePartOnly
+	fromColumn: FATO_FOLHA.Competencia
+	toColumn: LocalDateTable_8d59e9cc-de71-41de-af46-817a73be5bc7.Date
+
+relationship AutoDetected_4463f6f0-352a-4fe1-b143-a159de507c0a
+	fromColumn: FATO_FOLHA.ColaboradorID
+	toColumn: DIM_COLABORADOR.ColaboradorID
+
+relationship 26b68178-f544-484c-b731-e3ccfc742273
+	joinOnDateBehavior: datePartOnly
+	fromColumn: FATO_PAGAVEIS.DataEmissao
+	toColumn: LocalDateTable_ee51eedd-7dda-4625-8d96-2750febbc1f2.Date
+
+relationship 7ec6f239-97b7-4e1e-8190-5495783b097c
+	joinOnDateBehavior: datePartOnly
+	fromColumn: FATO_PAGAVEIS.DataVencimento
+	toColumn: LocalDateTable_54e8028d-9681-4302-90af-f4b4dd6229f5.Date
+
+relationship 47bb23ca-c60e-4a31-8088-eff1eafbbde3
+	joinOnDateBehavior: datePartOnly
+	fromColumn: FATO_PAGAVEIS.DataPagamento
+	toColumn: LocalDateTable_d1822e6d-8d9e-4d97-866e-7fd415b02925.Date
+
+relationship 77e90a8d-c2fc-4a9a-b1fb-934c01664fb2
+	joinOnDateBehavior: datePartOnly
+	fromColumn: FATO_PAGAVEIS.Competencia
+	toColumn: LocalDateTable_5c046a5a-c475-4c52-b106-f4c93a7c7582.Date
+
+relationship AutoDetected_933c7cab-b815-4500-9f2a-d8304185aff0
+	fromColumn: FATO_PAGAVEIS.ContaID
+	toColumn: DIM_CONTA_CONTABIL.ContaID
+
+relationship AutoDetected_46a25929-a1ef-46ef-9114-b348b449d7f1
+	fromColumn: FATO_PAGAVEIS.FornecedorID
+	toColumn: DIM_FORNECEDOR.FornecedorID
+
+relationship fb15530e-745d-409b-9cdd-5c1c2921bf18
+	joinOnDateBehavior: datePartOnly
+	fromColumn: FATO_PLANEJAMENTO.Competencia
+	toColumn: LocalDateTable_2b060c99-3fa0-485c-b44e-2022f14b4299.Date
+
+relationship AutoDetected_bf0eff15-7d3f-4ab0-b56a-ec7269435e46
+	fromColumn: FATO_PLANEJAMENTO.ContaID
+	toColumn: DIM_CONTA_CONTABIL.ContaID
+
+relationship c9757ecf-e2ac-4508-a5a9-0b18c906a40d
+	joinOnDateBehavior: datePartOnly
+	fromColumn: FATO_RECEBIVEIS.DataEmissao
+	toColumn: LocalDateTable_6e4f25a7-bfb1-48a7-8433-0f063cadea23.Date
+
+relationship 31fade36-61d0-46ba-8074-c548fd4c1c86
+	joinOnDateBehavior: datePartOnly
+	fromColumn: FATO_RECEBIVEIS.DataVencimento
+	toColumn: LocalDateTable_997ca415-d714-4d78-af21-a374da0d4722.Date
+
+relationship c0796a37-971b-48b1-80b0-cd4eb23a13e5
+	joinOnDateBehavior: datePartOnly
+	fromColumn: FATO_RECEBIVEIS.DataRecebimento
+	toColumn: LocalDateTable_445841e4-3d32-4bbf-a293-6267080f1cb3.Date
+
+relationship d2a7635c-4aa8-4bc4-b279-872f6349504c
+	joinOnDateBehavior: datePartOnly
+	fromColumn: FATO_RECEBIVEIS.Competencia
+	toColumn: LocalDateTable_b3b08af7-c061-4e79-b46a-b2a6dc77eb0f.Date
+
+relationship AutoDetected_3d0dd030-70f2-43bf-954e-39e32fdcbb51
+	fromColumn: FATO_RECEBIVEIS.ClienteID
+	toColumn: DIM_CLIENTE.ClienteID
+
+relationship AutoDetected_a1acec89-a4d0-4fff-8d63-db8802412e10
+	fromColumn: FATO_CAPEX.CentroCustoID
+	toColumn: DIM_CENTRO_CUSTO.CentroCustoID
+
+relationship AutoDetected_462aa4c4-c317-4a8a-ba74-66dae92aa499
+	fromColumn: FATO_DRE.CentroCustoID
+	toColumn: DIM_CENTRO_CUSTO.CentroCustoID
+
+relationship AutoDetected_e7bb0e2c-0556-4c4f-982b-113f594ea0bd
+	fromColumn: FATO_PLANEJAMENTO.CentroCustoID
+	toColumn: DIM_CENTRO_CUSTO.CentroCustoID
+
+relationship AutoDetected_775df7b9-bfa6-45f9-9329-c9abdcd8891b
+	fromColumn: FATO_CAPEX.UnidadeID
+	toColumn: DIM_UNIDADE.UnidadeID
+
+relationship AutoDetected_e313de14-bf4d-48e3-b499-d3fa86af9a4e
+	fromColumn: FATO_DRE.UnidadeID
+	toColumn: DIM_UNIDADE.UnidadeID
+
+relationship AutoDetected_98a8cb8f-a83d-4705-9cef-2ff056954972
+	fromColumn: FATO_PAGAVEIS.UnidadeID
+	toColumn: DIM_UNIDADE.UnidadeID
+
+relationship AutoDetected_168a53c1-f45f-4eaf-bd71-9313d61bf2d0
+	fromColumn: FATO_PLANEJAMENTO.UnidadeID
+	toColumn: DIM_UNIDADE.UnidadeID
+
+relationship AutoDetected_e25235e0-6914-4401-9b08-d65bca14fbdf
+	fromColumn: FATO_RECEBIVEIS.UnidadeID
+	toColumn: DIM_UNIDADE.UnidadeID
+
+relationship AutoDetected_e909a58d-74b0-4ebf-bc4c-e02eef743515
+	fromColumn: FATO_CAIXA_DIARIO.ContaBancariaID
+	toColumn: DIM_CONTA_BANCARIA.ContaBancariaID
+
+relationship AutoDetected_d6544440-9752-4555-839e-f3e81f7a9521
+	fromColumn: FATO_CAIXA_MOV.ContaBancariaID
+	toColumn: DIM_CONTA_BANCARIA.ContaBancariaID
+
+relationship 180afe36-806d-a566-3c3a-8cf3be1f4bf8
+	fromColumn: FATO_FOLHA.CentroCustoID
+	toColumn: DIM_CENTRO_CUSTO.CentroCustoID
+
+relationship 079796de-377b-82ec-563d-f543b73a63d8
+	fromColumn: FATO_FOLHA.UnidadeID
+	toColumn: DIM_UNIDADE.UnidadeID
+
+relationship 1a618623-7ddd-3a0c-5271-f88266511d0c
+	fromColumn: FATO_DRE.Competencia
+	toColumn: DIM_DATA.Data
+
+relationship 9ed7daf8-a393-26ba-0e4f-dab83f9b9fef
+	fromColumn: FATO_CAIXA_DIARIO.Data
+	toColumn: DIM_DATA.Data
+
+relationship a69d8955-1a2b-f27d-b785-639088652db6
+	fromColumn: FATO_CAIXA_MOV.Data
+	toColumn: DIM_DATA.Data
+
+
+relationship 868491d2-f0f0-e76c-bebd-41b06e336c74
+	fromColumn: FATO_PLANEJAMENTO.Competencia
+	toColumn: DIM_DATA.Data
+
+relationship b1f46362-8a3d-5191-2c48-3ac5ad354721
+	fromColumn: FATO_FOLHA.Competencia
+	toColumn: DIM_DATA.Data
+
+relationship bfcd0039-2f7d-1580-ecca-4cd23b21d286
+	fromColumn: FATO_CAPEX.Competencia
+	toColumn: DIM_DATA.Data
+
+relationship 0e14228d-928e-87a4-5662-c1bb2391255d
+	fromColumn: FATO_DIVIDA.DataPagamento
+	toColumn: DIM_DATA.Data

@@ -1,0 +1,46 @@
+table DIM_CENTRO_CUSTO
+	lineageTag: 2893e9c9-9f9e-4e72-a6ee-4b4a2d00ab54
+
+	column CentroCustoID
+		dataType: string
+		lineageTag: 3bf38d61-0f3e-4450-a526-b5f2df37cbe3
+		summarizeBy: none
+		sourceColumn: CentroCustoID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CentroCusto
+		dataType: string
+		lineageTag: ae7e31e9-4128-4781-8b72-1109fe1f9e71
+		summarizeBy: none
+		sourceColumn: CentroCusto
+
+		annotation SummarizationSetBy = Automatic
+
+	column GrupoCentroCusto
+		dataType: string
+		lineageTag: 0bd328ae-39cd-4814-afdd-f7b3f69765c2
+		summarizeBy: none
+		sourceColumn: GrupoCentroCusto
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_CENTRO_CUSTO = m
+		mode: import
+		source =
+				let
+				    // DIM_CENTRO_CUSTO: base fictícia embutida no modelo (csv compactado)
+				    Bin = Binary.Decompress(Binary.FromText(Text.Combine({
+				        "bY5NCsJADIX3gnfoAbLwX7cyRREUBcV9aEOJthPJpF7JlUtP0Is51IWiLvO+j7znyJuKq4PJKgX3vmCp9UU+gm7HuV4fjuRzDOCkIs0YyzYewAb1TMa++CJDWEvR3INxhgklLoXthRSbW/Og0BqjaJwwRIgWf3MVK+XHGsOBMi+lFIywj8vUqAUTWLBHnxGrwDyv2HMwRePra/EUdhSCtAWuLq1W/KfNIGUlE+Vf/AQ="
+				    }), BinaryEncoding.Base64), Compression.Deflate),
+				    Fonte = Csv.Document(Bin, [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Cabecalhos = Table.PromoteHeaders(Fonte, [PromoteAllScalars = true]),
+				    Nulos = Table.TransformColumns(Cabecalhos, List.Transform(Table.ColumnNames(Cabecalhos), (c) => {c, (v) => if v = "" then null else v})),
+				    Colunas = Table.SelectColumns(Nulos, {"CentroCustoID", "CentroCusto", "GrupoCentroCusto"}, MissingField.UseNull),
+				    Tipos = Table.TransformColumnTypes(Colunas, {{"CentroCustoID", type text}, {"CentroCusto", type text}, {"GrupoCentroCusto", type text}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+
+

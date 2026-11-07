@@ -1,0 +1,261 @@
+table Dim_Data
+	lineageTag: 9703208f-6697-4ae1-af5e-72de33217e48
+
+	measure 'Dias Úteis' =
+			
+			CALCULATE(
+			    COUNTROWS('Dim_Data'),
+			    'Dim_Data'[É Dia Útil] = 1
+			)
+		formatString: 0
+		lineageTag: 36ba02a4-7799-468a-b1d1-1e527f91fce3
+
+	measure 'HC Ativo' =
+			
+			COUNTROWS(
+			    FILTER(
+			        VALUES('DIM_CONSULTOR'[nm_consultor_recebimento]),
+			        CALCULATE([TRABALHADO]) > 0
+			    )
+			)
+		formatString: 0
+		lineageTag: bb6ae812-5350-42a8-87a1-f89b9aa923a9
+
+	measure 'Produtividade Total' =
+			
+			DIVIDE(
+			    [MATRICULAS],
+			    [HC Ativo] * [Dias Úteis],
+			    0
+			)
+		lineageTag: 292075cd-aacd-452d-9894-bf63a31ba753
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Produtividade Consultor' =
+			
+			DIVIDE(
+			    [MATRICULAS],
+			    [Dias Úteis],
+			    0
+			)
+		lineageTag: 96e4c02b-6671-4527-9036-ea66a9348967
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure PROD =
+			
+			VAR _Matriculas =
+			    [MATRICULAS]
+			
+			VAR _DiasUteis =
+			    [Dias Úteis]
+			
+			RETURN
+			    DIVIDE(
+			        _Matriculas,
+			        _DiasUteis,
+			        0
+			    )
+		formatString: 0.0
+		lineageTag: 4b9d8753-532b-4df4-aa5e-7d72cc29cbcc
+
+	column Date
+		formatString: General Date
+		lineageTag: 2e8850c8-f5c2-4343-8bb1-75fd14c52905
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		variation Variation
+			isDefault
+			relationship: 60c6b846-8b2b-413f-a74a-8433e30986d5
+			defaultHierarchy: LocalDateTable_d9e2b227-e348-482b-a5fc-60a14e8e0746.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ano
+		formatString: 0
+		lineageTag: 2e1cec85-a056-492d-bf31-34ba20841e2a
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Ano]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mês
+		formatString: 0
+		lineageTag: 3ae0dd04-4d4e-42f1-b190-c25ccb909709
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Mês]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nome Mês'
+		lineageTag: 13950caa-5ff2-4406-8e38-4a0525bb0894
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Nome Mês]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ano-Mês
+		lineageTag: f35b7c42-04b8-412f-acd5-aee35b5976bd
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Ano-Mês]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nome Mês-Ano'
+		lineageTag: bfbf8e40-7da4-410a-ab57-bb92db5531c3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Nome Mês-Ano]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trimestre
+		lineageTag: 6b027c8e-74d6-4189-b5ea-a20bc097d783
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Trimestre]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dia da Semana'
+		formatString: 0
+		lineageTag: 9a0e9521-f9a3-4b8f-b34e-6f5784aaad00
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Dia da Semana]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nome Dia'
+		lineageTag: 2a27d496-0b39-43cf-9162-04cbcfd00631
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Nome Dia]
+		sortByColumn: 'Dia da Semana'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'É Dia Útil'
+		formatString: 0
+		lineageTag: 8b67abb2-c49b-4773-b8ec-743d0ffc6c79
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [É Dia Útil]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Dia/Mês
+		lineageTag: 4e3a061f-25f0-44dd-8eb3-0c0b4f6d1af2
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Dia/Mês]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ano Ciclo'
+		formatString: 0
+		lineageTag: a21ae515-7d4e-4ed4-a3b5-d4b088b82c0b
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Ano Ciclo]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ordem Ciclo'
+		formatString: 0
+		lineageTag: 7656892b-d0df-4626-a11f-aeeeb2f35d31
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Ordem Ciclo]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Semana Mês'
+		lineageTag: 88eb0963-7887-4554-842f-fef9bc2fa111
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Semana Mês]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ordem Semana Mês'
+		formatString: 0
+		lineageTag: 9ad69f70-1976-4141-98f0-214783e7fb36
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Ordem Semana Mês]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Data = calculated
+		mode: import
+		source =
+				
+				ADDCOLUMNS (
+				    CALENDAR (DATE(2026,5,1), DATE(2026,10,23)-1),
+				
+				    "Ano", YEAR([Date]),
+				    "Mês", MONTH([Date]),
+				    "Nome Mês", FORMAT([Date], "mmmm"),
+				    "Ano-Mês", FORMAT([Date], "yyyy-MM"),
+				    "Nome Mês-Ano", FORMAT([Date], "mmm yyyy"),
+				    "Trimestre", "T" & FORMAT(QUARTER([Date]), "0"),
+				    "Dia da Semana", WEEKDAY([Date], 2),
+				    "Nome Dia", FORMAT([Date], "dddd"),
+				    "É Dia Útil", IF(WEEKDAY([Date], 2) <= 5, 1, 0),
+				
+				    -- NOVA COLUNA DIA/MÊS
+				    "Dia/Mês", FORMAT([Date], "dd/MM"),
+				
+				    -- ANO DO CICLO
+				    "Ano Ciclo",
+				        IF(MONTH([Date]) >= 10, YEAR([Date]), YEAR([Date]) - 1),
+				
+				    -- ORDEM DO CICLO (OUTUBRO PRIMEIRO)
+				    "Ordem Ciclo",
+				        SWITCH(
+				            MONTH([Date]),
+				            10, 1,
+				            11, 2,
+				            12, 3,
+				            1, 4,
+				            2, 5,
+				            3, 6,
+				            4, 7,
+				            5, 8,
+				            6, 9,
+				            7, 10,
+				            8, 11,
+				            9, 12
+				        ),
+				
+				 "Semana Mês",
+				SWITCH(
+				    TRUE(),
+				    DAY([Date]) <= 7, "1 a 7",
+				    DAY([Date]) <= 14, "8 a 14",
+				    DAY([Date]) <= 21, "15 a 21",
+				    DAY([Date]) <= 28, "22 a 28",
+				    "29 a 31"
+				),
+				
+				"Ordem Semana Mês",
+				SWITCH(
+				    TRUE(),
+				    DAY([Date]) <= 7, 1,
+				    DAY([Date]) <= 14, 2,
+				    DAY([Date]) <= 21, 3,
+				    DAY([Date]) <= 28, 4,
+				    5
+				)
+				)
+
+	annotation PBI_Id = 6aac6f1fb93e4a089fbb7f2308236c2b
+

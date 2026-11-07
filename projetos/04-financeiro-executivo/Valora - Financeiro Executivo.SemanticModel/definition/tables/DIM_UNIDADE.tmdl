@@ -1,0 +1,62 @@
+table DIM_UNIDADE
+	lineageTag: 7aaa894f-3c8f-4685-ad90-3b775ce9e352
+
+	column UnidadeID
+		dataType: string
+		lineageTag: f95a1a4f-8e38-4216-8a07-865b795be023
+		summarizeBy: none
+		sourceColumn: UnidadeID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Unidade
+		dataType: string
+		lineageTag: 82185c0a-7820-431b-a929-665cba1a4a20
+		summarizeBy: none
+		sourceColumn: Unidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column Regional
+		dataType: string
+		lineageTag: 81489876-c682-4e99-ba01-7f3f73333f50
+		summarizeBy: none
+		sourceColumn: Regional
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cidade
+		dataType: string
+		lineageTag: b33a3d8b-4c35-4303-86e4-929420226f9a
+		summarizeBy: none
+		sourceColumn: Cidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column UF
+		dataType: string
+		lineageTag: 36f456cb-ef42-4dbd-84cd-17f0cc62f53c
+		summarizeBy: none
+		sourceColumn: UF
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_UNIDADE = m
+		mode: import
+		source =
+				let
+				    // DIM_UNIDADE: base fictícia embutida no modelo (csv compactado)
+				    Bin = Binary.Decompress(Binary.FromText(Text.Combine({
+				        "XdBLDoIwEAbgvYl34ABj4tu1lkdcqA2EA4wwmklKaypsPI6uPAcXkwqocdf/z5fptKnmHHPa+pC2J4jpzEajAtHmNBwO0vEEdlhavnlJ/TCexEoZSKqcriXBbyUdnoLwPYHFhTVeP+xbvNEMQlaMyosp4xPB3tjWdVkGTs17JSrLJR+xGdes1gcZO7ToUWS4vmtGEKRLa0aH98BPGx2cXvZ6Q6p+Fu7iBnVBrh1ZQTDKTFGQzZrFMGs/5O+dLw=="
+				    }), BinaryEncoding.Base64), Compression.Deflate),
+				    Fonte = Csv.Document(Bin, [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Cabecalhos = Table.PromoteHeaders(Fonte, [PromoteAllScalars = true]),
+				    Nulos = Table.TransformColumns(Cabecalhos, List.Transform(Table.ColumnNames(Cabecalhos), (c) => {c, (v) => if v = "" then null else v})),
+				    Colunas = Table.SelectColumns(Nulos, {"UnidadeID", "Unidade", "Regional", "Cidade", "UF"}, MissingField.UseNull),
+				    Tipos = Table.TransformColumnTypes(Colunas, {{"UnidadeID", type text}, {"Unidade", type text}, {"Regional", type text}, {"Cidade", type text}, {"UF", type text}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+
+

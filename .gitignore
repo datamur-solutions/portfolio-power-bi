@@ -1,0 +1,8 @@
+# Power BI Project (PBIP): arquivos locais que não vão para o repositório
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini

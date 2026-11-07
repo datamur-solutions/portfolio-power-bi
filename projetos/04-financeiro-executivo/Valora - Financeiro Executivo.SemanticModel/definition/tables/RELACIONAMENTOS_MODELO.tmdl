@@ -1,0 +1,70 @@
+table RELACIONAMENTOS_MODELO
+	lineageTag: f406f2eb-a0ed-485a-b327-9383376bfa54
+
+	column TabelaOrigem
+		dataType: string
+		lineageTag: b67433be-2154-4fb8-8051-0cd0ebfee019
+		summarizeBy: none
+		sourceColumn: TabelaOrigem
+
+		annotation SummarizationSetBy = Automatic
+
+	column ColunaOrigem
+		dataType: string
+		lineageTag: 45077658-3934-4483-bdbb-83cb646187aa
+		summarizeBy: none
+		sourceColumn: ColunaOrigem
+
+		annotation SummarizationSetBy = Automatic
+
+	column TabelaDestino
+		dataType: string
+		lineageTag: fd276995-737b-4159-a030-bd2b66e04c56
+		summarizeBy: none
+		sourceColumn: TabelaDestino
+
+		annotation SummarizationSetBy = Automatic
+
+	column ColunaDestino
+		dataType: string
+		lineageTag: e4fb3435-734c-4e38-b249-46d7454cd514
+		summarizeBy: none
+		sourceColumn: ColunaDestino
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cardinalidade
+		dataType: string
+		lineageTag: 220a3c2c-252f-4c29-aa6c-eed6ebe86264
+		summarizeBy: none
+		sourceColumn: Cardinalidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column Observacao
+		dataType: string
+		lineageTag: bdb36641-0503-4924-8bab-30aa799a3264
+		summarizeBy: none
+		sourceColumn: Observacao
+
+		annotation SummarizationSetBy = Automatic
+
+	partition RELACIONAMENTOS_MODELO = m
+		mode: import
+		source =
+				let
+				    // RELACIONAMENTOS_MODELO: base fictícia embutida no modelo (csv compactado)
+				    Bin = Binary.Decompress(Binary.FromText(Text.Combine({
+				        "rZNBbsMgEEX3lXoHH8CbbrsbA26pbBMREmUXTWxaIdkQYacX6lF6sRLHTuN2E0fZIMEf3nxmBoU7XaPw5kM3MXH1wY4b1StUt52xbpDOO/SVsVibCisdi12r/SeW6B4fUlBiSyULF2yHnMaU51siCgWnNeHZWSqen+LU1J13UYVRZRpt2+8vF+3RY4TRO3aXwJXtsw3IVcEp0MvTeTSibYgkh7Zzo0lWKCm2ZLVU4o88E+2ave60LQ32YAoKYoodzuAsMijYG+TBk7hvKSUjLOFrxpcxqU145lhRkvGQjV2czrALL9AjU+etLnXl/EBNhSxCRirkVJtRUr4OrY5Zs/fH6WvGfrF8IdlS8VxMtevJqche4TjZuHMefz0TkUEiJBxNT9Xr2QT4BoJ3kHxoYIK2RG+mjUygICEE/oXMzZSL9WnGbp04Agu2uc8n+wE="
+				    }), BinaryEncoding.Base64), Compression.Deflate),
+				    Fonte = Csv.Document(Bin, [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Cabecalhos = Table.PromoteHeaders(Fonte, [PromoteAllScalars = true]),
+				    Nulos = Table.TransformColumns(Cabecalhos, List.Transform(Table.ColumnNames(Cabecalhos), (c) => {c, (v) => if v = "" then null else v})),
+				    Colunas = Table.SelectColumns(Nulos, {"TabelaOrigem", "ColunaOrigem", "TabelaDestino", "ColunaDestino", "Cardinalidade", "Observacao"}, MissingField.UseNull),
+				    Tipos = Table.TransformColumnTypes(Colunas, {{"TabelaOrigem", type text}, {"ColunaOrigem", type text}, {"TabelaDestino", type text}, {"ColunaDestino", type text}, {"Cardinalidade", type text}, {"Observacao", type text}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+
+

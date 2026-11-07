@@ -1,0 +1,990 @@
+table 'DICIONARIO GESTAO A VISTA'
+	lineageTag: ebb95da8-1674-41aa-b17f-67bb00bb5f50
+
+	column ORDEM_PAGINA
+		formatString: 0
+		lineageTag: 6980fc53-07be-4fa6-97b6-a1608a1c4e1c
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [ORDEM_PAGINA]
+
+		annotation SummarizationSetBy = Automatic
+
+	column PAGINA
+		lineageTag: 238ab1c5-826b-4c52-badb-3ecfe33d4376
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [PAGINA]
+		sortByColumn: ORDEM_PAGINA
+
+		annotation SummarizationSetBy = Automatic
+
+	column ORDEM_BLOCO
+		formatString: 0
+		lineageTag: a22e9ac7-5bc5-4e89-8955-3f10f7a03afa
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [ORDEM_BLOCO]
+
+		annotation SummarizationSetBy = Automatic
+
+	column BLOCO
+		lineageTag: f000ffb0-068d-4840-b4ae-21d8f5dc3d85
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [BLOCO]
+
+		annotation SummarizationSetBy = Automatic
+
+	column ORDEM_INDICADOR
+		formatString: 0
+		lineageTag: 228de4a5-0d1b-4a27-b407-18dee1fc06b5
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [ORDEM_INDICADOR]
+
+		annotation SummarizationSetBy = Automatic
+
+	column INDICADOR_KPI
+		lineageTag: 2a972464-0297-45a4-afa9-6f43b10c29f5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [INDICADOR_KPI]
+		sortByColumn: ORDEM_INDICADOR
+
+		annotation SummarizationSetBy = Automatic
+
+	column DESCRICAO
+		lineageTag: 34a88454-b5a4-495e-84f0-cc11cccdb7b1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [DESCRICAO]
+
+		annotation SummarizationSetBy = Automatic
+
+	column FORMULA_LEITURA
+		lineageTag: 04ee7c7e-57b7-4af3-ad55-9f0a3137ac8e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [FORMULA_LEITURA]
+
+		annotation SummarizationSetBy = Automatic
+
+	column REGRA_NEGOCIO
+		lineageTag: 542d2dba-ca31-4cd6-8e75-7dddcf5d960c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [REGRA_NEGOCIO]
+
+		annotation SummarizationSetBy = Automatic
+
+	column COMO_INTERPRETAR
+		lineageTag: 800f60f3-85b7-486a-a705-4ad84fc8a929
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [COMO_INTERPRETAR]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'DICIONARIO GESTAO A VISTA' = calculated
+		mode: import
+		source =
+				
+				DATATABLE(
+				    "ORDEM_PAGINA", INTEGER,
+				    "PAGINA", STRING,
+				    "ORDEM_BLOCO", INTEGER,
+				    "BLOCO", STRING,
+				    "ORDEM_INDICADOR", INTEGER,
+				    "INDICADOR_KPI", STRING,
+				    "DESCRICAO", STRING,
+				    "FORMULA_LEITURA", STRING,
+				    "REGRA_NEGOCIO", STRING,
+				    "COMO_INTERPRETAR", STRING,
+				    {
+				        /* =====================================================
+				           1. CONCEITOS GERAIS
+				           ===================================================== */
+				
+				        {
+				            0,
+				            "CONCEITOS GERAIS",
+				            1,
+				            "PAINEL",
+				            1,
+				            "DATA BASE",
+				            "Data da última atualização válida das informações apresentadas no painel.",
+				            "Maior data disponível na base carregada.",
+				            "A data base não representa necessariamente a data do último contato. Ela identifica a atualização considerada pelo painel.",
+				            "Utilize a data base para confirmar se a visão está atualizada antes de realizar análises ou comparações."
+				        },
+				
+				        {
+				            0,
+				            "CONCEITOS GERAIS",
+				            1,
+				            "PAINEL",
+				            2,
+				            "CICLO",
+				            "Período comercial utilizado para acompanhamento da captação e conversão dos candidatos.",
+				            "Classificação definida pela regra de período letivo.",
+				            "Os indicadores devem ser comparados dentro do mesmo ciclo, respeitando datas de início, viradas de ciclo e regras específicas das operações.",
+				            "Permite acompanhar a evolução comercial desde o início do período de captação."
+				        },
+				
+				        {
+				            0,
+				            "CONCEITOS GERAIS",
+				            1,
+				            "PAINEL",
+				            3,
+				            "EPS",
+				            "Empresa prestadora de serviço responsável pela atuação comercial do Contact Center.",
+				            "Classificação obtida na coluna EPS da base do Call Center.",
+				            "As principais operações consideradas são CONECTA+ e VOXPRIME.",
+				            "Utilize este filtro para comparar cobertura, esforço, produtividade e conversão entre operações."
+				        },
+				
+				        {
+				            0,
+				            "CONCEITOS GERAIS",
+				            1,
+				            "PAINEL",
+				            4,
+				            "SUPER CANAL",
+				            "Agrupamento comercial que identifica a principal origem ou estratégia de captação da inscrição.",
+				            "Classificação originada da base de captação comercial.",
+				            "Exemplos: Mídia, Hunter, Distribuidores, Consultoria Educação, Empresa, Marketplace, Você Indica e Outros.",
+				            "Permite identificar quais estratégias geram maior volume, contato, venda e matrícula."
+				        },
+				
+				        {
+				            0,
+				            "CONCEITOS GERAIS",
+				            2,
+				            "FILTROS",
+				            1,
+				            "DATA INSCRIÇÃO",
+				            "Filtra os candidatos pela data em que a inscrição foi criada.",
+				            "Intervalo mínimo e máximo da coluna DATA_INSCRICAO.",
+				            "É uma visão por safra de inscritos.",
+				            "Ao selecionar um período, o painel acompanha o comportamento das inscrições originadas naquele intervalo."
+				        },
+				
+				        {
+				            0,
+				            "CONCEITOS GERAIS",
+				            2,
+				            "FILTROS",
+				            2,
+				            "DATA MATRÍCULA",
+				            "Filtra os candidatos pela data em que a matrícula foi registrada.",
+				            "Intervalo mínimo e máximo da coluna DATA_MATRICULA.",
+				            "É uma visão por safra de matrícula.",
+				            "Utilize para análises de produção, pace, realizado e atingimento de meta."
+				        },
+				
+				        {
+				            0,
+				            "CONCEITOS GERAIS",
+				            2,
+				            "FILTROS",
+				            3,
+				            "TOMBAMENTOS",
+				            "Classificação que identifica registros originados de Tombamentos e Migrações.",
+				            "Se ORIGEM_CALLCENTER for Tombamentos e Migrações, retorna COM TOMBAMENTOS; nos demais casos, retorna SEM TOMBAMENTOS.",
+				            "Valores diferentes ou em branco são classificados como SEM TOMBAMENTOS.",
+				            "Permite analisar o resultado orgânico da operação separadamente dos registros migrados."
+				        },
+				
+				        {
+				            0,
+				            "CONCEITOS GERAIS",
+				            2,
+				            "FILTROS",
+				            4,
+				            "LIMPAR FILTROS",
+				            "Botão utilizado para retornar os filtros da página ao estado padrão.",
+				            "Ação configurada por marcador no Power BI.",
+				            "O botão não altera os dados da base, apenas remove as seleções aplicadas na página.",
+				            "Utilize antes de iniciar uma nova análise para evitar filtros residuais."
+				        },
+				
+				        /* =====================================================
+				           2. FUNIL CONTACT CENTER
+				           ===================================================== */
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            1,
+				            "CARDS SUPERIORES",
+				            1,
+				            "VENDAS",
+				            "Quantidade de vendas registradas pela operação de Contact Center.",
+				            "Soma de VENDAS_CALLCENTER.",
+				            "A venda é identificada pela tabulação de aceite da oferta.",
+				            "Representa o fechamento comercial realizado pela EPS."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            1,
+				            "CARDS SUPERIORES",
+				            2,
+				            "APROVADOS",
+				            "Quantidade de candidatos aprovados no processo de ingresso.",
+				            "Soma de APR_LIQ.",
+				            "Considera o indicador líquido de aprovação disponibilizado na base comercial.",
+				            "É uma etapa intermediária entre inscrição e matrícula."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            1,
+				            "CARDS SUPERIORES",
+				            3,
+				            "PAGAMENTOS",
+				            "Quantidade de candidatos com pagamento identificado.",
+				            "Contagem ou soma do indicador de pagamento, conforme a medida do painel.",
+				            "O pagamento pode ser identificado pela DATA_PAGAMENTO ou pelo indicador PAGAMENTO_ACEITOU_OFERTA.",
+				            "Mostra quantos candidatos avançaram financeiramente após a venda."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            1,
+				            "CARDS SUPERIORES",
+				            4,
+				            "MATRÍCULAS",
+				            "Quantidade de matrículas líquidas registradas.",
+				            "Soma de MAT_LIQ ou da medida de matrículas atribuídas, conforme a visão.",
+				            "A matrícula total pode ser diferente da matrícula atribuída ao Contact Center.",
+				            "Representa o principal resultado final do funil."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            1,
+				            "CARDS SUPERIORES",
+				            5,
+				            "ACEITE DO CONTRATO",
+				            "Quantidade de candidatos que realizaram o aceite do contrato.",
+				            "Soma de ACEITE_MAT_LIQ.",
+				            "Para determinadas ofertas, especialmente presenciais, o aceite é necessário para reconhecimento da matrícula.",
+				            "Mostra o avanço contratual após aprovação e pagamento."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            1,
+				            "CARDS SUPERIORES",
+				            6,
+				            "MAT/VENDA",
+				            "Percentual de vendas que foram convertidas em matrícula.",
+				            "Matrículas divididas por Vendas.",
+				            "O numerador deve utilizar a mesma regra de atribuição da venda para evitar deslocamento entre EPS.",
+				            "Quanto maior o percentual, maior a conversão da promessa comercial em matrícula efetiva."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            2,
+				            "ETAPAS DO FUNIL",
+				            1,
+				            "MAILING",
+				            "Quantidade de inscrições disponíveis para atuação da operação.",
+				            "Medida de INSCRITOS ou contagem distinta de CHAVE_INSCRICAO.",
+				            "Representa o universo de oportunidades disponibilizado para o Contact Center.",
+				            "É o topo do funil e a base para cálculo de cobertura."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            2,
+				            "ETAPAS DO FUNIL",
+				            2,
+				            "TRABALHADOS",
+				            "Quantidade de inscrições únicas que tiveram atuação válida da EPS.",
+				            "Contagem distinta de CHAVE_INSCRICAO conforme os status considerados trabalhados para cada EPS.",
+				            "CONECTA+ e VOXPRIME possuem listas específicas de status válidos.",
+				            "Mede o volume de mailing que recebeu atuação."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            2,
+				            "ETAPAS DO FUNIL",
+				            3,
+				            "TENTATIVAS",
+				            "Quantidade total de interações realizadas pela operação.",
+				            "Soma de FLAG_TENTATIVA.",
+				            "Uma mesma inscrição pode ter várias tentativas.",
+				            "Representa esforço operacional e não necessariamente contato com o candidato."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            2,
+				            "ETAPAS DO FUNIL",
+				            4,
+				            "ATENDIDOS",
+				            "Quantidade de inscrições em que houve atendimento.",
+				            "Contagem distinta de CHAVE_INSCRICAO classificada como atendida.",
+				            "Atendido significa que o contato superou a tentativa, mas não necessariamente gerou uma conversa comercial efetiva.",
+				            "Mede a capacidade de transformar esforço em contato."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            2,
+				            "ETAPAS DO FUNIL",
+				            5,
+				            "EFETIVOS",
+				            "Quantidade de inscrições em que houve uma interação comercial válida com o candidato.",
+				            "Contagem distinta de CHAVE_INSCRICAO conforme a regra de efetividade de cada EPS.",
+				            "Na CONECTA+, considera TABULACAO_HUMANA_4 igual a EFETIVO. Na VOXPRIME, considera FLAG_EFETIVO e exceções de ACEITOU OFERTA.",
+				            "Representa as conversas com real potencial de conversão."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            2,
+				            "ETAPAS DO FUNIL",
+				            6,
+				            "ALÔ",
+				            "Quantidade de contatos válidos com o candidato.",
+				            "Total de registros válidos, excluindo contato não realizado, caixa postal, telefone errado, blacklist, teste e registros em branco.",
+				            "Não deve haver retirada de duplicidade quando a visão medir volume de contatos. O Alô não deve ser menor que as recusas.",
+				            "Mede o volume real de engajamentos gerados pela operação."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            3,
+				            "INDICADORES RELATIVOS",
+				            1,
+				            "SPIN",
+				            "Quantidade média de tentativas realizadas por inscrição trabalhada.",
+				            "Tentativas divididas por Trabalhados.",
+				            "A mesma inscrição pode possuir várias tentativas.",
+				            "Quanto maior o Spin, maior o esforço aplicado em cada inscrição."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            3,
+				            "INDICADORES RELATIVOS",
+				            2,
+				            "% TRAB",
+				            "Percentual do mailing que foi trabalhado.",
+				            "Trabalhados divididos por Mailing.",
+				            "Deve considerar trabalhados únicos por CHAVE_INSCRICAO.",
+				            "Mede a cobertura da base disponibilizada."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            3,
+				            "INDICADORES RELATIVOS",
+				            3,
+				            "HITRATE",
+				            "Indicador de aproveitamento das tentativas em atendimento.",
+				            "Atendidos divididos por Tentativas, conforme a medida vigente do painel.",
+				            "Em algumas leituras operacionais também pode ser apresentado como esforço por atendimento. Confirmar o sentido utilizado na medida.",
+				            "Quanto maior o percentual, melhor o aproveitamento do esforço de contato."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            3,
+				            "INDICADORES RELATIVOS",
+				            4,
+				            "% ATENDIDO/BASE",
+				            "Percentual do mailing que chegou à etapa de atendimento.",
+				            "Atendidos divididos por Mailing.",
+				            "Considera inscrições únicas atendidas.",
+				            "Mede a capacidade de transformar base em atendimento."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            3,
+				            "INDICADORES RELATIVOS",
+				            5,
+				            "% EFETIVO/BASE",
+				            "Percentual do mailing que gerou interação comercial efetiva.",
+				            "Efetivos divididos por Mailing.",
+				            "Segue a regra de efetividade específica de cada EPS.",
+				            "Mede a qualidade da cobertura, e não apenas o volume trabalhado."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            3,
+				            "INDICADORES RELATIVOS",
+				            6,
+				            "% CONV VENDA",
+				            "Percentual de contatos efetivos que foram convertidos em venda.",
+				            "Vendas divididas por Efetivos.",
+				            "A venda deve estar atribuída à EPS responsável pela primeira venda.",
+				            "Mede a eficiência comercial depois de estabelecido o contato efetivo."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            3,
+				            "INDICADORES RELATIVOS",
+				            7,
+				            "% RET",
+				            "Percentual de perda ou retenção entre vendas e matrículas, conforme a medida configurada.",
+				            "Utiliza a medida FUNIL | % RET.",
+				            "A interpretação final deve respeitar a fórmula DAX atualmente utilizada no modelo.",
+				            "Utilize em conjunto com MAT/VENDA para avaliar perdas após a venda."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            3,
+				            "INDICADORES RELATIVOS",
+				            8,
+				            "% CONV MAT",
+				            "Percentual de vendas convertidas em matrículas.",
+				            "Matrículas divididas por Vendas.",
+				            "A matrícula atribuída deve permanecer na EPS responsável pela venda.",
+				            "Mede a efetividade da conversão final do funil."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            4,
+				            "VISÕES",
+				            1,
+				            "FUNIL CONECTA+",
+				            "Apresenta o funil completo da operação CONECTA+.",
+				            "Aplica os filtros da página e as regras específicas de trabalhado e efetivo da CONECTA+.",
+				            "A classificação de efetivo utiliza principalmente TABULACAO_HUMANA_4.",
+				            "Permite avaliar cobertura, esforço, contato e conversão da CONECTA+."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            4,
+				            "VISÕES",
+				            2,
+				            "FUNIL VOXPRIME",
+				            "Apresenta o funil completo da operação VOXPRIME.",
+				            "Aplica os filtros da página e as regras específicas de trabalhado e efetivo da VOXPRIME.",
+				            "A classificação considera FLAG_EFETIVO e exceções de ACEITOU OFERTA.",
+				            "Permite comparar o desempenho da estratégia VOXPRIME com as demais operações."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            4,
+				            "VISÕES",
+				            3,
+				            "FUNIL CALL CENTER TOTAL",
+				            "Consolida CONECTA+ e VOXPRIME em uma única visão.",
+				            "Soma as operações respeitando as regras específicas de cada EPS.",
+				            "Trabalhados e efetivos devem ser calculados separadamente por EPS antes da consolidação.",
+				            "Representa o desempenho geral do Contact Center."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            4,
+				            "VISÕES",
+				            4,
+				            "FUNIL MÍDIA",
+				            "Apresenta o funil das inscrições classificadas no Super Canal Mídia.",
+				            "Aplica filtro de SUPER_CANAL igual a MÍDIA.",
+				            "A visão pode conter atuações de mais de uma EPS.",
+				            "Permite avaliar especificamente a eficiência da captação originada em mídia."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            4,
+				            "VISÕES",
+				            5,
+				            "CONTATOS POR DIA DA SEMANA",
+				            "Compara o volume de inscrições e a taxa ou volume de Alô por dia da semana.",
+				            "Agrupamento pela data de interação ou inscrição, conforme a medida do gráfico.",
+				            "Sábados e domingos devem ser analisados separadamente por possuírem menor operação.",
+				            "Ajuda a identificar os dias com melhor aproveitamento de contato."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            4,
+				            "VISÕES",
+				            6,
+				            "PRODUTIVIDADE POR EPS",
+				            "Compara vendas, matrículas, produtividade e conversão por EPS, modalidade e super canal.",
+				            "Produtividade de matrícula é Matrículas divididas por HC multiplicado pelos dias úteis.",
+				            "O HC deve variar por EPS e por mês.",
+				            "Permite identificar qual operação e qual origem possuem maior produtividade."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            4,
+				            "VISÕES",
+				            7,
+				            "COHORT DE ALÔ",
+				            "Distribui os contatos válidos conforme a quantidade de dias transcorridos desde a inscrição.",
+				            "Diferença entre DATA_TABULACAO e DATA_INSCRICAO, classificada de D0 até D15+.",
+				            "D0 representa o mesmo dia da inscrição. D15+ representa contatos realizados após quinze dias.",
+				            "Mede a velocidade de atuação e o envelhecimento da base."
+				        },
+				
+				        {
+				            1,
+				            "FUNIL CC 27.1",
+				            4,
+				            "VISÕES",
+				            8,
+				            "ACUMULADO PLANEJADO X REALIZADO",
+				            "Compara o volume acumulado planejado com o volume acumulado realizado.",
+				            "Soma acumulada diária ou mensal do planejamento e do realizado.",
+				            "O realizado deve respeitar os filtros da página.",
+				            "Mostra antecipadamente a abertura ou fechamento do gap em relação ao plano."
+				        },
+				
+				        /* =====================================================
+				           3. ACUMULADO DO CICLO
+				           ===================================================== */
+				
+				        {
+				            2,
+				            "ACUMULADO CICLO",
+				            1,
+				            "CARDS",
+				            1,
+				            "PACE REAL",
+				            "Média diária realizada até a data selecionada.",
+				            "Realizado acumulado dividido pelos dias úteis trabalhados.",
+				            "Deve considerar apenas dias úteis e os feriados definidos na regra do painel.",
+				            "Mostra a velocidade atual de entrega."
+				        },
+				
+				        {
+				            2,
+				            "ACUMULADO CICLO",
+				            1,
+				            "CARDS",
+				            2,
+				            "PACE IDEAL",
+				            "Média diária necessária para alcançar o planejamento ou meta.",
+				            "Volume planejado dividido pelos dias úteis do período.",
+				            "O cálculo deve respeitar o período e os dias úteis restantes.",
+				            "Compara a velocidade necessária com a velocidade atual."
+				        },
+				
+				        {
+				            2,
+				            "ACUMULADO CICLO",
+				            1,
+				            "CARDS",
+				            3,
+				            "PRODUTIVIDADE",
+				            "Quantidade média de matrículas produzidas por operador por dia útil.",
+				            "Matrículas divididas por HC vezes dias úteis.",
+				            "O HC deve ser calculado por EPS e por mês. Na seleção de vários meses, deve somar HC vezes dias úteis de cada mês.",
+				            "Mede a eficiência da estrutura operacional."
+				        },
+				
+				        {
+				            2,
+				            "ACUMULADO CICLO",
+				            1,
+				            "CARDS",
+				            4,
+				            "GAP MAT REAL X PLAN",
+				            "Diferença entre matrículas realizadas e matrículas planejadas.",
+				            "Matrículas realizadas menos Matrículas planejadas.",
+				            "Valor negativo representa déficit. Valor positivo representa superação.",
+				            "Mostra o volume ainda necessário para alcançar o planejamento."
+				        },
+				
+				        {
+				            2,
+				            "ACUMULADO CICLO",
+				            2,
+				            "GRÁFICOS",
+				            1,
+				            "ACUMULADO VENDAS X MAT",
+				            "Compara a evolução acumulada de vendas e matrículas.",
+				            "Soma acumulada das medidas de vendas e matrículas ao longo do período.",
+				            "As duas curvas podem possuir ritmos diferentes devido ao tempo de maturação entre venda e matrícula.",
+				            "Ajuda a identificar represamento entre venda e matrícula."
+				        },
+				
+				        {
+				            2,
+				            "ACUMULADO CICLO",
+				            2,
+				            "GRÁFICOS",
+				            2,
+				            "PLANEJADO X REALIZADO - MATRÍCULAS",
+				            "Compara matrículas acumuladas planejadas e realizadas.",
+				            "Acumulado de MAT PLAN versus acumulado de MAT REAL.",
+				            "A curva planejada representa a necessidade esperada de entrega.",
+				            "Mostra em qual momento do ciclo o resultado se distancia do plano."
+				        },
+				
+				        {
+				            2,
+				            "ACUMULADO CICLO",
+				            2,
+				            "GRÁFICOS",
+				            3,
+				            "PLANEJADO X REALIZADO - VENDAS",
+				            "Compara vendas acumuladas planejadas e realizadas.",
+				            "Acumulado de vendas planejadas versus vendas realizadas.",
+				            "A análise de vendas antecipa possíveis impactos futuros em matrícula.",
+				            "Permite agir antes que o déficit chegue à etapa final do funil."
+				        },
+				
+				        /* =====================================================
+				           4. GERENCIAL
+				           ===================================================== */
+				
+				        {
+				            3,
+				            "GERENCIAL",
+				            1,
+				            "CPMAT POR MÊS",
+				            1,
+				            "HC",
+				            "Quantidade de operadores considerada no cálculo de produtividade.",
+				            "Valor definido por EPS e por mês.",
+				            "O HC não deve ser repetido indevidamente quando vários meses estiverem selecionados.",
+				            "Representa a capacidade operacional disponível."
+				        },
+				
+				        {
+				            3,
+				            "GERENCIAL",
+				            1,
+				            "CPMAT POR MÊS",
+				            2,
+				            "PROD HC/D.U",
+				            "Produtividade de matrícula por operador por dia útil.",
+				            "Matrículas divididas por HC vezes Dias Úteis.",
+				            "Para múltiplos meses, o denominador deve somar HC vezes dias úteis de cada mês.",
+				            "Permite comparar eficiência entre meses e EPS com estruturas diferentes."
+				        },
+				
+				        {
+				            3,
+				            "GERENCIAL",
+				            1,
+				            "CPMAT POR MÊS",
+				            3,
+				            "% ATING",
+				            "Percentual de atingimento da meta de matrícula.",
+				            "Matrículas realizadas divididas pela meta ou planejamento.",
+				            "Valores acima de 100% indicam superação da meta.",
+				            "Mede o avanço do realizado em relação ao objetivo."
+				        },
+				
+				        {
+				            3,
+				            "GERENCIAL",
+				            1,
+				            "CPMAT POR MÊS",
+				            4,
+				            "CPMAT",
+				            "Custo médio por matrícula.",
+				            "Investimento ou custo da operação dividido pelas matrículas.",
+				            "A fonte de custo deve seguir a base de planejamento utilizada no painel.",
+				            "Quanto menor o CPMAT, maior a eficiência financeira da operação."
+				        },
+				
+				        {
+				            3,
+				            "GERENCIAL",
+				            2,
+				            "MATRÍCULAS POR SEMANA",
+				            1,
+				            "MAT PLAN",
+				            "Volume de matrículas planejado para a semana.",
+				            "Soma do planejamento correspondente aos dias da semana.",
+				            "A soma das semanas deve fechar com o planejamento mensal ou do ciclo.",
+				            "É a referência esperada para a entrega semanal."
+				        },
+				
+				        {
+				            3,
+				            "GERENCIAL",
+				            2,
+				            "MATRÍCULAS POR SEMANA",
+				            2,
+				            "MAT REAL",
+				            "Volume de matrículas realizadas na semana.",
+				            "Soma das matrículas pela data de matrícula.",
+				            "Respeita os filtros de EPS, super canal e tombamentos.",
+				            "Mostra a entrega efetiva de cada semana."
+				        },
+				
+				        {
+				            3,
+				            "GERENCIAL",
+				            3,
+				            "PLANEJADO X REALIZADO",
+				            1,
+				            "SEMANA CICLO",
+				            "Identificação sequencial das semanas dentro do ciclo comercial.",
+				            "Classificação da data em Semana 01, Semana 02 e assim sucessivamente.",
+				            "A semana do ciclo não deve ser confundida com a semana do mês.",
+				            "Permite acompanhar tendência e ganho ou perda de produtividade ao longo do ciclo."
+				        },
+				
+				        /* =====================================================
+				           5. COHORT
+				           ===================================================== */
+				
+				        {
+				            4,
+				            "COHORT",
+				            1,
+				            "CONCEITOS",
+				            1,
+				            "SAFRA DE INSCRITOS",
+				            "Agrupamento dos candidatos pela data em que realizaram a inscrição.",
+				            "Data de inscrição utilizada como linha de origem do cohort.",
+				            "Cada linha acompanha o comportamento futuro das inscrições criadas naquele dia.",
+				            "Permite medir velocidade de contato e conversão sem misturar safras antigas e recentes."
+				        },
+				
+				        {
+				            4,
+				            "COHORT",
+				            1,
+				            "CONCEITOS",
+				            2,
+				            "ENTRANTES",
+				            "Quantidade de inscrições que entraram na safra analisada.",
+				            "Contagem distinta de CHAVE_INSCRICAO por DATA_INSCRICAO.",
+				            "É o denominador das taxas de contato e conversão do cohort.",
+				            "Representa o tamanho original de cada safra."
+				        },
+				
+				        {
+				            4,
+				            "COHORT",
+				            1,
+				            "CONCEITOS",
+				            3,
+				            "D0",
+				            "Resultado ocorrido no mesmo dia da inscrição.",
+				            "DATA_INTERACAO menos DATA_INSCRICAO igual a zero.",
+				            "É o principal indicador de velocidade inicial de atuação.",
+				            "Quanto maior o D0, mais rápida foi a operação sobre a nova inscrição."
+				        },
+				
+				        {
+				            4,
+				            "COHORT",
+				            1,
+				            "CONCEITOS",
+				            4,
+				            "D1 A D15",
+				            "Resultado ocorrido entre um e quinze dias após a inscrição.",
+				            "Diferença em dias entre a data da interação e a data da inscrição.",
+				            "Cada coluna representa o desempenho incremental da safra naquele dia de vida.",
+				            "Permite identificar em qual momento o contato ou a conversão acontece."
+				        },
+				
+				        {
+				            4,
+				            "COHORT",
+				            1,
+				            "CONCEITOS",
+				            5,
+				            "D15+",
+				            "Resultado ocorrido após quinze dias da inscrição.",
+				            "Diferença entre data da interação e inscrição superior a quinze dias.",
+				            "Concentração elevada em D15+ indica envelhecimento da base.",
+				            "Deve ser acompanhado para evitar perda de velocidade e redução de conversão."
+				        },
+				
+				        {
+				            4,
+				            "COHORT",
+				            2,
+				            "VISÕES",
+				            1,
+				            "COHORT ESTRATÉGIA D0>D6",
+				            "Visão operacional dos seis primeiros dias da safra.",
+				            "Apresenta entrantes, trabalhados, tentativas, Spin, atendidos, efetivos, vendas e matrículas.",
+				            "É a janela prioritária para aceleração da cobertura e contato.",
+				            "Permite avaliar rapidamente se a safra está sendo trabalhada com velocidade adequada."
+				        },
+				
+				        {
+				            4,
+				            "COHORT",
+				            2,
+				            "VISÕES",
+				            2,
+				            "COHORT CONVERSÃO",
+				            "Distribui as conversões da safra de inscritos pelos dias transcorridos desde a inscrição.",
+				            "Conversões de cada Dx divididas pelos entrantes da safra.",
+				            "As colunas não representam o acumulado, mas o resultado ocorrido em cada dia.",
+				            "Mostra em qual idade da inscrição a conversão acontece."
+				        },
+				
+				        {
+				            4,
+				            "COHORT",
+				            2,
+				            "VISÕES",
+				            3,
+				            "COHORT ALÔ",
+				            "Distribui os contatos válidos pelos dias transcorridos desde a inscrição.",
+				            "Alôs de cada Dx divididos pelos entrantes da safra.",
+				            "A leitura deve considerar a velocidade de atuação e o envelhecimento.",
+				            "Permite identificar se a operação concentra contatos em D0, D1 ou em safras envelhecidas."
+				        },
+				
+				        /* =====================================================
+				           6. OPORTUNIDADES
+				           ===================================================== */
+				
+				        {
+				            5,
+				            "OPORTUNIDADES",
+				            1,
+				            "CARDS",
+				            1,
+				            "PENDENTE VESTIBULAR E PAG",
+				            "Quantidade de candidatos vendidos que ainda não concluíram vestibular, aprovação ou pagamento.",
+				            "Diferença entre vendas e os avanços posteriores definidos na regra da medida.",
+				            "Representa oportunidades abertas no meio do funil.",
+				            "Utilize para direcionar ações de recuperação e acompanhamento."
+				        },
+				
+				        {
+				            5,
+				            "OPORTUNIDADES",
+				            1,
+				            "CARDS",
+				            2,
+				            "PENDENTE PAGTO",
+				            "Quantidade de candidatos que avançaram no processo, mas ainda não possuem pagamento identificado.",
+				            "Aprovados ou vendidos sem DATA_PAGAMENTO.",
+				            "A regra pode variar conforme o produto e o formato de oferta.",
+				            "Representa uma carteira prioritária para recuperação financeira."
+				        },
+				
+				        {
+				            5,
+				            "OPORTUNIDADES",
+				            1,
+				            "CARDS",
+				            3,
+				            "PENDENTE ACEITE",
+				            "Quantidade de candidatos matriculados ou pagos que ainda não realizaram o aceite do contrato.",
+				            "Matrículas ou pagamentos menos ACEITE_MAT_LIQ, conforme a medida.",
+				            "Para ofertas que exigem aceite, a ausência pode impedir o reconhecimento final da matrícula.",
+				            "Deve ser utilizada como fila operacional de regularização."
+				        },
+				
+				        {
+				            5,
+				            "OPORTUNIDADES",
+				            2,
+				            "CONSULTA",
+				            1,
+				            "DIGITE CPF CANDIDATO",
+				            "Campo utilizado para localizar rapidamente um candidato específico.",
+				            "Filtro aplicado sobre a coluna CPF.",
+				            "O CPF deve ser utilizado apenas para finalidade operacional autorizada.",
+				            "Permite consultar o status comercial e os próximos passos do candidato."
+				        },
+				
+				        {
+				            5,
+				            "OPORTUNIDADES",
+				            2,
+				            "CONSULTA",
+				            2,
+				            "TABELA DE OPORTUNIDADES",
+				            "Apresenta o status consolidado mais relevante de cada inscrição.",
+				            "Quando existe venda, preserva o status da venda e sua atribuição. Nos demais casos, apresenta a última interação válida.",
+				            "Os indicadores de inscrição, aprovação, pagamento, aceite e matrícula devem permanecer preservados.",
+				            "É a principal visão operacional para acompanhamento individual dos candidatos."
+				        },
+				
+				        {
+				            5,
+				            "OPORTUNIDADES",
+				            2,
+				            "CONSULTA",
+				            3,
+				            "ÚLTIMO MELHOR STATUS",
+				            "Status exibido para facilitar a consulta operacional da inscrição.",
+				            "Venda é preservada quando existir. Sem venda, retorna a interação mais recente da inscrição.",
+				            "A consolidação reduz o volume de linhas sem eliminar os indicadores-chave.",
+				            "Permite visualizar uma linha mais representativa por oportunidade."
+				        },
+				
+				        {
+				            5,
+				            "OPORTUNIDADES",
+				            3,
+				            "ATRIBUIÇÃO",
+				            1,
+				            "PRIMEIRA VENDA",
+				            "Venda inicial responsável pela atribuição comercial da oportunidade.",
+				            "Primeira ocorrência de VENDAS_CALLCENTER ou ACEITOU OFERTA pela ordem cronológica.",
+				            "Matrícula atribuída, pagamento, aprovação e aceite vinculados à venda devem permanecer na mesma EPS.",
+				            "Evita deslocamento de resultado entre CONECTA+ e VOXPRIME."
+				        },
+				
+				        {
+				            5,
+				            "OPORTUNIDADES",
+				            3,
+				            "ATRIBUIÇÃO",
+				            2,
+				            "MATRÍCULA ATRIBUÍDA AO CALL CENTER",
+				            "Matrícula vinculada diretamente a uma venda realizada pelo Contact Center.",
+				            "Soma de MAT_LIQ_ATRIBUIDA_CALLCENTER.",
+				            "Não deve ser confundida com matrícula total da CAPCOM.",
+				            "É o indicador mais adequado para medir o impacto direto da operação."
+				        }
+				    }
+				)
+
+	annotation PBI_Id = e2fce5a566664241bbf3d18852fc06bf
+

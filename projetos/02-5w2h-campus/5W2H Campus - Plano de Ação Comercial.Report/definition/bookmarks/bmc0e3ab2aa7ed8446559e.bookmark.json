@@ -1,0 +1,135 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/2.1.0/schema.json",
+  "displayName": "Filtros · abrir · Custo das ações",
+  "name": "bmc0e3ab2aa7ed8446559e",
+  "options": {
+    "applyOnlyToTargetVisuals": true,
+    "targetVisualNames": [
+      "749098d121814d1d97df",
+      "8283c7a1f9846950c149",
+      "398204ba2706e6f615d4",
+      "54d6d79b40119b90bb1b",
+      "2a35a7d467f0fc379de6",
+      "cf9e6f554d3d16dfcad7",
+      "935f96fe234a0d863433",
+      "312147da9bbed3bfc3cf",
+      "a7a306a37126b878f2fc",
+      "2bbdda0f4fbe199c5d92",
+      "6f49e01d9d5dc622f73c",
+      "5022597d33c44a2eb453",
+      "9b50dec739f11ed845e6",
+      "95162a7445411a9feb19",
+      "93ba600f272706f13f70",
+      "a4950dd20550c1f14dac",
+      "13953750ecb9eed2f6d4",
+      "d170fcc4cd7a634fb0c0",
+      "ae12100be1a6de8793d5"
+    ],
+    "suppressData": true
+  },
+  "explorationState": {
+    "version": "1.0",
+    "activeSection": "p_custo",
+    "sections": {
+      "p_custo": {
+        "visualContainers": {
+          "749098d121814d1d97df": {
+            "singleVisual": {
+              "visualType": "textbox"
+            }
+          },
+          "8283c7a1f9846950c149": {
+            "singleVisual": {
+              "visualType": "actionButton"
+            }
+          },
+          "398204ba2706e6f615d4": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "54d6d79b40119b90bb1b": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "2a35a7d467f0fc379de6": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "cf9e6f554d3d16dfcad7": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "935f96fe234a0d863433": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "312147da9bbed3bfc3cf": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "a7a306a37126b878f2fc": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "2bbdda0f4fbe199c5d92": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "6f49e01d9d5dc622f73c": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "5022597d33c44a2eb453": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "9b50dec739f11ed845e6": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "95162a7445411a9feb19": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "93ba600f272706f13f70": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "a4950dd20550c1f14dac": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "13953750ecb9eed2f6d4": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "d170fcc4cd7a634fb0c0": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "ae12100be1a6de8793d5": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          }
+        }
+      }
+    }
+  }
+}

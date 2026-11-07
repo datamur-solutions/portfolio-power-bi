@@ -1,0 +1,108 @@
+{
+  "name": "EduNova · Inside Sales",
+  "dataColors": [
+    "#0C718B",
+    "#F08A24",
+    "#14A38B",
+    "#13505E",
+    "#4FABC1",
+    "#E8A317",
+    "#8FC9D6",
+    "#D9473F",
+    "#7A8B93",
+    "#2E3138"
+  ],
+  "background": "#FFFFFF",
+  "foreground": "#1E2D33",
+  "tableAccent": "#0C718B",
+  "good": "#1E9E5A",
+  "neutral": "#E8A317",
+  "bad": "#D9473F",
+  "maximum": "#13505E",
+  "center": "#8FC9D6",
+  "minimum": "#E6F2F4",
+  "textClasses": {
+    "callout": {
+      "fontSize": 28,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#13505E"
+    },
+    "title": {
+      "fontSize": 13,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#13505E"
+    },
+    "header": {
+      "fontSize": 12,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#1E2D33"
+    },
+    "label": {
+      "fontSize": 11,
+      "fontFace": "Segoe UI",
+      "color": "#3C4A50"
+    }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "valueAxis": [
+          {
+            "gridlineColor": {
+              "solid": {
+                "color": "#E6EEF0"
+              }
+            },
+            "labelColor": {
+              "solid": {
+                "color": "#5B6B71"
+              }
+            }
+          }
+        ],
+        "categoryAxis": [
+          {
+            "labelColor": {
+              "solid": {
+                "color": "#5B6B71"
+              }
+            }
+          }
+        ],
+        "legend": [
+          {
+            "labelColor": {
+              "solid": {
+                "color": "#3C4A50"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#EEF3F4"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "outspace": [
+          {
+            "color": {
+              "solid": {
+                "color": "#EEF3F4"
+              }
+            },
+            "transparency": 0
+          }
+        ]
+      }
+    }
+  }
+}

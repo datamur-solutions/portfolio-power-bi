@@ -1,0 +1,44 @@
+table 'DIM SUPER_CANAL'
+	lineageTag: db27ffe2-2b75-4bdf-bb4f-b3b48e00980e
+
+	column SUPER_CANAL_DE_PARA
+		lineageTag: 7783eef2-0217-4e5c-917a-c556086fd57c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: TB CALL CENTER[SUPER_CANAL_DE_PARA]
+
+		annotation SummarizationSetBy = Automatic
+
+	column ORDEM
+		formatString: 0
+		lineageTag: b98a89f2-d76e-4505-8129-e8627828e1df
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ORDEM]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'DIM SUPER_CANAL' = calculated
+		mode: import
+		source =
+				
+				ADDCOLUMNS(
+				    FILTER(
+				        DISTINCT('TB CALL CENTER'[SUPER_CANAL_DE_PARA]),
+				        NOT(ISBLANK('TB CALL CENTER'[SUPER_CANAL_DE_PARA]))
+				            && 'TB CALL CENTER'[SUPER_CANAL_DE_PARA] <> ""
+				    ),
+				    "ORDEM",
+				        SWITCH(
+				            'TB CALL CENTER'[SUPER_CANAL_DE_PARA],
+				            "Hunter Campus", 1,
+				            "Hunter Polo", 2,
+				            "MIDIA", 3,
+				            "Novos Canais", 4,
+				            "Outros", 5,
+				            99
+				        )
+				)
+
+	annotation PBI_Id = e082e727fa3243bd91550fcaab67406c
+

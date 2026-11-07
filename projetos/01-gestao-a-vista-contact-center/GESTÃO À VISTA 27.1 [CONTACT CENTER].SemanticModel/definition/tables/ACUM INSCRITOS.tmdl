@@ -1,0 +1,48 @@
+table 'ACUM INSCRITOS'
+	lineageTag: e8bccc0c-5d7d-4b65-9573-e3ca5fe44d14
+
+	column 'ACUM INSCRITOS'
+		lineageTag: 19a6a13d-9791-4099-b7a6-65d7768624ef
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'ACUM INSCRITOS Pedido'
+
+		relatedColumnDetails
+			groupByColumn: 'ACUM INSCRITOS Campos'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ACUM INSCRITOS Campos'
+		isHidden
+		lineageTag: ca8d2280-161a-4efe-be65-115a6626ee06
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'ACUM INSCRITOS Pedido'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ACUM INSCRITOS Pedido'
+		isHidden
+		formatString: 0
+		lineageTag: ef25d7d8-3edd-44f6-8a37-28a346a80db0
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'ACUM INSCRITOS' = calculated
+		mode: import
+		source =
+				{
+				    ("DIA", NAMEOF('Dim_Data'[Date]), 0),
+				    ("MÊS", NAMEOF('Dim_Data'[Nome Mês-Ano]), 1)
+				}
+
+	annotation PBI_Id = 5b5a5f8968c541cda577fbb0e42f5fdf
+

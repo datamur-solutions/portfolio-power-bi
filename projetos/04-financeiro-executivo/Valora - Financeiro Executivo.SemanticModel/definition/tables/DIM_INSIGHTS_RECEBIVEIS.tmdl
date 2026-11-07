@@ -1,0 +1,39 @@
+table DIM_INSIGHTS_RECEBIVEIS
+	lineageTag: 63c031de-53a1-45ad-875b-c6010cfe4077
+
+	column Ordem
+		formatString: 0
+		lineageTag: 3ca93d45-de6c-462e-9cb7-76e3dad941b4
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Ordem]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Indicador
+		lineageTag: fa4cd2d1-0a10-4ec7-bceb-167009cb28c5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Indicador]
+		sortByColumn: Ordem
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_INSIGHTS_RECEBIVEIS = calculated
+		mode: import
+		source =
+				
+				DATATABLE(
+				    "Ordem", INTEGER,
+				    "Indicador", STRING,
+				    {
+				        {1, "INADIMPLÊNCIA"},
+				        {2, "60+ DIAS"},
+				        {3, "90+ DIAS"},
+				        {4, "ATRASO MÉDIO"},
+				        {5, "A VENCER"}
+				    }
+				)
+
+	annotation PBI_Id = 487c55b9133e495591d9a37225d60a7d
+

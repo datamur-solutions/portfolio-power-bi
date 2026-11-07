@@ -1,0 +1,63 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: pt-BR
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["DICIONARIO_TABELAS","DIM_CENTRO_CUSTO","DIM_CLIENTE","DIM_COLABORADOR","DIM_CONTA_BANCARIA","DIM_CONTA_CONTABIL","DIM_DATA","DIM_EMPRESTIMO","DIM_FORNECEDOR","DIM_UNIDADE","FATO_CAIXA_DIARIO","FATO_CAIXA_MOV","FATO_CAPEX","FATO_DIVIDA","FATO_DRE","FATO_FOLHA","FATO_PAGAVEIS","FATO_PLANEJAMENTO","FATO_RECEBIVEIS","RELACIONAMENTOS_MODELO"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table DICIONARIO_TABELAS
+ref table DIM_CENTRO_CUSTO
+ref table DIM_CLIENTE
+ref table DIM_COLABORADOR
+ref table DateTableTemplate_56f0b3a2-ac43-4b24-8d6b-b67bd1180fea
+ref table LocalDateTable_7f743ca3-cad7-4f18-b97b-6256e4deb064
+ref table LocalDateTable_2a06ecb9-35bc-47ca-a1b6-a6d78462d8ee
+ref table DIM_CONTA_BANCARIA
+ref table DIM_CONTA_CONTABIL
+ref table DIM_DATA
+ref table LocalDateTable_80738c3d-96df-433e-8d2d-25bf3ff620b7
+ref table LocalDateTable_e2086683-24e8-4f79-8e1a-37d599903a05
+ref table DIM_EMPRESTIMO
+ref table LocalDateTable_d9668cfe-56cb-471f-a159-331502751de6
+ref table DIM_FORNECEDOR
+ref table DIM_UNIDADE
+ref table FATO_CAIXA_DIARIO
+ref table FATO_CAIXA_MOV
+ref table FATO_CAPEX
+ref table LocalDateTable_f11efd99-fff0-4556-abca-58c7dbb9f850
+ref table LocalDateTable_652b0682-0d62-44ed-9c53-db1349d42db0
+ref table FATO_DIVIDA
+ref table LocalDateTable_6443cd43-a072-478d-8a9c-e23f5166d26e
+ref table LocalDateTable_af4faa8e-8ab5-43fd-842e-b14f9b2d4ceb
+ref table FATO_DRE
+ref table FATO_FOLHA
+ref table LocalDateTable_8d59e9cc-de71-41de-af46-817a73be5bc7
+ref table FATO_PAGAVEIS
+ref table LocalDateTable_ee51eedd-7dda-4625-8d96-2750febbc1f2
+ref table LocalDateTable_54e8028d-9681-4302-90af-f4b4dd6229f5
+ref table LocalDateTable_d1822e6d-8d9e-4d97-866e-7fd415b02925
+ref table LocalDateTable_5c046a5a-c475-4c52-b106-f4c93a7c7582
+ref table FATO_PLANEJAMENTO
+ref table LocalDateTable_2b060c99-3fa0-485c-b44e-2022f14b4299
+ref table FATO_RECEBIVEIS
+ref table LocalDateTable_6e4f25a7-bfb1-48a7-8433-0f063cadea23
+ref table LocalDateTable_997ca415-d714-4d78-af21-a374da0d4722
+ref table LocalDateTable_445841e4-3d32-4bbf-a293-6267080f1cb3
+ref table LocalDateTable_b3b08af7-c061-4e79-b46a-b2a6dc77eb0f
+ref table RELACIONAMENTOS_MODELO
+ref table _Medidas
+ref table DIM_PONTE_RESULTADO
+ref table DIM_ALERTAS
+ref table DIM_FLUXO_CAIXA
+ref table DIM_INSIGHTS_RECEBIVEIS
+
+ref cultureInfo pt-BR
+

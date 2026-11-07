@@ -1,0 +1,23 @@
+table DIM_SUPERCANAL
+	lineageTag: 2edef212-b8b7-4b8c-aec8-591e28be9dc1
+
+	column ds_supercanal_vendas
+		lineageTag: 9d20fce6-fb67-4caa-b2a9-001120754a9d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: CAPCOM[ds_supercanal_vendas]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_SUPERCANAL = calculated
+		mode: import
+		source =
+				
+				FILTER(
+				    DISTINCT('CAPCOM'[ds_supercanal_vendas]),
+				    NOT(ISBLANK('CAPCOM'[ds_supercanal_vendas]))
+				        && 'CAPCOM'[ds_supercanal_vendas] <> ""
+				)
+
+	annotation PBI_Id = 4f8ce028b6124b2baaa749995b68efdf
+

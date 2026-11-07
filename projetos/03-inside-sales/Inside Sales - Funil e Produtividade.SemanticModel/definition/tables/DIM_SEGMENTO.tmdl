@@ -1,0 +1,23 @@
+table DIM_SEGMENTO
+	lineageTag: 89b99e81-23d2-4197-bce1-9ad2395eed70
+
+	column ds_segmento_ic
+		lineageTag: aecf1537-6ffc-4faa-9988-c16ff1038c19
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: CAPCOM[ds_segmento_ic]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_SEGMENTO = calculated
+		mode: import
+		source =
+				
+				FILTER(
+				    DISTINCT('CAPCOM'[ds_segmento_ic]),
+				    NOT(ISBLANK('CAPCOM'[ds_segmento_ic]))
+				        && 'CAPCOM'[ds_segmento_ic] <> ""
+				)
+
+	annotation PBI_Id = befd00629d6640fa887c50e29e7559d4
+

@@ -1,0 +1,199 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.3.0/schema.json",
+  "themeCollection": {
+    "baseTheme": {
+      "name": "Fluent2-CY26SU08",
+      "reportVersionAtImport": {
+        "visual": "2.12.0",
+        "report": "3.4.0",
+        "page": "2.3.1"
+      },
+      "type": "SharedResources"
+    },
+    "customTheme": {
+      "name": "TemaEduNovaInsideSales.json",
+      "reportVersionAtImport": {
+        "visual": "2.12.0",
+        "report": "3.4.0",
+        "page": "2.3.1"
+      },
+      "type": "RegisteredResources"
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "bb92699aa55c0dfec0d0",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "DIM_PRODUTO"
+              }
+            },
+            "Property": "tipo_curso"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User",
+        "isHiddenInViewMode": true,
+        "objects": {
+          "general": [
+            {
+              "properties": {
+                "isInvertedSelectionMode": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "true"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "bbd8e7858ed9688f3a53",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "DIM_CONSULTOR"
+              }
+            },
+            "Property": "nm_consultor_recebimento"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User",
+        "isHiddenInViewMode": true,
+        "objects": {
+          "general": [
+            {
+              "properties": {
+                "isInvertedSelectionMode": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "true"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "objects": {
+    "section": [
+      {
+        "properties": {
+          "verticalAlignment": {
+            "expr": {
+              "Literal": {
+                "Value": "'Top'"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspacePane": [
+      {
+        "properties": {
+          "expanded": {
+            "expr": {
+              "Literal": {
+                "Value": "false"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "resourcePackages": [
+    {
+      "name": "SharedResources",
+      "type": "SharedResources",
+      "items": [
+        {
+          "name": "Fluent2-CY26SU08",
+          "path": "BaseThemes/Fluent2-CY26SU08.json",
+          "type": "BaseTheme"
+        }
+      ]
+    },
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "IconeFiltro.png",
+          "path": "IconeFiltro.png",
+          "type": "Image"
+        },
+        {
+          "name": "LogoEduNova.png",
+          "path": "LogoEduNova.png",
+          "type": "Image"
+        },
+        {
+          "name": "funil_(1)10357255747110639.png",
+          "path": "funil_(1)10357255747110639.png",
+          "type": "Image"
+        },
+        {
+          "name": "Icone_Limpar_Filtros_Cinza8417463036598254.png",
+          "path": "Icone_Limpar_Filtros_Cinza8417463036598254.png",
+          "type": "Image"
+        },
+        {
+          "name": "icons8-limpar-filtros-50_1_5521553482541498.png",
+          "path": "icons8-limpar-filtros-50_1_5521553482541498.png",
+          "type": "Image"
+        },
+        {
+          "name": "indicador-de-nivel-de-volume4247080658347212.png",
+          "path": "indicador-de-nivel-de-volume4247080658347212.png",
+          "type": "Image"
+        },
+        {
+          "name": "produtividade7917000194828557.png",
+          "path": "produtividade7917000194828557.png",
+          "type": "Image"
+        },
+        {
+          "name": "cabecalho_edunova_34e951cd.png",
+          "path": "cabecalho_edunova_34e951cd.png",
+          "type": "Image"
+        },
+        {
+          "name": "cabecalho_edunova_9884a47f.png",
+          "path": "cabecalho_edunova_9884a47f.png",
+          "type": "Image"
+        },
+        {
+          "name": "cabecalho_edunova_f4860c9e.png",
+          "path": "cabecalho_edunova_f4860c9e.png",
+          "type": "Image"
+        },
+        {
+          "name": "TemaEduNovaInsideSales.json",
+          "path": "TemaEduNovaInsideSales.json",
+          "type": "CustomTheme"
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "useStylableVisualContainerHeader": true,
+    "exportDataMode": "AllowSummarized",
+    "defaultDrillFilterOtherVisuals": true,
+    "allowChangeFilterTypes": true,
+    "useEnhancedTooltips": true,
+    "useDefaultAggregateDisplayName": true
+  }
+}

@@ -1,0 +1,222 @@
+table Dim_Data
+	lineageTag: 1cb7736e-5375-43ef-8983-ae3fa801fc61
+
+	column Date
+		formatString: Short Date
+		lineageTag: 1945c87f-016f-4f4c-aae7-513b54055dac
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		variation Variation
+			isDefault
+			relationship: 24555a62-f432-4090-98c2-e33dbdcf00e7
+			defaultHierarchy: LocalDateTable_86545e93-a6a3-4f2f-b57c-8623cb439e0d.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Ano
+		formatString: 0
+		lineageTag: b1cf0906-3439-46e1-bb75-785c0bc43b99
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Ano]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mês
+		formatString: 0
+		lineageTag: b5bd4204-2ece-4e69-947c-a21eeae17628
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Mês]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nome Mês'
+		lineageTag: 27981fff-ab30-40ff-9355-30ebff481817
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Nome Mês]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ano-Mês
+		lineageTag: 4bece643-ea69-4eb5-85d8-c91982b853ab
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Ano-Mês]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nome Mês-Ano'
+		lineageTag: 0455f34e-93aa-46da-9163-9bf3f305412d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Nome Mês-Ano]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trimestre
+		lineageTag: c2fb543f-58a2-4400-9e30-84044a001ccc
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Trimestre]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dia da Semana'
+		formatString: 0
+		lineageTag: b1f11c27-96e4-4db1-965f-a6bac537cdc1
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Dia da Semana]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nome Dia'
+		lineageTag: 0250e02e-324e-4aff-a81a-bbdc5f097ab5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Nome Dia]
+		sortByColumn: 'Dia da Semana'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'É Dia Útil'
+		formatString: 0
+		lineageTag: 65ee329c-ff5d-4887-bd06-7ddfffd00a5f
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [É Dia Útil]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Dia/Mês
+		lineageTag: 0ea56d44-e9d0-4d6a-a844-ed4a40087f28
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Dia/Mês]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ano Ciclo'
+		formatString: 0
+		lineageTag: d0b801f1-71f3-429f-af62-5084fd908f1a
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Ano Ciclo]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ordem Ciclo'
+		formatString: 0
+		lineageTag: 62580a7f-62ec-4fb1-b9d7-0b0cc683b9af
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Ordem Ciclo]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Semana Mês'
+		lineageTag: 3e97b014-e2da-48f3-b05c-a97959cac324
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Semana Mês]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ordem Semana Mês'
+		formatString: 0
+		lineageTag: 75c1d7d6-2b6f-48fc-9d5f-8e27ab907b82
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Ordem Semana Mês]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Dia_Semana_Ordem =
+			
+			SWITCH(
+			    'Dim_Data'[NOME DIA],
+			    "Segunda-feira", 1,
+			    "Terça-feira", 2,
+			    "Quarta-feira", 3,
+			    "Quinta-feira", 4,
+			    "Sexta-feira", 5,
+			    "Sábado", 6,
+			    "Domingo", 7
+			)
+		formatString: 0
+		lineageTag: 51246f68-0ad4-4495-b44e-4f9e4de0efea
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Data = calculated
+		mode: import
+		source =
+				
+				ADDCOLUMNS (
+				    CALENDAR (DATE(2025,10,1), DATE(2026, 10, 23)),
+				
+				    "Ano", YEAR([Date]),
+				    "Mês", MONTH([Date]),
+				    "Nome Mês", FORMAT([Date], "mmmm"),
+				    "Ano-Mês", FORMAT([Date], "yyyy-MM"),
+				    "Nome Mês-Ano", FORMAT([Date], "mmm yyyy"),
+				    "Trimestre", "T" & FORMAT(QUARTER([Date]), "0"),
+				    "Dia da Semana", WEEKDAY([Date], 2),
+				    "Nome Dia", FORMAT([Date], "dddd"),
+				    "É Dia Útil", IF(WEEKDAY([Date], 2) <= 5, 1, 0),
+				
+				    -- NOVA COLUNA DIA/MÊS
+				    "Dia/Mês", FORMAT([Date], "dd/MM"),
+				
+				    -- ANO DO CICLO
+				    "Ano Ciclo",
+				        IF(MONTH([Date]) >= 10, YEAR([Date]), YEAR([Date]) - 1),
+				
+				    -- ORDEM DO CICLO (OUTUBRO PRIMEIRO)
+				    "Ordem Ciclo",
+				        SWITCH(
+				            MONTH([Date]),
+				            10, 1,
+				            11, 2,
+				            12, 3,
+				            1, 4,
+				            2, 5,
+				            3, 6,
+				            4, 7,
+				            5, 8,
+				            6, 9,
+				            7, 10,
+				            8, 11,
+				            9, 12
+				        ),
+				
+				 "Semana Mês",
+				SWITCH(
+				    TRUE(),
+				    DAY([Date]) <= 7, "1 a 7",
+				    DAY([Date]) <= 14, "8 a 14",
+				    DAY([Date]) <= 21, "15 a 21",
+				    DAY([Date]) <= 28, "22 a 28",
+				    "29 a 31"
+				),
+				
+				"Ordem Semana Mês",
+				SWITCH(
+				    TRUE(),
+				    DAY([Date]) <= 7, 1,
+				    DAY([Date]) <= 14, 2,
+				    DAY([Date]) <= 21, 3,
+				    DAY([Date]) <= 28, 4,
+				    5
+				)
+				)
+
+	annotation PBI_Id = 8d3a9e8c978e4251b8c78a61fd50496f
+

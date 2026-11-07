@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "163b12f4707a5209be3d",
+  "position": {
+    "x": 223.33333333333334,
+    "y": 360,
+    "z": 20000,
+    "height": 2140,
+    "width": 873.3333333333334,
+    "tabOrder": 15000
+  },
+  "visualGroup": {
+    "displayName": "FILTTRO  OFICIAL GESTAO",
+    "groupMode": "ScaleMode"
+  },
+  "isHidden": true
+}

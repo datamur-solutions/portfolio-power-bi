@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "5W2H Campus - Plano de Ação Comercial"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "a8702d70-5327-4cd2-a76c-a2cb454df307"
+  }
+}

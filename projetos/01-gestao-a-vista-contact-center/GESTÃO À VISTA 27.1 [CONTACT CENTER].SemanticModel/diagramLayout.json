@@ -1,0 +1,339 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 4583.0040390410923,
+        "y": 5962.6375027397216
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 989.930276146794,
+            "y": 11523.643065055312
+          },
+          "nodeIndex": "TB CALL CENTER",
+          "nodeLineageTag": "0e6700f8-3faa-4ad2-b966-40ded0ff84a6",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 815.46829999999977,
+            "y": 11198.506394659989
+          },
+          "nodeIndex": "Dim_Data",
+          "nodeLineageTag": "1cb7736e-5375-43ef-8983-ae3fa801fc61",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 11524.861745002458
+          },
+          "nodeIndex": "Dim_Data2",
+          "nodeLineageTag": "bd4e4542-b21c-4dc0-82f0-55038c8d21fe",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 8
+        },
+        {
+          "location": {
+            "x": 1295.0923759158627,
+            "y": 11551.943936783278
+          },
+          "nodeIndex": "Parâmetro",
+          "nodeLineageTag": "267cfcc8-5042-49e6-a66b-3b25dbd4893e",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 9
+        },
+        {
+          "location": {
+            "x": 1579.0923759158627,
+            "y": 11521.044522521621
+          },
+          "nodeIndex": "Dim_Cohort",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 10
+        },
+        {
+          "location": {
+            "x": 1863.0923759158627,
+            "y": 11534.695401129135
+          },
+          "nodeIndex": "Parâmetro 2",
+          "nodeLineageTag": "1cbd3b1b-bd12-446e-b8cd-2464102f956b",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 11
+        },
+        {
+          "location": {
+            "x": 2147.0923759158627,
+            "y": 11436.957911207672
+          },
+          "nodeIndex": "Dim_Funil",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 12
+        },
+        {
+          "location": {
+            "x": 2431.0923759158627,
+            "y": 11429.058496946014
+          },
+          "nodeIndex": "FILTROS DINAMICOS",
+          "nodeLineageTag": "091d8bb8-c9d9-4d66-8d1d-670db067b5b9",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 13
+        },
+        {
+          "location": {
+            "x": 146.34568240206474,
+            "y": 11320.068136061869
+          },
+          "nodeIndex": "Dim_Data TAB",
+          "nodeLineageTag": "84bba95a-817a-4fce-b3db-a02f4513a156",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 14
+        },
+        {
+          "location": {
+            "x": 2715.0923759158627,
+            "y": 11346.214022183776
+          },
+          "nodeIndex": "DATA 3",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 15
+        },
+        {
+          "location": {
+            "x": 492.57575944553548,
+            "y": 11317.069772686875
+          },
+          "nodeIndex": "Dim_Cohort 2",
+          "nodeLineageTag": "b62628ac-f1cf-47e4-8128-e18aa7edbd82",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 16
+        },
+        {
+          "location": {
+            "x": 2999.0923759158627,
+            "y": 11095.117718763195
+          },
+          "nodeIndex": "ALO+CONV",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 17
+        },
+        {
+          "location": {
+            "x": 3567.0923759158627,
+            "y": 10745.778261806881
+          },
+          "nodeIndex": "CURVA ACUM 3",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 19
+        },
+        {
+          "location": {
+            "x": 488.50719441372962,
+            "y": 11144.497963211048
+          },
+          "nodeIndex": "DIM SUPER_CANAL",
+          "nodeLineageTag": "db27ffe2-2b75-4bdf-bb4f-b3b48e00980e",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 20
+        },
+        {
+          "location": {
+            "x": 679.52620556285626,
+            "y": 11648.292341954253
+          },
+          "nodeIndex": "PLANEJADO",
+          "nodeLineageTag": "79ffc2d0-e218-419c-a91d-9cabc8e9703c",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 21
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 11094.157149862876
+          },
+          "nodeIndex": "DIM_EPS",
+          "nodeLineageTag": "671ae7fd-ceda-4dcd-bd4d-0b98c752863d",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 3851.0923759158627,
+            "y": 9098.3007957599
+          },
+          "nodeIndex": "ACUM INSCRITOS",
+          "nodeLineageTag": "e8bccc0c-5d7d-4b65-9573-e3ca5fe44d14",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 116.11599324016032,
+            "y": 11786.725670395106
+          },
+          "nodeIndex": "DIM_SEMANA_MES",
+          "nodeLineageTag": "97fa20a9-552b-43d6-ae38-23b67316d4be",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 362.47754201239775,
+            "y": 11876.432584185639
+          },
+          "nodeIndex": "DIM_FERIADOS",
+          "nodeLineageTag": "eb8e58b4-552f-46a3-ba74-30594a8d6bb4",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 4135.0923759158632,
+            "y": 6867.9620304212258
+          },
+          "nodeIndex": "DICIONARIO GESTAO A VISTA",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 4419.0923759158632,
+            "y": 6209.4290833147916
+          },
+          "nodeIndex": "VISÃO DATA",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 22
+        },
+        {
+          "location": {
+            "x": 4703.0923759158632,
+            "y": 4927.3114448736878
+          },
+          "nodeIndex": "Parâmetro 3",
+          "nodeLineageTag": "73ce3183-be15-4b6a-af0a-24519bb4045c",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 4987.0923759158632,
+            "y": 0
+          },
+          "nodeIndex": "DINAMICA VENDAS",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 5271.0923759158632,
+            "y": 5962.2162920928195
+          },
+          "nodeIndex": "Parâmetro 4",
+          "nodeLineageTag": "d3e5b066-9f9a-4f40-8596-013945136d00",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 5555.0923759158632,
+            "y": 5962.2162920928195
+          },
+          "nodeIndex": "ALO EPS MEDIA",
+          "nodeLineageTag": "1720461b-491a-4100-8b55-f83ec8708add",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas as tabelas",
+      "zoomValue": 54.942129191901046,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas as tabelas",
+  "defaultDiagram": "Todas as tabelas"
+}

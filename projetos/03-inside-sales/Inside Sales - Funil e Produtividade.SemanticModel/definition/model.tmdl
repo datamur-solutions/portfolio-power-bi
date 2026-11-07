@@ -1,0 +1,65 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: pt-BR
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["CAPCOM","OMNI CHAT"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table CAPCOM
+ref table DateTableTemplate_02fdb6d2-5d99-4cc5-87b9-f762e74cee16
+ref table LocalDateTable_0c1a81ba-33fe-4657-a163-1638c8f0be3d
+ref table LocalDateTable_1a27bced-c84b-4275-8af5-7a9277e2f23e
+ref table LocalDateTable_f347bd77-7030-4b97-8843-212a47392111
+ref table LocalDateTable_4b8efeca-7f79-4e35-969a-b99a5612460d
+ref table LocalDateTable_07ad79f1-4db0-4377-b3a9-fd3983477fd1
+ref table LocalDateTable_01c4f528-fbb7-4940-ac3c-01ce9a0ec35d
+ref table LocalDateTable_e680054b-f945-409b-81a1-bbfffb1622d1
+ref table LocalDateTable_9861084a-cc9b-43db-96b6-db64306bc76b
+ref table LocalDateTable_b9c436e3-89d7-4479-957a-5accc8a47ca6
+ref table LocalDateTable_6936a814-5664-4b1a-bd83-8e5bc7bed1d8
+ref table LocalDateTable_41afff29-edb3-4f3b-814e-d79d1dfbe919
+ref table LocalDateTable_ed4ec08e-7196-4d39-ad03-f1050e185fba
+ref table LocalDateTable_8f800485-cfb2-4b6b-8376-cd4442651ba2
+ref table LocalDateTable_86bf4e85-1cbd-4d7c-aac9-a1be61a93c3d
+ref table LocalDateTable_9a6bf677-f80a-4634-a58e-94b29d088ae2
+ref table LocalDateTable_b71dbc2f-d199-4844-a5cd-86b407d48ef9
+ref table 'OMNI CHAT'
+ref table LocalDateTable_69c6871f-ed76-436d-9584-f98f9c922757
+ref table LocalDateTable_8dd6f295-d79b-4ee7-a096-27159cc750ad
+ref table LocalDateTable_f17a0563-e9d8-45b6-a446-ef6f03d3b28c
+ref table LocalDateTable_fbb2049d-dff4-408b-95ff-ae06b65b0328
+ref table LocalDateTable_f4dd6d13-3075-4f4b-833e-067bca66af8a
+ref table LocalDateTable_c6127ffc-4c2a-42ef-bf4e-d4f802001629
+ref table LocalDateTable_c2d0d568-75ff-4e86-a6d8-3c453becd38a
+ref table LocalDateTable_201d427f-4921-47cc-8d55-a51e167f02b4
+ref table LocalDateTable_457ee99a-bb83-48db-bf1f-d274802c0941
+ref table LocalDateTable_beeec300-ce0b-4659-a7a3-16a570bd1ead
+ref table Dim_Data
+ref table DIM_CONSULTOR
+ref table LocalDateTable_d73c4d71-6546-4bcf-9b5e-49f10f9885c3
+ref table Dim_Funil
+ref table DIM_PRODUTO
+ref table DIM_COHORT
+ref table DIM_CURSO
+ref table LocalDateTable_d9e2b227-e348-482b-a5fc-60a14e8e0746
+ref table DIM_SUPERCANAL
+ref table DIM_UNIDADE
+ref table DIM_INSIGHTS_EXECUTIVOS
+ref table PARAM_REDUCAO_TMA
+ref table 'Meta Alô'
+ref table DIM_REGIONAL
+ref table DIM_SEGMENTO
+ref table DIM_GERENTE
+ref table DIM_CANAL
+ref table 'DIM_COHORT ATEND'
+
+ref cultureInfo pt-BR
+

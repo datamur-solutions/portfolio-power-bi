@@ -1,0 +1,48 @@
+table 'ALO EPS MEDIA'
+	lineageTag: 1720461b-491a-4100-8b55-f83ec8708add
+
+	column 'ALO EPS MEDIA'
+		lineageTag: bbb23021-e03b-41d0-aa99-1daca8e12a98
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'ALO EPS MEDIA Pedido'
+
+		relatedColumnDetails
+			groupByColumn: 'ALO EPS MEDIA Campos'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ALO EPS MEDIA Campos'
+		isHidden
+		lineageTag: 06076b56-072d-41c6-a320-586ec00862fc
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'ALO EPS MEDIA Pedido'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ALO EPS MEDIA Pedido'
+		isHidden
+		formatString: 0
+		lineageTag: 17f080a0-f2e3-4ec2-a2ad-ab714e6dfb39
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'ALO EPS MEDIA' = calculated
+		mode: import
+		source =
+				{
+				    ("EPS", NAMEOF('DIM_EPS'[EPS]), 0),
+				    ("% ATENDIDIMENTO", NAMEOF('TB CALL CENTER'[FUNIL | % ATENDIDO/BASE]), 1)
+				}
+
+	annotation PBI_Id = e5bc9aae9f394474b94ca6c0bc459f78
+

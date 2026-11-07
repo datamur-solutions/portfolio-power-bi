@@ -1,0 +1,136 @@
+table Consultores
+	lineageTag: 514eda46-6de6-5f87-941a-8c518d74bb10
+
+	column Chave
+		dataType: string
+		isHidden
+		lineageTag: bc0e653d-6bbf-5e83-abf8-74b1fccf36cb
+		summarizeBy: none
+		sourceColumn: Chave
+
+		annotation SummarizationSetBy = Automatic
+
+	column Matrícula
+		dataType: string
+		lineageTag: 5a9f75e5-08d9-5d60-b2a1-ab7b08fd56ad
+		summarizeBy: none
+		sourceColumn: Matrícula
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Consultor (cadastro)'
+		dataType: string
+		lineageTag: 2dae5a35-417b-5b1e-907b-0d03e8df49f4
+		summarizeBy: none
+		sourceColumn: Consultor (cadastro)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Email Consultor'
+		dataType: string
+		isHidden
+		lineageTag: b18f7549-e060-52da-a04c-c8ae54690ce8
+		summarizeBy: none
+		sourceColumn: Email Consultor
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Função (cadastro)'
+		dataType: string
+		lineageTag: a46ab1dd-df64-5e27-a240-e32df6744f73
+		summarizeBy: none
+		sourceColumn: Função (cadastro)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Situação (cadastro)'
+		dataType: string
+		lineageTag: 2a842a7d-b697-5f55-856d-8f6e69e9438f
+		summarizeBy: none
+		sourceColumn: Situação (cadastro)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Unidade atual'
+		dataType: string
+		lineageTag: dd7cd68e-9120-5635-88b4-2b845e12d397
+		summarizeBy: none
+		sourceColumn: Unidade atual
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Filial atual'
+		dataType: string
+		lineageTag: a12f80a7-f808-52f1-84dc-ef838b007547
+		summarizeBy: none
+		sourceColumn: Filial atual
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Regional atual'
+		dataType: string
+		lineageTag: 9e05b4ff-dce0-5352-843b-d12c637883bf
+		summarizeBy: none
+		sourceColumn: Regional atual
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Coordenador atual'
+		dataType: string
+		lineageTag: 346839ef-57e2-512f-bc9a-7d631334fbf5
+		summarizeBy: none
+		sourceColumn: Coordenador atual
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Email Coordenador'
+		dataType: string
+		isHidden
+		lineageTag: 950079c7-32cd-5dc2-894f-4725bb53d54c
+		summarizeBy: none
+		sourceColumn: Email Coordenador
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Gerente atual'
+		dataType: string
+		lineageTag: abc3c094-131d-5250-8f75-bb65baa7e06c
+		summarizeBy: none
+		sourceColumn: Gerente atual
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Email Gerente'
+		dataType: string
+		isHidden
+		lineageTag: 00560706-e9b7-5f90-948f-27c2ce592c33
+		summarizeBy: none
+		sourceColumn: Email Gerente
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ativo
+		dataType: boolean
+		lineageTag: 8b7177b6-09cd-5d71-863e-07f3446a2c5c
+		summarizeBy: none
+		sourceColumn: Ativo
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Consultores = m
+		mode: import
+		source =
+				let
+				    C = #"Consultores Base",
+				    Final = Table.SelectColumns(C, {"Chave", "Matricula", "Nome", "EmailConsultor", "Funcao", "Situacao", "Unidade", "Filial", "Regional", "Coordenador", "EmailCoordenador",
+				        "Gerente", "EmailGerente", "Ativo"}),
+				    Nomes = Table.RenameColumns(Final, {{"Matricula", "Matrícula"}, {"Nome", "Consultor (cadastro)"}, {"EmailConsultor", "Email Consultor"}, {"Funcao", "Função (cadastro)"},
+				        {"Situacao", "Situação (cadastro)"}, {"Unidade", "Unidade atual"}, {"Filial", "Filial atual"}, {"Regional", "Regional atual"}, {"Coordenador", "Coordenador atual"},
+				        {"EmailCoordenador", "Email Coordenador"}, {"Gerente", "Gerente atual"}, {"EmailGerente", "Email Gerente"}, {"Ativo", "Ativo"}}),
+				    Minusculas = Table.TransformColumns(Nomes, {{"Email Consultor", Text.Lower, type text}, {"Email Coordenador", Text.Lower, type text}, {"Email Gerente", Text.Lower, type text}}),
+				    Tipos = Table.TransformColumnTypes(Minusculas, {{"Ativo", type logical}})
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

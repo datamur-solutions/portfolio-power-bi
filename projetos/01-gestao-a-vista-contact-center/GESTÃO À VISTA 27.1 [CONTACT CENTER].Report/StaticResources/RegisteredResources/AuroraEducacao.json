@@ -1,0 +1,29 @@
+{
+  "name": "Aurora Educação",
+  "dataColors": [
+    "#0F4C5C",
+    "#1A7F8E",
+    "#F28C6B",
+    "#F6B54A",
+    "#5FA8B3",
+    "#8C5E58",
+    "#B9D9DE",
+    "#F9D9A6",
+    "#3E6D78",
+    "#E3A08C"
+  ],
+  "good": "#1A7F8E",
+  "neutral": "#F6B54A",
+  "bad": "#E06A4E",
+  "maximum": "#0F4C5C",
+  "center": "#8CC7CF",
+  "minimum": "#E8F3F5",
+  "foreground": "#1E2D33",
+  "foregroundNeutralSecondary": "#5B6B71",
+  "foregroundNeutralTertiary": "#9AA7AC",
+  "background": "#FFFFFF",
+  "backgroundLight": "#F4F7F8",
+  "backgroundNeutral": "#E3EAEC",
+  "tableAccent": "#1A7F8E",
+  "hyperlink": "#1A7F8E"
+}

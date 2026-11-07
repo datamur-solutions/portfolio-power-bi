@@ -1,0 +1,54 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: pt-BR
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["TB CALL CENTER","PLANEJADO"]
+
+annotation PBI_ProTooling = ["CalcGroup","DevMode"]
+
+ref table DateTableTemplate_c84f3029-eb8d-4561-87b0-b73a7e3fe500
+ref table 'TB CALL CENTER'
+ref table LocalDateTable_3280e206-9973-4a9a-a874-3c3b142f44d7
+ref table LocalDateTable_c0a6627c-c624-4fb7-aade-5e4c8fcc5779
+ref table LocalDateTable_7e8a31ec-7a26-49ea-a5a7-4f70f8dcdac6
+ref table Dim_Data
+ref table Dim_Data2
+ref table LocalDateTable_fb59e560-41be-40c0-b6b4-84ddd87ba7ea
+ref table LocalDateTable_3c97800e-e4c8-4bc7-830c-dd895642e75b
+ref table LocalDateTable_f5bc90c5-11fe-40b2-b5cc-c1eb1a2b7042
+ref table LocalDateTable_bcf56d1a-12be-4eaf-903c-c34e73037412
+ref table Parâmetro
+ref table Dim_Cohort
+ref table 'Parâmetro 2'
+ref table Dim_Funil
+ref table 'FILTROS DINAMICOS'
+ref table 'Dim_Data TAB'
+ref table 'DATA 3'
+ref table 'Dim_Cohort 2'
+ref table ALO+CONV
+ref table 'CURVA ACUM 3'
+ref table 'DIM SUPER_CANAL'
+ref table PLANEJADO
+ref table DIM_EPS
+ref table 'ACUM INSCRITOS'
+ref table DIM_SEMANA_MES
+ref table DIM_FERIADOS
+ref table LocalDateTable_58039698-72d0-45fe-aaa7-3c26ff968e95
+ref table 'DICIONARIO GESTAO A VISTA'
+ref table 'VISÃO DATA'
+ref table 'Parâmetro 3'
+ref table 'DINAMICA VENDAS'
+ref table 'Parâmetro 4'
+ref table 'ALO EPS MEDIA'
+ref table LocalDateTable_86545e93-a6a3-4f2f-b57c-8623cb439e0d
+ref table LocalDateTable_913572c3-37a2-4f33-b4e3-96b4626de98d
+
+ref cultureInfo pt-BR
+

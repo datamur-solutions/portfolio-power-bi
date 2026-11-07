@@ -1,0 +1,135 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/2.1.0/schema.json",
+  "displayName": "Filtros · abrir · Ações vencidas",
+  "name": "bm0d2d5ea50155df0a1462",
+  "options": {
+    "applyOnlyToTargetVisuals": true,
+    "targetVisualNames": [
+      "98a9c0da23f52bb3d84d",
+      "125a809ce990d51468c5",
+      "52e04d8f484db37fa990",
+      "d68b9a21bd029394bee7",
+      "5012d003efc3f625aae4",
+      "b2715e1fe340e913f039",
+      "806b759855287925fa16",
+      "be1e0740d67913c1827a",
+      "9f0d343da4372db71326",
+      "aa530be77ed76f1019a3",
+      "3c159c29dd97fbbb6592",
+      "74c9ec85e306c869278b",
+      "5f02efad20fe2a32c015",
+      "4829f36310b824be7ff5",
+      "bb6743d77b56ea155ef3",
+      "3594f6b72a4cc09a2496",
+      "ab05535213d4e1917e35",
+      "9a15a77d03d94db2b077",
+      "9d7e3f74e7479b5dbdfb"
+    ],
+    "suppressData": true
+  },
+  "explorationState": {
+    "version": "1.0",
+    "activeSection": "p_venc",
+    "sections": {
+      "p_venc": {
+        "visualContainers": {
+          "98a9c0da23f52bb3d84d": {
+            "singleVisual": {
+              "visualType": "textbox"
+            }
+          },
+          "125a809ce990d51468c5": {
+            "singleVisual": {
+              "visualType": "actionButton"
+            }
+          },
+          "52e04d8f484db37fa990": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "d68b9a21bd029394bee7": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "5012d003efc3f625aae4": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "b2715e1fe340e913f039": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "806b759855287925fa16": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "be1e0740d67913c1827a": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "9f0d343da4372db71326": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "aa530be77ed76f1019a3": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "3c159c29dd97fbbb6592": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "74c9ec85e306c869278b": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "5f02efad20fe2a32c015": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "4829f36310b824be7ff5": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "bb6743d77b56ea155ef3": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "3594f6b72a4cc09a2496": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "ab05535213d4e1917e35": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "9a15a77d03d94db2b077": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          },
+          "9d7e3f74e7479b5dbdfb": {
+            "singleVisual": {
+              "visualType": "slicer"
+            }
+          }
+        }
+      }
+    }
+  }
+}

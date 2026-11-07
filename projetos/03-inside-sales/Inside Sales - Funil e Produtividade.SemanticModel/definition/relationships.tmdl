@@ -1,0 +1,220 @@
+relationship 073361f8-6b93-4a27-b433-edd7439fb433
+	joinOnDateBehavior: datePartOnly
+	fromColumn: CAPCOM.dt_base
+	toColumn: LocalDateTable_0c1a81ba-33fe-4657-a163-1638c8f0be3d.Date
+
+relationship b8469adf-1a6e-4000-8187-3be2bd5860b6
+	joinOnDateBehavior: datePartOnly
+	fromColumn: CAPCOM.dt_inscricao_ic
+	toColumn: LocalDateTable_1a27bced-c84b-4275-8af5-7a9277e2f23e.Date
+
+relationship 428d7c5a-cad6-4b30-bdf4-7978cea9fd84
+	joinOnDateBehavior: datePartOnly
+	fromColumn: CAPCOM.dt_inscricao
+	toColumn: LocalDateTable_f347bd77-7030-4b97-8843-212a47392111.Date
+
+relationship 39964f82-fd16-429f-ac8c-96ab716d3e6d
+	joinOnDateBehavior: datePartOnly
+	fromColumn: CAPCOM.dt_aprovado_ic
+	toColumn: LocalDateTable_4b8efeca-7f79-4e35-969a-b99a5612460d.Date
+
+relationship e3e70696-5ed8-4478-becc-8ec9153b98e4
+	joinOnDateBehavior: datePartOnly
+	fromColumn: CAPCOM.dt_aprovado
+	toColumn: LocalDateTable_07ad79f1-4db0-4377-b3a9-fd3983477fd1.Date
+
+relationship b09835dd-b1d8-4910-9d7f-f91932e39bdc
+	joinOnDateBehavior: datePartOnly
+	fromColumn: CAPCOM.dt_matricula
+	toColumn: LocalDateTable_01c4f528-fbb7-4940-ac3c-01ce9a0ec35d.Date
+
+relationship 55cbd8e1-9b07-4ca3-83f5-5513442ab98d
+	joinOnDateBehavior: datePartOnly
+	fromColumn: CAPCOM.dt_matricula_prouni
+	toColumn: LocalDateTable_e680054b-f945-409b-81a1-bbfffb1622d1.Date
+
+relationship 91fe7e78-94ab-4ef9-bd33-9fcec3c45ce6
+	joinOnDateBehavior: datePartOnly
+	fromColumn: CAPCOM.dt_cancelamento_ic
+	toColumn: LocalDateTable_9861084a-cc9b-43db-96b6-db64306bc76b.Date
+
+relationship 5779398b-f246-4c6b-9f3f-0b025bef5272
+	joinOnDateBehavior: datePartOnly
+	fromColumn: CAPCOM.dt_cancelamento
+	toColumn: LocalDateTable_b9c436e3-89d7-4479-957a-5accc8a47ca6.Date
+
+relationship 0e9f7b64-fe18-4d89-99af-6f71e844aa3f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: CAPCOM.dt_aceite_ic
+	toColumn: LocalDateTable_6936a814-5664-4b1a-bd83-8e5bc7bed1d8.Date
+
+relationship aab595b0-e030-48b9-907f-525075721338
+	joinOnDateBehavior: datePartOnly
+	fromColumn: CAPCOM.dt_geracao_pagto_recebimento
+	toColumn: LocalDateTable_41afff29-edb3-4f3b-814e-d79d1dfbe919.Date
+
+relationship 74c83b20-431e-4d24-a8f5-b7aaa3c31864
+	joinOnDateBehavior: datePartOnly
+	fromColumn: CAPCOM.dt_inicio_aula
+	toColumn: LocalDateTable_ed4ec08e-7196-4d39-ad03-f1050e185fba.Date
+
+relationship d878061c-b1dd-4076-bd32-ad229b80ebde
+	joinOnDateBehavior: datePartOnly
+	fromColumn: CAPCOM.ksa_datadopagamento
+	toColumn: LocalDateTable_8f800485-cfb2-4b6b-8376-cd4442651ba2.Date
+
+relationship 1ba25b6b-6837-4fad-a57a-4cd6f2bb6a9e
+	joinOnDateBehavior: datePartOnly
+	fromColumn: CAPCOM.dt_pend_in
+	toColumn: LocalDateTable_86bf4e85-1cbd-4d7c-aac9-a1be61a93c3d.Date
+
+relationship fafe4f6d-bce0-466a-b3fa-d85b1e8d02be
+	joinOnDateBehavior: datePartOnly
+	fromColumn: CAPCOM.dt_pend_out
+	toColumn: LocalDateTable_9a6bf677-f80a-4634-a58e-94b29d088ae2.Date
+
+relationship 1e86ce15-f6b3-49d7-9c4d-1da423a1a39e
+	joinOnDateBehavior: datePartOnly
+	fromColumn: CAPCOM.dt_execucao
+	toColumn: LocalDateTable_b71dbc2f-d199-4844-a5cd-86b407d48ef9.Date
+
+relationship 9f331585-d922-4944-9316-a1ea52e4399c
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'OMNI CHAT'.dt_mes_ref
+	toColumn: LocalDateTable_69c6871f-ed76-436d-9584-f98f9c922757.Date
+
+relationship d2e00806-dc95-4bb7-8480-671de84e92c1
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'OMNI CHAT'.dt_semana_ref
+	toColumn: LocalDateTable_8dd6f295-d79b-4ee7-a096-27159cc750ad.Date
+
+relationship ed4d2975-59e9-4342-a90d-741d5ceb87c0
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'OMNI CHAT'.dt_inscricao
+	toColumn: LocalDateTable_f17a0563-e9d8-45b6-a446-ef6f03d3b28c.Date
+
+relationship 1f443eb0-5860-44ce-bb40-21864c0f8f1b
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'OMNI CHAT'.dt_matricula
+	toColumn: LocalDateTable_fbb2049d-dff4-408b-95ff-ae06b65b0328.Date
+
+relationship 86cc1bdd-7cf9-4ded-8aeb-ce5ae387bdc8
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'OMNI CHAT'.dt_criacao
+	toColumn: LocalDateTable_f4dd6d13-3075-4f4b-833e-067bca66af8a.Date
+
+relationship 39a31f3d-1065-46ac-b861-4ad27a24113f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'OMNI CHAT'.dt_contato
+	toColumn: LocalDateTable_c6127ffc-4c2a-42ef-bf4e-d4f802001629.Date
+
+relationship 96b1ff6e-cfdf-4965-885a-343bfae07c98
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'OMNI CHAT'.dt_resposta_cliente
+	toColumn: LocalDateTable_c2d0d568-75ff-4e86-a6d8-3c453becd38a.Date
+
+relationship f6c110f2-d18e-4864-a6c0-032bc928b3bc
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'OMNI CHAT'.dt_finalizacao
+	toColumn: LocalDateTable_201d427f-4921-47cc-8d55-a51e167f02b4.Date
+
+relationship b533c29f-c02b-45b1-81b6-febd79304748
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'OMNI CHAT'.dt_bot_contato
+	toColumn: LocalDateTable_457ee99a-bb83-48db-bf1f-d274802c0941.Date
+
+relationship 16f24aa2-34cc-45bc-bd27-f83446a0cbf3
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'OMNI CHAT'.dt_bot_transferencia
+	toColumn: LocalDateTable_beeec300-ce0b-4659-a7a3-16a570bd1ead.Date
+
+relationship 83846d8e-3fb4-6a4d-05d8-7fbda2ca9c35
+	fromColumn: 'OMNI CHAT'.consultor_nome
+	toColumn: DIM_CONSULTOR.nm_consultor_recebimento
+
+relationship 85c135eb-f786-a97d-5b99-9d9e440d152e
+	fromColumn: CAPCOM.nm_consultor_recebimento
+	toColumn: DIM_CONSULTOR.nm_consultor_recebimento
+
+relationship 84a0ecdc-2c90-4ef3-9266-db04f42647d1
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'OMNI CHAT'.dt_disparo
+	toColumn: LocalDateTable_d73c4d71-6546-4bcf-9b5e-49f10f9885c3.Date
+
+relationship 6b7c2962-3dff-ffcc-bcc4-f42dff68aeb1
+	fromColumn: CAPCOM.tipo_curso
+	toColumn: DIM_PRODUTO.tipo_curso
+
+relationship cb47a6e5-87e5-076c-07d4-c8238610a4d8
+	fromColumn: 'OMNI CHAT'.TIPO_CURSO
+	toColumn: DIM_PRODUTO.tipo_curso
+
+relationship d635d4c8-9b04-c09e-9667-091167c341eb
+	fromColumn: CAPCOM.COHORT
+	toColumn: DIM_COHORT.COHORT
+
+relationship c0299ca8-df98-3ab9-5aa7-a524d83a7095
+	fromColumn: CAPCOM.ds_curso_ic
+	toColumn: DIM_CURSO.ds_curso_ic
+
+relationship cd8c9a58-d53c-e3e3-b61b-a23056e6f840
+	fromColumn: 'OMNI CHAT'.curso
+	toColumn: DIM_CURSO.ds_curso_ic
+
+relationship 60c6b846-8b2b-413f-a74a-8433e30986d5
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Dim_Data.Date
+	toColumn: LocalDateTable_d9e2b227-e348-482b-a5fc-60a14e8e0746.Date
+
+relationship 5c920550-7623-f439-1389-35df0b5952e3
+	fromColumn: 'OMNI CHAT'.dt_dia
+	toColumn: Dim_Data.Date
+
+relationship df61c1a3-fa8d-edeb-841f-0635d609e300
+	fromColumn: CAPCOM.dt_matricula_ic
+	toColumn: Dim_Data.Date
+
+relationship 3ecf5d28-728c-0c9b-8c85-0fa51f2db475
+	fromColumn: CAPCOM.ds_supercanal_vendas
+	toColumn: DIM_SUPERCANAL.ds_supercanal_vendas
+
+relationship 8e4931a0-e46b-3b89-9ac4-4fa0e05a8428
+	fromColumn: 'OMNI CHAT'.supercanal
+	toColumn: DIM_SUPERCANAL.ds_supercanal_vendas
+
+relationship cb453fb1-f1b7-f3bf-fb76-f885a719d2a3
+	fromColumn: CAPCOM.nome_siga_ic
+	toColumn: DIM_UNIDADE.nome_siga_ic
+
+relationship fe6ef990-5206-e21b-c7ca-f07e9d3eb5f7
+	fromColumn: 'OMNI CHAT'.unidade_siga
+	toColumn: DIM_UNIDADE.nome_siga_ic
+
+relationship 1a022486-d6a9-ddca-c034-0644e6d11a4a
+	fromColumn: 'OMNI CHAT'.segmento
+	toColumn: DIM_SEGMENTO.ds_segmento_ic
+
+relationship 18b07428-7844-f322-06af-77cc3ffc3b91
+	fromColumn: CAPCOM.ds_segmento_ic
+	toColumn: DIM_SEGMENTO.ds_segmento_ic
+
+relationship a55522fd-4b95-d8ff-2e52-1698eaf3c76c
+	fromColumn: 'OMNI CHAT'.canal_captacao
+	toColumn: DIM_CANAL.ds_canal
+
+relationship 50a4a8bf-b2f1-db9b-71a2-599f78168fe2
+	fromColumn: CAPCOM.ds_canal
+	toColumn: DIM_CANAL.ds_canal
+
+relationship f5374583-d4fd-4bb4-a9bd-67b0352d0b1c
+	fromColumn: CAPCOM.gerente_ic
+	toColumn: DIM_GERENTE.gerente_ic
+
+relationship c0e34078-3dfa-d361-de86-1d32123c872e
+	fromColumn: 'OMNI CHAT'.gerente
+	toColumn: DIM_GERENTE.gerente_ic
+
+relationship 678179a2-4999-b0eb-7909-5dac12712a1d
+	fromColumn: 'OMNI CHAT'.cohort_atendido
+	toColumn: 'DIM_COHORT ATEND'.COHORT
+

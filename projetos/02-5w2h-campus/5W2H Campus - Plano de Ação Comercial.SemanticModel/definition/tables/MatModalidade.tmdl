@@ -1,0 +1,136 @@
+table MatModalidade
+	isHidden
+	lineageTag: 63d7fa8b-3db1-56c2-985d-50b7d1896c2e
+
+	column IdSemana
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 820fd0be-9c1e-5da1-b3e5-8fd79a53ce72
+		summarizeBy: none
+		sourceColumn: IdSemana
+
+		annotation SummarizationSetBy = Automatic
+
+	column IdAção
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 221d72b8-0cc0-54d6-98c9-f659d04da4cf
+		summarizeBy: none
+		sourceColumn: IdAção
+
+		annotation SummarizationSetBy = Automatic
+
+	column Modalidade
+		dataType: string
+		isHidden
+		lineageTag: 184a398b-cf85-59b9-aad2-d2dc0c30aa47
+		summarizeBy: none
+		sourceColumn: Modalidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Meta INS'
+		dataType: double
+		isHidden
+		formatString: #,0
+		lineageTag: a0d6ad4b-1017-51d5-8a10-21a8f0bce18f
+		summarizeBy: sum
+		sourceColumn: Meta INS
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Real INS'
+		dataType: double
+		isHidden
+		formatString: #,0
+		lineageTag: 4e0780b3-a3e2-5622-8ead-542e7a254757
+		summarizeBy: sum
+		sourceColumn: Real INS
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Meta MAT'
+		dataType: double
+		isHidden
+		formatString: #,0
+		lineageTag: 280b3910-d050-5979-b236-dd172a93bcc5
+		summarizeBy: sum
+		sourceColumn: Meta MAT
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Real MAT'
+		dataType: double
+		isHidden
+		formatString: #,0
+		lineageTag: 2fe162c1-65aa-5fca-bbac-f3fa8da374ea
+		summarizeBy: sum
+		sourceColumn: Real MAT
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data Início'
+		dataType: dateTime
+		isHidden
+		formatString: dd/MM/yyyy
+		lineageTag: c482aa16-8456-5b58-8627-2fa2a79d223a
+		summarizeBy: none
+		sourceColumn: Data Início
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Data Fim'
+		dataType: dateTime
+		isHidden
+		formatString: dd/MM/yyyy
+		lineageTag: d92b3ac7-38cc-50b2-b04a-25ddb83f813a
+		summarizeBy: none
+		sourceColumn: Data Fim
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Dias Válidos'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 15feadf8-6921-5311-925d-bbc3f7636d8c
+		summarizeBy: none
+		sourceColumn: Dias Válidos
+
+		annotation SummarizationSetBy = Automatic
+
+	partition MatModalidade = m
+		mode: import
+		source =
+				let
+				    A = #"Ações Expandidas",
+				    // uma linha por ação × produto (ou modalidade): 1 item = total da ação; 2+ itens = abertura {M|R}{Ins|Mat}_{chave}; sem item = "Não informado"
+				    L = Table.AddColumn(A, "P", (a) =>
+				        let
+				            ks = a[ListaModalidades],
+				            base = [IdSemana = a[IdSemana], IdAção = a[IdAcao], #"Data Início" = a[DataInicio], #"Data Fim" = a[Fim], #"Dias Válidos" = List.Max({1, List.Count(a[DiasAcao])})],
+				            campo = (pre, k) => Record.FieldOrDefault(a, pre & "_" & k, null),
+				            temAbertura = List.AnyTrue(List.Transform(ks, (k) => campo("MMat", k) <> null or campo("RMat", k) <> null or campo("MIns", k) <> null or campo("RIns", k) <> null)),
+				            total = (k) => base & [Modalidade = k, #"Meta INS" = a[MetaInscritos], #"Real INS" = a[RealInscritos], #"Meta MAT" = a[MetaMatriculas], #"Real MAT" = a[RealMatriculas]],
+				            zero = (v) => if v = null then 0 else v
+				        in
+				            if List.Count(ks) = 1 then {total(ks{0})}
+				            else if List.Count(ks) >= 2 and temAbertura then
+				                List.Transform(ks, (k) => base & [Modalidade = k, #"Meta INS" = zero(campo("MIns", k)), #"Real INS" = campo("RIns", k),
+				                                                    #"Meta MAT" = zero(campo("MMat", k)), #"Real MAT" = campo("RMat", k)])
+				            else {total("NaoInformado")}),
+				    Tabela = Table.FromRecords(List.Combine(L[P]), {"IdSemana", "IdAção", "Modalidade", "Meta INS", "Real INS", "Meta MAT", "Real MAT", "Data Início", "Data Fim", "Dias Válidos"},
+				        MissingField.UseNull),
+				    Tipos = Table.TransformColumnTypes(Tabela, {{"IdSemana", Int64.Type}, {"IdAção", Int64.Type}, {"Modalidade", type text}, {"Meta INS", type number}, {"Real INS", type number},
+				        {"Meta MAT", type number}, {"Real MAT", type number}, {"Data Início", type date}, {"Data Fim", type date}, {"Dias Válidos", Int64.Type}})
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

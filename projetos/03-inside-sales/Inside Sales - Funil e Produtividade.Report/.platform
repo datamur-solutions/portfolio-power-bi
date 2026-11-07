@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Inside Sales - Funil e Produtividade"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "b7b67bae-bee1-4121-9a59-be140ecbf58c"
+  }
+}

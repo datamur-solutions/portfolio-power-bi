@@ -1,0 +1,73 @@
+table DIM_INSIGHTS_EXECUTIVOS
+	lineageTag: e9937bc1-c256-4cde-8002-a6dc4b70b649
+
+	column ID
+		formatString: 0
+		lineageTag: ec5268f0-776c-40d3-b609-ebbd4f29d895
+		summarizeBy: count
+		isNameInferred
+		sourceColumn: [ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Categoria
+		lineageTag: f9fd0ce8-5221-4f4a-9505-299d709dd863
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Categoria]
+		sortByColumn: Ordem
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordem
+		formatString: 0
+		lineageTag: b9122925-8ea5-4157-97a3-b89e955246a8
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Ordem]
+		sortByColumn: Grupo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Grupo
+		lineageTag: 9b9a35f0-ebea-4e6c-8c84-f827cf08ce8e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Grupo]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cor
+		lineageTag: ad03082e-fe98-4dc4-b48f-6bb93e5f55e4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Cor]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_INSIGHTS_EXECUTIVOS = calculated
+		mode: import
+		source =
+				
+				DATATABLE(
+				    "ID", INTEGER,
+				    "Grupo", STRING,
+				    "Categoria", STRING,
+				    "Ordem", INTEGER,
+				    "Cor", STRING,
+				    {
+				        {1, "LEITURA EXECUTIVA", "RITMO", 1, "#5B5B5B"},
+				        {2, "LEITURA EXECUTIVA", "ALÔ", 2, "#4779D7"},
+				        {3, "LEITURA EXECUTIVA", "TMA", 3, "#4779D7"},
+				        {4, "LEITURA EXECUTIVA", "TEMPO DE ESPERA", 4, "#4779D7"},
+				        {5, "LEITURA EXECUTIVA", "MELHOR DIA", 5, "#2EAE6B"},
+				        {6, "LEITURA EXECUTIVA", "DIA CRÍTICO", 6, "#E53955"},
+				        {7, "LEITURA EXECUTIVA", "FECHAMENTO", 7, "#F0A23B"},
+				
+				        {8, "OPORTUNIDADES & AÇÕES", "PRINCIPAL OPORTUNIDADE", 8, "#358392"},
+				        {9, "OPORTUNIDADES & AÇÕES", "PLANO DE RECUPERAÇÃO", 9, "#4779D7"}
+				    }
+				)
+
+	annotation PBI_Id = 8c622dd59a854792912c2a29dc0421f9
+

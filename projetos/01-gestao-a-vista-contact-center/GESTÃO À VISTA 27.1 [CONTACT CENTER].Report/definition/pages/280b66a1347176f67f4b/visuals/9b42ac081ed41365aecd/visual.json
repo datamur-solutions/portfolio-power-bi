@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "9b42ac081ed41365aecd",
+  "position": {
+    "x": 273.33333333333337,
+    "y": 130,
+    "z": 5000,
+    "height": 553.6755846092298,
+    "width": 1854.883025959537,
+    "tabOrder": 5000
+  },
+  "visualGroup": {
+    "displayName": "FILTROS SEG",
+    "groupMode": "ScaleMode"
+  },
+  "isHidden": true
+}

@@ -1,0 +1,36 @@
+table DIM_FLUXO_CAIXA
+	lineageTag: 1c02e871-f68a-4095-8810-4aff9ab3b9cf
+
+	column Fluxo
+		lineageTag: 45027086-fa22-4dfc-8264-12af5853e6e5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Fluxo]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordem
+		formatString: 0
+		lineageTag: 7f4a10af-8d8e-4524-931c-71d59ea38ce7
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Ordem]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_FLUXO_CAIXA = calculated
+		mode: import
+		source =
+				
+				DATATABLE (
+				    "Fluxo", STRING,
+				    "Ordem", INTEGER,
+				    {
+				        { "Operacional", 1 },
+				        { "Investimentos", 2 },
+				        { "Financiamento", 3 }
+				    }
+				)
+
+	annotation PBI_Id = c03f7fe45ada4d74b19548aa948da863
+

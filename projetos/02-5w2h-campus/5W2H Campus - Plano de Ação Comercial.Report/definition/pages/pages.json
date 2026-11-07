@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/pagesMetadata/1.0.0/schema.json",
+  "pageOrder": [
+    "p_geral",
+    "p_equipe",
+    "p_prod",
+    "p_ins",
+    "p_conv",
+    "p_custo",
+    "p_exec",
+    "p_venc",
+    "p_mapa",
+    "p_ref",
+    "p_diag"
+  ],
+  "activePageName": "p_geral"
+}

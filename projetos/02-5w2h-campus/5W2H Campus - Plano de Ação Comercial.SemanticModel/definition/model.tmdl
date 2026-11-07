@@ -1,0 +1,37 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: pt-BR
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["DataReferencia","Semanas","Ações","AgendaAções","Dias","MatProduto","MatModalidade","dProduto","dModalidade","Consultores","Config","dCalendario","Diagnóstico","Resolver","Normalizar","SemanaDoMes","SemanasDoMes","DiasUteis","ChaveConsultor","MesTexto","ListaChaves","Localizar","Fonte Ações","Fonte Consultores","Mapa Ações","Mapa Consultores","Ações Base","Consultores Base","Semanas Base","Ações Expandidas"]
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Semanas
+ref table Ações
+ref table AgendaAções
+ref table Dias
+ref table MatProduto
+ref table MatModalidade
+ref table dProduto
+ref table dModalidade
+ref table Consultores
+ref table Config
+ref table dCalendario
+ref table Diagnóstico
+ref table 'Ver por'
+ref table GanhoRitmo
+ref table _Medidas
+
+ref role Administradores
+ref role Consultor
+ref role Coordenadores
+ref role Gerentes
+
+ref cultureInfo pt-BR
+

@@ -1,0 +1,130 @@
+table DIM_DATA
+	lineageTag: d33bb54a-9f97-4bc6-b2f7-5588340b979c
+
+	column Data
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: eaa9c51f-81de-4b87-872b-b1e2b38da4a6
+		summarizeBy: none
+		sourceColumn: Data
+
+		variation Variation
+			isDefault
+			relationship: 6a18438c-fb52-44c9-8324-2905aeb646e8
+			defaultHierarchy: LocalDateTable_80738c3d-96df-433e-8d2d-25bf3ff620b7.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Ano
+		dataType: int64
+		formatString: 0
+		lineageTag: e325fb00-c5ab-4070-87fa-e9f873697a5a
+		summarizeBy: sum
+		sourceColumn: Ano
+
+		annotation SummarizationSetBy = Automatic
+
+	column MesNumero
+		dataType: int64
+		formatString: 0
+		lineageTag: a77795ed-55ff-44cc-8820-2a867e1b7412
+		summarizeBy: sum
+		sourceColumn: MesNumero
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mes
+		dataType: string
+		lineageTag: a45525d4-821b-49cf-b0ab-eeccbdabf0aa
+		summarizeBy: none
+		sortByColumn: MesNumero
+		sourceColumn: Mes
+
+		annotation SummarizationSetBy = Automatic
+
+	column AnoMes
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 4753848d-45ad-4c10-b875-3e3cfe6f07b8
+		summarizeBy: none
+		sourceColumn: AnoMes
+
+		variation Variation
+			isDefault
+			relationship: 80bbc5f4-7c18-4636-9c78-49697f380ef9
+			defaultHierarchy: LocalDateTable_e2086683-24e8-4f79-8e1a-37d599903a05.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Trimestre
+		dataType: string
+		lineageTag: 6129806d-c7a5-4968-862f-9be77338af3c
+		summarizeBy: none
+		sourceColumn: Trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column Semestre
+		dataType: int64
+		formatString: 0
+		lineageTag: 187c0141-a150-4953-8827-56bcf497b5e9
+		summarizeBy: sum
+		sourceColumn: Semestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column DiaSemanaNumero
+		dataType: int64
+		formatString: 0
+		lineageTag: 911b0236-511a-4583-afa2-f4671764f6c2
+		summarizeBy: sum
+		sourceColumn: DiaSemanaNumero
+
+		annotation SummarizationSetBy = Automatic
+
+	column DiaSemana
+		dataType: string
+		lineageTag: 83f04c12-f642-4ad5-90c7-ba58a92390eb
+		summarizeBy: none
+		sourceColumn: DiaSemana
+
+		annotation SummarizationSetBy = Automatic
+
+	column DiaUtil
+		dataType: int64
+		formatString: 0
+		lineageTag: e23ce6ca-3353-462c-8108-8ae4cb353373
+		summarizeBy: sum
+		sourceColumn: DiaUtil
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês Ano' = FORMAT ( DIM_DATA[AnoMes], "mmm/yy" )
+		lineageTag: 4b3e71a8-9374-323f-0e3b-1d190875e17b
+		summarizeBy: none
+		sortByColumn: AnoMes
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_DATA = m
+		mode: import
+		source =
+				let
+				    // DIM_DATA: base fictícia embutida no modelo (csv compactado)
+				    Bin = Binary.Decompress(Binary.FromText(Text.Combine({
+				        "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"
+				    }), BinaryEncoding.Base64), Compression.Deflate),
+				    Fonte = Csv.Document(Bin, [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Cabecalhos = Table.PromoteHeaders(Fonte, [PromoteAllScalars = true]),
+				    Nulos = Table.TransformColumns(Cabecalhos, List.Transform(Table.ColumnNames(Cabecalhos), (c) => {c, (v) => if v = "" then null else v})),
+				    Colunas = Table.SelectColumns(Nulos, {"Data", "Ano", "MesNumero", "Mes", "AnoMes", "Trimestre", "Semestre", "DiaSemanaNumero", "DiaSemana", "DiaUtil"}, MissingField.UseNull),
+				    Tipos = Table.TransformColumnTypes(Colunas, {{"Data", type datetime}, {"Ano", Int64.Type}, {"MesNumero", Int64.Type}, {"Mes", type text}, {"AnoMes", type datetime}, {"Trimestre", type text}, {"Semestre", Int64.Type}, {"DiaSemanaNumero", Int64.Type}, {"DiaSemana", type text}, {"DiaUtil", Int64.Type}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

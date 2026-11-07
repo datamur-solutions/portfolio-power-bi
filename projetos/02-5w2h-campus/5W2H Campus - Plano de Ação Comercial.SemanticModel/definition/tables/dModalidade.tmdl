@@ -1,0 +1,46 @@
+table dModalidade
+	lineageTag: 6d5695e2-aabe-5e74-8be2-1cad0e14e004
+
+	column Chave
+		dataType: string
+		isHidden
+		lineageTag: bc0e653d-6bbf-5e83-abf8-74b1fccf36cb
+		summarizeBy: none
+		sourceColumn: Chave
+
+		annotation SummarizationSetBy = Automatic
+
+	column Modalidade
+		dataType: string
+		lineageTag: 184a398b-cf85-59b9-aad2-d2dc0c30aa47
+		summarizeBy: none
+		sourceColumn: Modalidade
+		sortByColumn: Ordem
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordem
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3e88d7c9-ec54-50d6-a11a-d3329be2fd21
+		summarizeBy: none
+		sourceColumn: Ordem
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dModalidade = m
+		mode: import
+		source =
+				let
+				    Tabela = #table(type table [Chave = text, Modalidade = text, Ordem = Int64.Type], {
+				        {"Pres", "Presencial", 1},
+				        {"Semi", "Semipresencial", 2},
+				        {"EAD", "EAD", 3},
+				        {"NaoInformado", "Não informado", 9}
+				    })
+				in
+				    Tabela
+
+	annotation PBI_ResultType = Table
+

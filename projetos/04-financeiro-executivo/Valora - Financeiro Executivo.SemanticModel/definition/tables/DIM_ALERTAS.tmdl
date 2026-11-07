@@ -1,0 +1,40 @@
+table DIM_ALERTAS
+	lineageTag: 1bc78484-dcab-4f90-bd65-664c9ebcf4af
+
+	column Ordem
+		formatString: 0
+		lineageTag: 5a18cd68-52d3-4875-83e2-f56b08d0946c
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Ordem]
+
+		annotation SummarizationSetBy = Automatic
+
+	column TipoAlerta
+		lineageTag: 7d4e63cf-8d9f-4102-a65b-19f1b603faa7
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [TipoAlerta]
+		sortByColumn: Ordem
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_ALERTAS = calculated
+		mode: import
+		source =
+				
+				DATATABLE (
+				    "Ordem", INTEGER,
+				    "TipoAlerta", STRING,
+				    {
+				        { 1, "RECEITA" },
+				        { 2, "EBITDA" },
+				        { 3, "MARGEM" },
+				        { 4, "INADIMPLÊNCIA" },
+				        { 5, "CAPITAL DE GIRO" },
+				        { 6, "CAIXA" }
+				    }
+				)
+
+	annotation PBI_Id = 38f4a83c9edb45778dc8630ad444e191
+

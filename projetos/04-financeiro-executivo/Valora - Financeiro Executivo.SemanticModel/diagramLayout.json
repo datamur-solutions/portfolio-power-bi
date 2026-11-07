@@ -1,0 +1,342 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 719.74622509847723,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 0,
+            "y": 0
+          },
+          "nodeIndex": "DICIONARIO_TABELAS",
+          "nodeLineageTag": "7e0f3d15-f1f9-4a5a-b7d0-d5a27627b623",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 880.13379072139344
+          },
+          "nodeIndex": "DIM_CENTRO_CUSTO",
+          "nodeLineageTag": "2893e9c9-9f9e-4e72-a6ee-4b4a2d00ab54",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 282.95821764547424,
+            "y": 881.12534706357758
+          },
+          "nodeIndex": "DIM_CLIENTE",
+          "nodeLineageTag": "bdd6c49a-89bb-4ff9-9f89-1017f6f5fbd6",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 584.77332904263187,
+            "y": 874.9404584607355
+          },
+          "nodeIndex": "DIM_COLABORADOR",
+          "nodeLineageTag": "092353cd-f032-4f4d-b407-b20058141e50",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 846.50443979618467,
+            "y": 872.58756857068283
+          },
+          "nodeIndex": "DIM_CONTA_BANCARIA",
+          "nodeLineageTag": "70a9d40b-509f-4e43-a6f7-2df2dd9c3615",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 1119.3699951729609,
+            "y": 871.35223598822233
+          },
+          "nodeIndex": "DIM_CONTA_CONTABIL",
+          "nodeLineageTag": "1a674313-6d30-4880-a223-6f20bb8ec621",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 18
+        },
+        {
+          "location": {
+            "x": 1410.0506619468952,
+            "y": 868.486680611446
+          },
+          "nodeIndex": "DIM_DATA",
+          "nodeLineageTag": "d33bb54a-9f97-4bc6-b2f7-5588340b979c",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 15
+        },
+        {
+          "location": {
+            "x": 454.40179363149366,
+            "y": 23.958663503061214
+          },
+          "nodeIndex": "DIM_EMPRESTIMO",
+          "nodeLineageTag": "0e5c38c6-676d-420a-9d1b-cd72211acca4",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 20
+        },
+        {
+          "location": {
+            "x": 1013.8077575757255,
+            "y": 4.4537778492894695
+          },
+          "nodeIndex": "DIM_FORNECEDOR",
+          "nodeLineageTag": "c0980318-e9e4-4c64-ab8a-32478b14bfb6",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 19
+        },
+        {
+          "location": {
+            "x": 1593.983984553475,
+            "y": 1.7763568394002505E-15
+          },
+          "nodeIndex": "DIM_UNIDADE",
+          "nodeLineageTag": "7aaa894f-3c8f-4685-ad90-3b775ce9e352",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 16
+        },
+        {
+          "location": {
+            "x": 1158.6988618932262,
+            "y": 382.30222794315728
+          },
+          "nodeIndex": "FATO_CAIXA_DIARIO",
+          "nodeLineageTag": "70d82c64-07b6-44ba-85e7-285fcbc6131a",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 1462.7408622150294,
+            "y": 380.79800611424935
+          },
+          "nodeIndex": "FATO_CAIXA_MOV",
+          "nodeLineageTag": "00587e64-9dfe-4dfb-a188-f53591b3d92e",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 1766.7828625368318,
+            "y": 380.79800611424935
+          },
+          "nodeIndex": "FATO_CAPEX",
+          "nodeLineageTag": "62b9b2a1-3af3-4b1a-82a2-1e410e01740e",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 8
+        },
+        {
+          "location": {
+            "x": 278.17927851962418,
+            "y": 385.25178396353886
+          },
+          "nodeIndex": "FATO_DIVIDA",
+          "nodeLineageTag": "b0519369-6d00-4f18-906e-79f3c98322f6",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 17
+        },
+        {
+          "location": {
+            "x": 582.22127884142685,
+            "y": 383.66356149102575
+          },
+          "nodeIndex": "FATO_DRE",
+          "nodeLineageTag": "012d79c1-a93a-4867-a4c7-92a581978678",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 9
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 374.11733934031537
+          },
+          "nodeIndex": "FATO_FOLHA",
+          "nodeLineageTag": "426467e5-deea-403a-9ac2-050614f3ec33",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 10
+        },
+        {
+          "location": {
+            "x": 874.08705218547948,
+            "y": 383.02489503889416
+          },
+          "nodeIndex": "FATO_PAGAVEIS",
+          "nodeLineageTag": "be72ecf1-0213-43ca-8a42-24efc4c28d07",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 11
+        },
+        {
+          "location": {
+            "x": 2037.7081774201492,
+            "y": 379.20978364173629
+          },
+          "nodeIndex": "FATO_PLANEJAMENTO",
+          "nodeLineageTag": "f37c10eb-3606-40b4-892d-bc1dc7469321",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 12
+        },
+        {
+          "location": {
+            "x": 2329.131061216498,
+            "y": 376.3442282649599
+          },
+          "nodeIndex": "FATO_RECEBIVEIS",
+          "nodeLineageTag": "0c5b7d0e-f0ae-4d5a-b4b1-deef03dcc40f",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 13
+        },
+        {
+          "location": {
+            "x": 1733.509834042944,
+            "y": 857.49512426926185
+          },
+          "nodeIndex": "RELACIONAMENTOS_MODELO",
+          "nodeLineageTag": "f406f2eb-a0ed-485a-b327-9383376bfa54",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 14
+        },
+        {
+          "location": {
+            "x": 2613.131061216498,
+            "y": 485.47022923036775
+          },
+          "nodeIndex": "_Medidas",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2897.131061216498,
+            "y": 485.47022923036775
+          },
+          "nodeIndex": "DIM_PONTE_RESULTADO",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3181.131061216498,
+            "y": 485.47022923036775
+          },
+          "nodeIndex": "DIM_ALERTAS",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3465.131061216498,
+            "y": 485.47022923036775
+          },
+          "nodeIndex": "DIM_FLUXO_CAIXA",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3749.131061216498,
+            "y": 485.47022923036775
+          },
+          "nodeIndex": "DIM_INSIGHTS_RECEBIVEIS",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas as tabelas",
+      "zoomValue": 31.863081771035677,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas as tabelas",
+  "defaultDiagram": "Todas as tabelas"
+}

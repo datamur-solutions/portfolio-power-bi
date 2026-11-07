@@ -1,0 +1,107 @@
+relationship ecabfcaa-4b77-49df-beba-c8afceca72f8
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'TB CALL CENTER'.DT_BASE
+	toColumn: LocalDateTable_3280e206-9973-4a9a-a874-3c3b142f44d7.Date
+
+relationship f4707f35-ee5a-4db1-b480-bd6f69a59d79
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'TB CALL CENTER'.DATA_APROVADO
+	toColumn: LocalDateTable_c0a6627c-c624-4fb7-aade-5e4c8fcc5779.Date
+
+relationship be9dfee6-fcdc-4ca2-8322-29a21bacd424
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'TB CALL CENTER'.DATA_REFERENCIA
+	toColumn: LocalDateTable_7e8a31ec-7a26-49ea-a5a7-4f70f8dcdac6.Date
+
+relationship bcfc18cd-427a-47ef-898b-b5a769376268
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'TB CALL CENTER'.PUBLISH_TIME
+	toColumn: LocalDateTable_fb59e560-41be-40c0-b6b4-84ddd87ba7ea.Date
+
+relationship 375cb869-b210-4748-927c-3e0431673ca9
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'TB CALL CENTER'.DATA_MATRICULA_CPF
+	toColumn: LocalDateTable_3c97800e-e4c8-4bc7-830c-dd895642e75b.Date
+
+relationship 0a1ff366-75ff-475f-8787-986a49346214
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'TB CALL CENTER'.DATA_INSCRICAO_CPF
+	toColumn: LocalDateTable_f5bc90c5-11fe-40b2-b5cc-c1eb1a2b7042.Date
+
+relationship 60d33e6d-c429-43cc-ae4c-cd5142490d55
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'TB CALL CENTER'.DATA_APROVADO_CPF
+	toColumn: LocalDateTable_bcf56d1a-12be-4eaf-903c-c34e73037412.Date
+
+relationship 267afca2-9ab1-fbe4-9300-14fd4c097ff7
+	fromColumn: 'TB CALL CENTER'.COHORT_INTERACAO
+	toColumn: Dim_Cohort.COHORT
+
+relationship a0b67661-6980-37bf-2e2a-c793c6ffcc5b
+	fromColumn: 'TB CALL CENTER'.COHORT_INTERACAO
+	toColumn: 'Dim_Cohort 2'.COHORT
+
+relationship ca543eec-291d-4e24-0f21-4cf61b3b809c
+	fromColumn: 'TB CALL CENTER'.SUPER_CANAL_DE_PARA
+	toColumn: 'DIM SUPER_CANAL'.SUPER_CANAL_DE_PARA
+
+relationship 272cfb6d-08f5-1212-e35b-22cc4fe06101
+	fromColumn: PLANEJADO.EPS
+	toColumn: DIM_EPS.EPS
+
+relationship 0a6edc42-bab6-b80b-2661-3873a295dde9
+	fromColumn: 'TB CALL CENTER'.EPS
+	toColumn: DIM_EPS.EPS
+
+relationship 0f08a9b9-2717-4c19-b407-f34e1def0429
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DIM_FERIADOS.Data
+	toColumn: LocalDateTable_58039698-72d0-45fe-aaa7-3c26ff968e95.Date
+
+relationship 24555a62-f432-4090-98c2-e33dbdcf00e7
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Dim_Data.Date
+	toColumn: LocalDateTable_86545e93-a6a3-4f2f-b57c-8623cb439e0d.Date
+
+relationship f6105528-ee87-5e1b-1c61-f8ed425e2b3a
+	fromColumn: 'TB CALL CENTER'.DATA_INSCRICAO
+	toColumn: Dim_Data.Date
+
+relationship ecec63e2-aa29-6b28-36e4-da2c708e78cf
+	fromColumn: PLANEJADO.Data
+	toColumn: Dim_Data.Date
+
+relationship 261e78c7-21b3-21b6-5dd0-60f0459197b7
+	isActive: false
+	fromColumn: 'TB CALL CENTER'.DATA_MATRICULA
+	toColumn: Dim_Data.Date
+
+relationship db4787b2-0f93-4f66-8a50-87f1e24b39ce
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Dim_Data TAB'.Date
+	toColumn: LocalDateTable_913572c3-37a2-4f33-b4e3-96b4626de98d.Date
+
+relationship ddf7ea6c-9dde-69d3-30bb-afea9aa3b994
+	fromColumn: 'TB CALL CENTER'.DATA_TABULACAO
+	toColumn: 'Dim_Data TAB'.Date
+
+relationship 605c8bb1-418a-305e-9c13-b53250cf11df
+	fromColumn: PLANEJADO.Data
+	toColumn: 'Dim_Data TAB'.Date
+
+relationship d8c5185d-182c-e98c-c942-96cf5048c04a
+	fromColumn: Dim_Data2.Date
+	toColumn: DIM_FERIADOS.Data
+
+relationship 8d67dac8-bbee-8447-18c6-d96d8bc359f5
+	fromColumn: 'TB CALL CENTER'.DATA_MATRICULA
+	toColumn: Dim_Data2.Date
+
+relationship 79d800e4-5135-dbed-3474-e164397f4f02
+	fromColumn: PLANEJADO.Data
+	toColumn: Dim_Data2.Date
+
+relationship 2a076785-1d61-ec0c-dc1f-2d17b2ccd125
+	fromColumn: Dim_Data2.'Semana Mês'
+	toColumn: DIM_SEMANA_MES.'Semana Mês'
+

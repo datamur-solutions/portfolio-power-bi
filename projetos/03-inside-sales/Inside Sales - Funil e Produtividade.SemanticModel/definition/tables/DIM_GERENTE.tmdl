@@ -1,0 +1,23 @@
+table DIM_GERENTE
+	lineageTag: f125e88c-e50e-4ddc-a655-356b1bb30493
+
+	column gerente_ic
+		lineageTag: d5ce40b9-a211-4f78-a44b-8f0450f3e849
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: CAPCOM[gerente_ic]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_GERENTE = calculated
+		mode: import
+		source =
+				
+				FILTER(
+				    DISTINCT('CAPCOM'[gerente_ic]),
+				    NOT(ISBLANK('CAPCOM'[gerente_ic]))
+				        && 'CAPCOM'[gerente_ic] <> ""
+				)
+
+	annotation PBI_Id = 51139523e2bc4cd1b2b78c8e88d6f368
+

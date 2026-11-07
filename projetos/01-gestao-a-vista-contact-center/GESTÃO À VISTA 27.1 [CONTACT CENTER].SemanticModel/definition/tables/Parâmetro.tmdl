@@ -1,0 +1,52 @@
+table Parâmetro
+	lineageTag: 267cfcc8-5042-49e6-a66b-3b25dbd4893e
+
+	column Parâmetro
+		lineageTag: 2d71039c-3809-4f6a-84ca-74ac767f8487
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Parâmetro Pedido'
+
+		relatedColumnDetails
+			groupByColumn: 'Parâmetro Campos'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parâmetro Campos'
+		isHidden
+		lineageTag: 82f10b0e-6bf4-420d-8b77-f3ded7347891
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Parâmetro Pedido'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parâmetro Pedido'
+		isHidden
+		formatString: 0
+		lineageTag: 5f34d779-2e59-43c6-a41b-0439fa5fb150
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Parâmetro = calculated
+		mode: import
+		source =
+				{
+				    ("INS_LIQ", NAMEOF('TB CALL CENTER'[INS_LIQ]), 0),
+				    ("FLAG_TRABALHADO", NAMEOF('TB CALL CENTER'[FLAG_TRABALHADO]), 1),
+				    ("FLAG_TENTATIVA", NAMEOF('TB CALL CENTER'[FLAG_TENTATIVA]), 2),
+				    ("FLAG_EFETIVO", NAMEOF('TB CALL CENTER'[FLAG_EFETIVO]), 3),
+				    ("VENDAS_CALLCENTER", NAMEOF('TB CALL CENTER'[VENDAS_CALLCENTER]), 4),
+				    ("MAT_LIQ_ATRIBUIDA_CALLCENTER", NAMEOF('TB CALL CENTER'[MAT_LIQ_ATRIBUIDA_CALLCENTER]), 5)
+				}
+
+	annotation PBI_Id = ef77664a3e6e4d1b9bd1a6e861fe2167
+

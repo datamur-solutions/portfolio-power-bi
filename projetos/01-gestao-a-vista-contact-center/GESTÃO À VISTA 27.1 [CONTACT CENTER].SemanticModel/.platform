@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "GESTÃO À VISTA 27.1 [CONTACT CENTER]"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "efac9bb8-7b1b-4b33-bc9b-4314792014d3"
+  }
+}

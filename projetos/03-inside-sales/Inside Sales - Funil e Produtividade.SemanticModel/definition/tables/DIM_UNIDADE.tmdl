@@ -1,0 +1,23 @@
+table DIM_UNIDADE
+	lineageTag: 67dee331-8755-403a-a876-e8a763a09dad
+
+	column nome_siga_ic
+		lineageTag: b8766514-783a-4231-ae68-e99cf551767f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: CAPCOM[nome_siga_ic]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_UNIDADE = calculated
+		mode: import
+		source =
+				
+				FILTER(
+				    DISTINCT('CAPCOM'[nome_siga_ic]),
+				    NOT(ISBLANK('CAPCOM'[nome_siga_ic]))
+				        && 'CAPCOM'[nome_siga_ic] <> ""
+				)
+
+	annotation PBI_Id = 733c60a01cb64156bad5837fe65bdc7a
+

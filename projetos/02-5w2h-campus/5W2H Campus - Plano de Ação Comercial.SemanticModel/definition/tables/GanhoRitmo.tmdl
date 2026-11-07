@@ -1,0 +1,19 @@
+table GanhoRitmo
+	lineageTag: 53073222-c5ca-59b3-80f6-e53aa57dd4b7
+
+	column 'Ganho de ritmo (%)'
+		dataType: int64
+		formatString: 0
+		lineageTag: 31bca426-37c4-557a-9b29-39bf42e9e8f3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Ganho de ritmo (%)]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition GanhoRitmo = calculated
+		mode: import
+		source = SELECTCOLUMNS ( GENERATESERIES ( -20, 80, 5 ), "Ganho de ritmo (%)", [Value] )
+
+	annotation PBI_ResultType = Table
+

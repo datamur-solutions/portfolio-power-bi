@@ -1,0 +1,41 @@
+table DIM_PONTE_RESULTADO
+	lineageTag: f5bd3543-0f41-4aa8-b95b-176785559728
+
+	column Etapa
+		lineageTag: c8326901-e2b5-4e59-b0dd-dbd453c87097
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Etapa]
+		sortByColumn: Ordem
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordem
+		formatString: 0
+		lineageTag: c6195536-428f-44b1-9f02-795d32013c13
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Ordem]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_PONTE_RESULTADO = calculated
+		mode: import
+		source =
+				
+				DATATABLE (
+				    "Etapa", STRING,
+				    "Ordem", INTEGER,
+				    {
+				        { "Receita Bruta", 1 },
+				        { "Deduções", 2 },
+				        { "CMV", 3 },
+				        { "OPEX", 4 },
+				        { "Depreciação", 5 },
+				        { "Resultado Financeiro", 6 },
+				        { "Impostos", 7 }
+				    }
+				)
+
+	annotation PBI_Id = cf04d8a3d4c143a882ebd81eb59b8511
+

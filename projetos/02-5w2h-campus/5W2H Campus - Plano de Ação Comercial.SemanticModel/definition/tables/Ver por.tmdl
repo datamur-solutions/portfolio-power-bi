@@ -1,0 +1,54 @@
+table 'Ver por'
+	lineageTag: 6c621f1f-7740-5a69-b76a-880dc8f32a22
+
+	column 'Ver por'
+		dataType: string
+		lineageTag: e4e55632-0fa3-549c-8009-aee7849ded76
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Ver por Ordem'
+
+		relatedColumnDetails
+			groupByColumn: 'Ver por Campos'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ver por Campos'
+		dataType: string
+		isHidden
+		lineageTag: 87e7e714-8a68-5c5e-9510-9ddc54b87ab1
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Ver por Ordem'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ver por Ordem'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 73f65198-5c27-55e6-9c53-0994120cbce8
+		summarizeBy: none
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Ver por' = calculated
+		mode: import
+		source =
+				{
+				    ("Unidade", NAMEOF ( 'Semanas'[Unidade] ), 0),
+				    ("Regional", NAMEOF ( 'Semanas'[Regional] ), 1),
+				    ("Gerente", NAMEOF ( 'Semanas'[Gerente] ), 2),
+				    ("Coordenador", NAMEOF ( 'Semanas'[Coordenador] ), 3),
+				    ("Consultor", NAMEOF ( 'Semanas'[Consultor] ), 4)
+				}
+
+	annotation PBI_Id = e13d1fa589d55206aab0600bb7f7d583
+

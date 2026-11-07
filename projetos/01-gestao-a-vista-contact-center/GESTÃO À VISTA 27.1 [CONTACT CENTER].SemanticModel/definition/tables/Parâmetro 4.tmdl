@@ -1,0 +1,57 @@
+table 'Parâmetro 4'
+	lineageTag: d3e5b066-9f9a-4f40-8596-013945136d00
+
+	column Parâmetro
+		lineageTag: 192ed58c-6ae1-4ac2-b9ce-37888acbb380
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Parâmetro Pedido'
+
+		relatedColumnDetails
+			groupByColumn: 'Parâmetro Campos'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parâmetro Campos'
+		isHidden
+		lineageTag: 72924e88-ed1c-4e7d-ab07-b17c676764cc
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Parâmetro Pedido'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parâmetro Pedido'
+		isHidden
+		formatString: 0
+		lineageTag: 121688ce-a1a7-41ef-a5ad-8c8f3cbb58ac
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Parâmetro 4' = calculated
+		mode: import
+		source =
+				{
+				    ("SUPERCANAL", NAMEOF('TB CALL CENTER'[SUPER_CANAL]), 0),
+				    ("MODALIDADE", NAMEOF('TB CALL CENTER'[MODALIDADE]), 1),
+				    ("CURSO", NAMEOF('TB CALL CENTER'[CURSO]), 2),
+				    ("UNIDADE", NAMEOF('TB CALL CENTER'[NOME_SIGA]), 3),
+				    ("GERENTE", NAMEOF('TB CALL CENTER'[GERENTE]), 4),
+				    ("REGIONAL", NAMEOF('TB CALL CENTER'[NOME_REGIONAL]), 5),
+				    ("DIRETOR", NAMEOF('TB CALL CENTER'[DIRETOR]), 6),
+				    ("EPS", NAMEOF('TB CALL CENTER'[EPS]), 7),
+				    ("DATA", NAMEOF('Dim_Data TAB'[Date]), 8),
+				    ("PRODUTO", NAMEOF('TB CALL CENTER'[TIPO_CURSO]), 9),
+				    ("CANAL", NAMEOF('TB CALL CENTER'[CANAL]), 10)
+				}
+
+	annotation PBI_Id = 83274277d4a9402aa4230ec3d79903a6
+

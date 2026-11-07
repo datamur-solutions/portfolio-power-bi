@@ -1,0 +1,47 @@
+table 'Parâmetro 3'
+	lineageTag: 73ce3183-be15-4b6a-af0a-24519bb4045c
+
+	column Parâmetro
+		lineageTag: 08790727-8050-418c-992f-6dca3b167240
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Parâmetro Pedido'
+
+		relatedColumnDetails
+			groupByColumn: 'Parâmetro Campos'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parâmetro Campos'
+		isHidden
+		lineageTag: 67d7fd8c-7139-47b2-8ee9-6b1b4c6f9ed0
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Parâmetro Pedido'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parâmetro Pedido'
+		isHidden
+		formatString: 0
+		lineageTag: b982dad7-a3bb-499e-800c-cdd9121cd6bb
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Parâmetro 3' = calculated
+		mode: import
+		source =
+				{
+				    ("TIPO DATA", NAMEOF('VISÃO DATA'[TIPO DATA]), 0)
+				}
+
+	annotation PBI_Id = ab537325653e4e5783fafb363cdc355c
+

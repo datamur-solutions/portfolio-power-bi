@@ -1,0 +1,39 @@
+table AgendaAções
+	isHidden
+	lineageTag: 967a4985-c715-5f20-8709-5535b32ca141
+
+	column IdAção
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 221d72b8-0cc0-54d6-98c9-f659d04da4cf
+		summarizeBy: none
+		sourceColumn: IdAção
+
+		annotation SummarizationSetBy = Automatic
+
+	column Data
+		dataType: dateTime
+		isHidden
+		formatString: dd/MM/yyyy
+		lineageTag: b047856f-cb7a-53cc-8795-746485a7171e
+		summarizeBy: none
+		sourceColumn: Data
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition AgendaAções = m
+		mode: import
+		source =
+				let
+				    A = #"Ações Expandidas",
+				    Linhas = List.Combine(Table.TransformRows(A, (a) => List.Transform(a[DiasAcao], (d) => [IdAção = a[IdAcao], Data = d]))),
+				    Tabela = Table.FromRecords(Linhas, {"IdAção", "Data"}, MissingField.UseNull),
+				    Tipos = Table.TransformColumnTypes(Tabela, {{"IdAção", Int64.Type}, {"Data", type date}})
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

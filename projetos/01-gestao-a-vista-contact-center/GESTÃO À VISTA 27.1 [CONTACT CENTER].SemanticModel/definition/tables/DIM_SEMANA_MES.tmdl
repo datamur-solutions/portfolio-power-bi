@@ -1,0 +1,39 @@
+table DIM_SEMANA_MES
+	lineageTag: 97fa20a9-552b-43d6-ae38-23b67316d4be
+
+	column 'Ordem Semana Mês'
+		formatString: 0
+		lineageTag: 802e6523-8484-457c-b619-bf93bc2274bd
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Ordem Semana Mês]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Semana Mês'
+		lineageTag: 32134142-075a-41b7-9b74-0b6c721d4f0d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Semana Mês]
+		sortByColumn: 'Ordem Semana Mês'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_SEMANA_MES = calculated
+		mode: import
+		source =
+				
+				DATATABLE(
+				    "Ordem Semana Mês", INTEGER,
+				    "Semana Mês", STRING,
+				    {
+				        {1, "1 a 7"},
+				        {2, "8 a 14"},
+				        {3, "15 a 21"},
+				        {4, "22 a 28"},
+				        {5, "29 a 31"}
+				    }
+				)
+
+	annotation PBI_Id = 87739cc2583a485da4a1f7bd4ea56351
+

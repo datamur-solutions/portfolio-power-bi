@@ -1,0 +1,40 @@
+table 'VISÃO DATA'
+	lineageTag: 727c1b65-a018-4d4b-9b75-d5455158f49a
+
+	calculationGroup
+
+		calculationItem 'Data Inscrição' = SELECTEDMEASURE()
+
+		calculationItem 'Data Matrícula' =
+				
+				CALCULATE(
+				    SELECTEDMEASURE(),
+				    CROSSFILTER(
+				        Dim_Data[Date],
+				        'TB CALL CENTER'[DATA_INSCRICAO],
+				        NONE
+				    ),
+				    USERELATIONSHIP(
+				        Dim_Data[Date],
+				        'TB CALL CENTER'[DATA_MATRICULA]
+				    )
+				)
+
+	column 'TIPO DATA'
+		dataType: string
+		lineageTag: 74b107b3-6331-44c4-8daa-7620a1c33a0a
+		summarizeBy: none
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordinal
+		dataType: int64
+		formatString: 0
+		lineageTag: 36295994-6df3-4421-9f5f-72aff1139e93
+		summarizeBy: sum
+		sourceColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+

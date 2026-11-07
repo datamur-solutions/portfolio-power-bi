@@ -1,0 +1,95 @@
+table Diagnóstico
+	lineageTag: 7c184fc2-2e56-5b7e-ad3e-d00e355c0684
+
+	column Campo
+		dataType: string
+		lineageTag: c4daf9ef-25de-5e65-a7f8-1708e8f8dda6
+		summarizeBy: none
+		sourceColumn: Campo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Coluna
+		dataType: string
+		lineageTag: 50ef0098-6831-50cc-8adc-c83abc6abb13
+		summarizeBy: none
+		sourceColumn: Coluna
+
+		annotation SummarizationSetBy = Automatic
+
+	column Situação
+		dataType: string
+		lineageTag: 449caaff-1a06-5e76-be12-022ca073ef1b
+		summarizeBy: none
+		sourceColumn: Situação
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Linhas preenchidas'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 4fb0e4c4-36f0-5893-ab36-86e7eed62144
+		summarizeBy: sum
+		sourceColumn: Linhas preenchidas
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Linhas na lista'
+		dataType: int64
+		formatString: #,0
+		lineageTag: d31eeb0d-0eef-55ed-b73b-b667a0af035d
+		summarizeBy: max
+		sourceColumn: Linhas na lista
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Diagnóstico = m
+		mode: import
+		source =
+				let
+				    Sistema = {"ID", "Id", "Created", "Modified", "Author", "Editor", "AuthorId", "EditorId", "Content Type", "ContentType", "ContentTypeId", "Attachments", "FileSystemObjectType", "ServerRedirectedEmbedUri", "ServerRedirectedEmbedUrl", "GUID", "OData__UIVersionString", "ComplianceAssetId", "OData__ColorTag", "Criado", "Modificado", "Criado por", "Modificado por", "Anexos", "Tipo de Conteúdo", "Versão", "Tipo de Item", "Caminho", "CriadoPorNome", "CriadoPorEmail"},
+				    Bloco = (nome as text, fonte as record, mapa as list) as list =>
+				        let
+				            Itens = fonte[Itens],
+				            Cols = Table.ColumnNames(Itens),
+				            R = Resolver(fonte, mapa),
+				            Total = Table.RowCount(Itens),
+				            Preenchidas = (c as text) as number => List.Count(List.Select(Table.Column(Itens, c), each _ <> null and _ <> "" and _ <> {})),
+				            Titulos = Record.FromList(List.Transform(Cols, (c) => try fonte[Campos]{[InternalName = c]}[Title] otherwise c), Cols),
+				            Esperadas = Table.TransformRows(R, (d) =>
+				                let n = if d[Fonte] = null then 0 else Preenchidas(d[Fonte])
+				                in [Campo = nome & " · " & d[Campo], Coluna = if d[Fonte] = null then d[Candidatos] else d[Titulo] & " [" & d[Fonte] & "]",
+				                    Situação = if d[Fonte] = null then "1 · Não encontrada na lista" else if n = 0 then "2 · Encontrada, sem nenhum valor" else "4 · OK",
+				                    #"Linhas preenchidas" = n, #"Linhas na lista" = Total]),
+				            Extras = List.Transform(List.Select(List.Difference(Cols, List.RemoveNulls(R[Fonte])), (c) => not List.Contains(Sistema, c) and not Text.StartsWith(c, "OData_") and not Text.StartsWith(c, "odata")), (c) =>
+				                [Campo = nome, Coluna = (let t = Record.Field(Titulos, c) in if t = null then c else t) & " [" & c & "]", Situação = "3 · Coluna da lista não usada pelo painel",
+				                 #"Linhas preenchidas" = Preenchidas(c), #"Linhas na lista" = Total])
+				        in
+				            Esperadas & Extras,
+				    A = #"Ações Base",
+				    T = Normalizar(#"Fonte Ações", #"Mapa Ações"),
+				    C = #"Consultores Base",
+				    Checa = (texto as text, n as number, total as number) as record =>
+				        [Campo = "(verificação)", Coluna = texto, Situação = if n > 0 then "0 · Atenção" else "4 · OK", #"Linhas preenchidas" = n, #"Linhas na lista" = total],
+				    NA = Table.RowCount(T),
+				    Verif = {
+				        Checa("Ações sem consultor ou sem data de início (não entram no painel)", NA - Table.RowCount(A), NA),
+				        Checa("Ações com Fim antes do Início (usamos o Início como Fim)", Table.RowCount(Table.SelectRows(T, each [DataFim] <> null and [DataInicio] <> null and [DataFim] < [DataInicio])), NA),
+				        Checa("Ações cuja semana gravada difere da semana calculada pela data de início", Table.RowCount(Table.SelectRows(A, each [Semana] <> 0 and [Semana] <> [SemanaN])), NA),
+				        Checa("Ações com 2+ produtos sem abertura de matrículas por produto", Table.RowCount(Table.SelectRows(A, (a) => List.Count(a[ListaProdutos]) >= 2
+				            and List.AllTrue(List.Transform(a[ListaProdutos], (k) => Record.Field(a, "MMat_" & k) = null and Record.Field(a, "RMat_" & k) = null)))), NA),
+				        Checa("Ações sem produto informado", Table.RowCount(Table.SelectRows(A, each List.IsEmpty([ListaProdutos]))), NA),
+				        Checa("Ações com status fechado e sem nenhum realizado", Table.RowCount(Table.SelectRows(A, each [StatusN] <> "Planejada" and [RealInscritos] = null and [RealMatriculas] = null)), NA),
+				        Checa("Ações de consultores que não estão na lista Consultores 5W2H", if Table.IsEmpty(C) then 0 else Table.RowCount(Table.SelectRows(A, each not List.Contains(C[Chave], [Chave]))), NA),
+				        let u = Table.Distinct(Table.SelectColumns(#"Semanas Base", {"Unidade", "Filial"})), sem = Table.SelectRows(u, each Localizar([Unidade], [Filial])[UF] = "")
+				        in Checa("Unidades sem UF identificada (ficam fora do mapa): " & Text.Combine(List.FirstN(List.Distinct(sem[Unidade]), 15), "; "), Table.RowCount(sem), Table.RowCount(u)),
+				        [Campo = "(informação)", Coluna = "Consultores ativos no cadastro", Situação = "4 · OK", #"Linhas preenchidas" = Table.RowCount(Table.SelectRows(C, each [Ativo])), #"Linhas na lista" = Table.RowCount(C)]
+				    },
+				    Tabela = Table.FromRecords(Verif & Bloco("Ações 5W2H", #"Fonte Ações", #"Mapa Ações") & Bloco("Consultores 5W2H", #"Fonte Consultores", #"Mapa Consultores"),
+				        {"Campo", "Coluna", "Situação", "Linhas preenchidas", "Linhas na lista"}, MissingField.UseNull),
+				    Tipos = Table.TransformColumnTypes(Tabela, {{"Campo", type text}, {"Coluna", type text}, {"Situação", type text}, {"Linhas preenchidas", Int64.Type}, {"Linhas na lista", Int64.Type}})
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

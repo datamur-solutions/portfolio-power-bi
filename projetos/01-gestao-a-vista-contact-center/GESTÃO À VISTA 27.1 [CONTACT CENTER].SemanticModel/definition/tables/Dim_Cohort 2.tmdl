@@ -1,0 +1,52 @@
+table 'Dim_Cohort 2'
+	lineageTag: b62628ac-f1cf-47e4-8128-e18aa7edbd82
+
+	column COHORT
+		lineageTag: f7c5b011-737b-4cbf-9f13-fa5ece0e2ea1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [COHORT]
+		sortByColumn: ORDEM
+
+		annotation SummarizationSetBy = Automatic
+
+	column ORDEM
+		formatString: 0
+		lineageTag: 47545029-1dcf-4553-80ec-57d0fac5419a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ORDEM]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Dim_Cohort 2' = calculated
+		mode: import
+		source =
+				
+				DATATABLE(
+				    "COHORT", STRING,
+				    "ORDEM", INTEGER,
+				    {
+				        {"ENTRANTES", 0},
+				        {"D0", 1},
+				        {"D1", 2},
+				        {"D2", 3},
+				        {"D3", 4},
+				        {"D4", 5},
+				        {"D5", 6},
+				        {"D6", 7},
+				        {"D7", 8},
+				        {"D8", 9},
+				        {"D9", 10},
+				        {"D10", 11},
+				        {"D11", 12},
+				        {"D12", 13},
+				        {"D13", 14},
+				        {"D14", 15},
+				        {"D15", 16},
+				        {"D15+", 17}
+				    }
+				)
+
+	annotation PBI_Id = f4d1e4292fa3401d80d8c79ed632b419
+

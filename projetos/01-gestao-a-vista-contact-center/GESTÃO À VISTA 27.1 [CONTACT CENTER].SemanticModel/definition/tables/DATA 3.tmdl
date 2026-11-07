@@ -1,0 +1,48 @@
+table 'DATA 3'
+	lineageTag: 8d0f850a-c8a2-4c9c-bf04-ff217a751df9
+
+	column Parâmetro
+		lineageTag: ac186b89-2868-4c77-aea6-a1a8bf704bc8
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Parâmetro Pedido'
+
+		relatedColumnDetails
+			groupByColumn: 'Parâmetro Campos'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parâmetro Campos'
+		isHidden
+		lineageTag: 8b5dc1d8-4801-4859-8390-c77f32d01a4c
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Parâmetro Pedido'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parâmetro Pedido'
+		isHidden
+		formatString: 0
+		lineageTag: 0e101e83-0408-4afb-bcfd-f1a4673788ee
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'DATA 3' = calculated
+		mode: import
+		source =
+				{
+				    ("DATA INSCRIÇÃO", NAMEOF('Dim_Data'[Nome Dia]), 0),
+				    ("DATA DE CONTATO", NAMEOF('Dim_Data TAB'[Nome Dia]), 1)
+				}
+
+	annotation PBI_Id = 9c31ffbb6ad54c3e925adc1aa0cd1564
+

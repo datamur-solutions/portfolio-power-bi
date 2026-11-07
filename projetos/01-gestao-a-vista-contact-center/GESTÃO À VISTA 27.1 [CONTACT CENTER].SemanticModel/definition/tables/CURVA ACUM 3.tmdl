@@ -1,0 +1,48 @@
+table 'CURVA ACUM 3'
+	lineageTag: ff9b7446-8b11-4a1b-956f-b15f2a69ba97
+
+	column Parâmetro
+		lineageTag: c58d90c4-37e1-4c3f-a768-fc9bc790803d
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Parâmetro Pedido'
+
+		relatedColumnDetails
+			groupByColumn: 'Parâmetro Campos'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parâmetro Campos'
+		isHidden
+		lineageTag: 65c8262c-e932-459a-bfa2-031acd3a521c
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Parâmetro Pedido'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parâmetro Pedido'
+		isHidden
+		formatString: 0
+		lineageTag: 2bfe178f-eb11-45d0-837b-fc04cb5f0bd0
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'CURVA ACUM 3' = calculated
+		mode: import
+		source =
+				{
+				    ("DIA", NAMEOF('Dim_Data2'[Date]), 0),
+				    ("MÊS", NAMEOF('Dim_Data2'[Nome Mês-Ano]), 1)
+				}
+
+	annotation PBI_Id = ae0df16c22fc469f8835ec110f09518a
+

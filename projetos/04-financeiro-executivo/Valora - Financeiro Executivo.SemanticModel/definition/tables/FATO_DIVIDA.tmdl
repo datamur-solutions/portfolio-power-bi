@@ -1,0 +1,131 @@
+table FATO_DIVIDA
+	lineageTag: b0519369-6d00-4f18-906e-79f3c98322f6
+
+	column ParcelaID
+		dataType: string
+		lineageTag: d48050f3-e0e7-43cf-8ba6-daa561426a66
+		summarizeBy: none
+		sourceColumn: ParcelaID
+
+		annotation SummarizationSetBy = Automatic
+
+	column EmprestimoID
+		dataType: string
+		lineageTag: a4efe4bc-0a3d-44dc-8105-5d1d1d2ed6a2
+		summarizeBy: none
+		sourceColumn: EmprestimoID
+
+		annotation SummarizationSetBy = Automatic
+
+	column DataVencimento
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 2374fcce-67b9-43a5-b9f9-b0abeb33072e
+		summarizeBy: none
+		sourceColumn: DataVencimento
+
+		variation Variation
+			isDefault
+			relationship: 5b173cc5-3ae1-4b63-8b7b-709bde69850d
+			defaultHierarchy: LocalDateTable_6443cd43-a072-478d-8a9c-e23f5166d26e.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column DataPagamento
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: b7efc28c-f37d-4096-ba3d-d29504a8b0ba
+		summarizeBy: none
+		sourceColumn: DataPagamento
+
+		variation Variation
+			isDefault
+			relationship: 9e746212-94cf-477d-a7f0-bdad57bd0ce5
+			defaultHierarchy: LocalDateTable_af4faa8e-8ab5-43fd-842e-b14f9b2d4ceb.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column NumeroParcela
+		dataType: int64
+		formatString: 0
+		lineageTag: 92677a07-cc8a-4183-ab04-138bdac5b017
+		summarizeBy: sum
+		sourceColumn: NumeroParcela
+
+		annotation SummarizationSetBy = Automatic
+
+	column ValorParcela
+		dataType: int64
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: bc4327d4-3596-445f-96b1-f12e27256c0d
+		summarizeBy: sum
+		sourceColumn: ValorParcela
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column Juros
+		dataType: int64
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: b3ccc0b0-eb6f-4d38-bb20-ec0b09c0ac33
+		summarizeBy: sum
+		sourceColumn: Juros
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column Amortizacao
+		dataType: int64
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: dc965102-227c-4ee4-92e4-c245c8b08f35
+		summarizeBy: sum
+		sourceColumn: Amortizacao
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column SaldoDevedor
+		dataType: int64
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 442f34ef-aafa-402a-8b82-f380b2ba796e
+		summarizeBy: sum
+		sourceColumn: SaldoDevedor
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column Status
+		dataType: string
+		lineageTag: 44d879f6-0ab2-4922-8a4e-06c1af9873e9
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FATO_DIVIDA = m
+		mode: import
+		source =
+				let
+				    // FATO_DIVIDA: base fictícia embutida no modelo (csv compactado)
+				    Bin = Binary.Decompress(Binary.FromText(Text.Combine({
+				        "bZpbiyW3FYXfA/kP+QE1oH3T5TFgPySQMGDwe2fchAGPO/T05CG/PmtLJdXZdWSMre6Z87VKe619UfXnl/cvr7+//O2n4+dv/3l//f7x9dsbvvjp5ePl19c/vnz99vrHx1v/8vPLv1/GV//88e31/e3z+OTx68vvb+/zi7//eH/7fvz129v7x9f/vXx5eTt+efn9t7efXv/7+tvb+/HLx8vHj+9//tPP//ic6FNKdPTVwYn1EyX8ey3poKMaVTtEJKcDS7aDRSsVO7Cbt4vDgUMXh5zDk8NZwWFTcLhZlnTjSODwxelLmRxqqR0mXDI4ymJ64+jFsU9p7mcs6dDFoQyOJgKHahWpN44FDl+cvrTJSUoVnJILOCJW6MbJgSMXpy/zyeGWrRxmxhV/XGpSuXFK4OjF6csyObXiv368/Y+pPHFq4NjF6cu6OITIWklVDmpZc74/VwucfHGyn3ObnCIer1IRL4Qul3rTDz72yCkXp3QdpgnKhtBazRXfrBBiugWeKIDqBepLmopmyxU7atqwo1JrTrfIEwdQu0B9SVPSrDXzkZMwjqhw5adHk0fQsthckixQAiJDkXxQzoX4FjMKmqZL02NJU9QsVABifwTKyYhuQaMgarpEPZY0Vc0gEUC1KL6p+PJ+Rg+qzpfL5pKWrEmlHFmKVmyzVG0321MJIL5AY0dL18kMO9Is2JGSVMs3UA0guUB9SVPYELPhjAwpBBHQKnzXUQsgvUB9SVPZhMNB+LPCYQS71Ho7bE4BZBfIemacyoYIsbtcBCmEcGBGtx0xBVC+QGM5lU25VuyoCnIpkWa+h585gLrXEOv5cWs4k9zYcDKp5GY4iW9/efnX6/vHA0MCow7GlDJpK0hG2DLWyH2efjYMDYw2GFPFJK3pUYga0oh4Stwh7BExDAVrL4TXgYLEjrPJImWLCBoeVkKamQj2ElkEueYoDfKqO0RQ7zARUt5EpOYfVnYQTreWHeJBt+W0D7LviWgNT1+MBZLVVFDsNoQWCOcmpkwrku5RMhdUKWgVafiZICkQumFQ2U4CXAtCEWmH1kKyewqhQNBBmMLMBVURGAhbUy2804RwINggTG2ap/3SvAQIN3ZrPRMkEPIgTGWq4dFryqhGnri9WjwTNBCGP2S1DIqcgwYIR4ss7VbbECwQhjtkpVVx03PN+Ib21PcMyAEwrCFLlLD4+dGnE+DV0/EqV5wel3TuXt0eiIRijYdqsWfh1dPxqlacwnJyUkUoNTX0JoI2CLnwxpHAoYvTl7I4gt7Qkzr2I6Vw6DF59XS8ahWnx6WeHGkVbsFGoHX0rSat3Dh2cXqp4vS4tMURqwd6S6QNqE082URODhy+OH05VSJoxZxTO8dQfeXGKYEjF6cvy+KIPxeOBs/FSKol3zg1cPTiYEne0w0OLIjTwjHj7NFsoPe5cVrg2MUx57TFERQNVfW4ExJkaZFz9nS8qhRfBYtHTzdAuTQckDZkCkkFvfwtYEQBVBzUO7nz4ww7qKHS4eNcU80bUxAHRh2MqWE07PjhMAE2wq1yes7zvDo5XgWrM2QxCMrVbArbesXSsmPoI2M4qbdug4HOBowCM/UeHulqxwgCHi7qXdvJSKg3SPHI14xQ1+ckx6t141WzOmNpFlJDbP0gUMga5yQ7xoNwy+me3qsNBuY78VpRMBOhA6i8jUsNjHMfS6twXzmgDCifc0Ph0h2jBYYMxtIpoWKAAQgYqkgIGwanwOjm6c3ZyYDhDkuG9oQxNPQQPDMoMGwwlk571UE37jZAN13blsGBkQdj6TR51jHy4snaiJ5bGl7NGa8Cxmdz1hnQJmYebybwLAhLlZ3WWQNj+IWnTpHMvJNAhKF1dOG17nTKFhjDL2yL4ZnQxCsyNtNnjQ0jPzJOv/DUKWoEzheH6TpFc0NbnXLQ6ekXnjrlXsRNMU2CgeJs27gEnZ5+4boYjNOE5ZsPO56ad4WZH3Rap1946hQ/t6L6ZDJv5lHj",
+				        "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"
+				    }), BinaryEncoding.Base64), Compression.Deflate),
+				    Fonte = Csv.Document(Bin, [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Cabecalhos = Table.PromoteHeaders(Fonte, [PromoteAllScalars = true]),
+				    Nulos = Table.TransformColumns(Cabecalhos, List.Transform(Table.ColumnNames(Cabecalhos), (c) => {c, (v) => if v = "" then null else v})),
+				    Colunas = Table.SelectColumns(Nulos, {"ParcelaID", "EmprestimoID", "DataVencimento", "DataPagamento", "NumeroParcela", "ValorParcela", "Juros", "Amortizacao", "SaldoDevedor", "Status"}, MissingField.UseNull),
+				    Tipos = Table.TransformColumnTypes(Colunas, {{"ParcelaID", type text}, {"EmprestimoID", type text}, {"DataVencimento", type datetime}, {"DataPagamento", type datetime}, {"NumeroParcela", Int64.Type}, {"ValorParcela", Int64.Type}, {"Juros", Int64.Type}, {"Amortizacao", Int64.Type}, {"SaldoDevedor", Int64.Type}, {"Status", type text}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

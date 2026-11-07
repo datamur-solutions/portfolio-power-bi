@@ -1,0 +1,23 @@
+table DIM_CONSULTOR
+	lineageTag: 7e0277e3-0f1d-41aa-a7e4-f302946a4794
+
+	column nm_consultor_recebimento
+		lineageTag: 967557da-20c5-4ff2-ab22-00220e8cec02
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: CAPCOM[nm_consultor_recebimento]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_CONSULTOR = calculated
+		mode: import
+		source =
+				
+				FILTER(
+				    DISTINCT('CAPCOM'[nm_consultor_recebimento]),
+				    NOT(ISBLANK('CAPCOM'[nm_consultor_recebimento]))
+				        && 'CAPCOM'[nm_consultor_recebimento] <> ""
+				)
+
+	annotation PBI_Id = b349fa0bd2804d8fb479a31bc334f558
+

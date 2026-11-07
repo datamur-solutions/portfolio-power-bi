@@ -1,0 +1,2505 @@
+table _Medidas
+	lineageTag: 68be9a9c-0e5b-4753-9cca-225ca0b41c76
+
+	measure 'Valor DRE Realizado' =
+			
+			CALCULATE (
+			    SUM ( FATO_DRE[Valor] ),
+			    KEEPFILTERS (
+			        FATO_DRE[Cenario] = "Realizado"
+			    )
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 01dc58a6-e720-44ca-8f2d-8586c5ca8d67
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Receita Bruta' =
+			
+			CALCULATE (
+			    [Valor DRE Realizado],
+			    DIM_CONTA_CONTABIL[LinhaDRE] = "Receita Bruta"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 936221ef-8b7f-465e-bb4b-51a073c50836
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Deduções da Receita' =
+			
+			CALCULATE (
+			    [Valor DRE Realizado],
+			    DIM_CONTA_CONTABIL[LinhaDRE] = "Deduções da Receita"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 1375cc42-0905-4531-ae69-d4d5d9bb70a5
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Receita Líquida' =
+			
+			[Receita Bruta]
+			    + [Deduções da Receita]
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 2de04a6a-a1cb-4253-9ca4-d96078c869e9
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure CMV =
+			
+			CALCULATE (
+			    [Valor DRE Realizado],
+			    DIM_CONTA_CONTABIL[LinhaDRE] = "CMV"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 2fe7b6e1-9b56-49a9-9cf0-54345489c8cc
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Lucro Bruto' =
+			
+			[Receita Líquida]
+			    + [CMV]
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: a39fd0ed-9353-43e0-b185-39a9ad249a68
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Margem Bruta %' =
+			
+			DIVIDE (
+			    [Lucro Bruto],
+			    [Receita Líquida]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 8f92490d-aba0-41a9-9ebe-d4bff51148ef
+
+	measure OPEX =
+			
+			CALCULATE (
+			    [Valor DRE Realizado],
+			    DIM_CONTA_CONTABIL[GrupoDRE] = "OPEX"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 165fba45-09e9-400b-9857-2cb83b3a7a94
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure EBITDA =
+			
+			[Lucro Bruto]
+			    + [OPEX]
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 6f5ac968-3db7-40b3-bee3-94b5c410ff07
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Margem EBITDA %' =
+			
+			DIVIDE (
+			    [EBITDA],
+			    [Receita Líquida]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: b08ad192-c915-4d72-8851-b8a2ed837050
+
+	measure 'Depreciação e Amortização' =
+			
+			CALCULATE (
+			    [Valor DRE Realizado],
+			    DIM_CONTA_CONTABIL[LinhaDRE] = "Depreciação"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: b060ad7f-4261-4e7a-98a0-0bf53c109d7b
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure EBIT =
+			
+			[EBITDA]
+			    + [Depreciação e Amortização]
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 55a6f015-27a7-4ffc-88ce-94ed22260d0a
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Margem EBIT %' =
+			
+			DIVIDE (
+			    [EBIT],
+			    [Receita Líquida]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: b9e7be12-3058-41b9-84bd-513c5879c6ff
+
+	measure 'Resultado Financeiro' =
+			
+			CALCULATE (
+			    [Valor DRE Realizado],
+			    DIM_CONTA_CONTABIL[LinhaDRE] = "Resultado Financeiro"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 92687c8d-f76a-4d46-aa37-06119bfaf8de
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Resultado Antes dos Impostos' =
+			
+			[EBIT]
+			    + [Resultado Financeiro]
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 6534d781-959e-40e8-9642-e51df7922663
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Impostos sobre Lucro' =
+			
+			CALCULATE (
+			    [Valor DRE Realizado],
+			    DIM_CONTA_CONTABIL[LinhaDRE] = "Impostos sobre Lucro"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 2c391573-0df7-4a59-ab5a-051a33444aff
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Resultado Líquido' =
+			
+			[Resultado Antes dos Impostos]
+			    + [Impostos sobre Lucro]
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: e745270b-6ee0-420d-bfb2-1e0d9ddda140
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Custos Fixos' =
+			
+			CALCULATE (
+			    [Valor DRE Realizado],
+			    DIM_CONTA_CONTABIL[ClassificacaoCusto] = "Fixa"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: cacc1568-8583-4d2e-9e86-fca3fc37fe93
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Custos Variáveis' =
+			
+			CALCULATE (
+			    [Valor DRE Realizado],
+			    DIM_CONTA_CONTABIL[ClassificacaoCusto] = "Variável"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: e4799a0a-4306-4ca6-ae86-a91efb7b2fbf
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Custos Semivariáveis' =
+			
+			CALCULATE (
+			    [Valor DRE Realizado],
+			    DIM_CONTA_CONTABIL[ClassificacaoCusto] = "Semivariável"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: c4a69828-c25f-40e6-af15-8804f63bb458
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'OPEX sobre Receita %' =
+			
+			DIVIDE (
+			    ABS ( [OPEX] ),
+			    [Receita Líquida]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 77d9d3b7-740a-4c79-aacf-bb17a45e9d5b
+
+	measure 'CMV sobre Receita %' =
+			
+			DIVIDE (
+			    ABS ( [CMV] ),
+			    [Receita Líquida]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: bef1b581-cfaa-44e2-8855-46d0240a92aa
+
+	measure 'Receita Líquida AA' =
+			
+			CALCULATE (
+			    [Receita Líquida],
+			    DATEADD (
+			        DIM_DATA[Data],
+			        -1,
+			        YEAR
+			    )
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 51e804e4-d3e3-4de9-91f5-5e9950cc7b73
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'YoY Receita Líquida %' =
+			
+			DIVIDE (
+			    [Receita Líquida]
+			        - [Receita Líquida AA],
+			    [Receita Líquida AA]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: fc30337a-0353-43bc-a2e7-03447298f111
+
+	measure 'EBITDA AA' =
+			
+			CALCULATE (
+			    [EBITDA],
+			    DATEADD (
+			        DIM_DATA[Data],
+			        -1,
+			        YEAR
+			    )
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 0c0609f4-50f4-4a1f-a36a-e3d021eac21c
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'YoY EBITDA %' =
+			
+			DIVIDE (
+			    [EBITDA] - [EBITDA AA],
+			    ABS ( [EBITDA AA] )
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 56a8f276-5fa1-401b-9211-6bc30c6e4ea9
+
+	measure 'Margem EBITDA AA %' =
+			
+			CALCULATE (
+			    [Margem EBITDA %],
+			    DATEADD (
+			        DIM_DATA[Data],
+			        -1,
+			        YEAR
+			    )
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: a381e15c-2ace-4106-8f20-a0a023e37d99
+
+	measure 'Variação Margem EBITDA p.p.' =
+			
+			(
+			    [Margem EBITDA %]
+			        - [Margem EBITDA AA %]
+			) * 100
+		formatString: +0.0" p.p.";-0.0" p.p.";0.0" p.p."
+		lineageTag: 1d838857-4d1d-4968-85c9-89504b932538
+
+
+	measure 'Resultado Líquido AA' =
+			
+			CALCULATE (
+			    [Resultado Líquido],
+			    DATEADD (
+			        DIM_DATA[Data],
+			        -1,
+			        YEAR
+			    )
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: ae049f90-381a-4fc6-8b41-f034ee02f2f9
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'YoY Resultado Líquido %' =
+			
+			DIVIDE (
+			    [Resultado Líquido]
+			        - [Resultado Líquido AA],
+			    ABS ( [Resultado Líquido AA] )
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 59f4a7f3-3488-412c-89a9-0286f6d9335f
+
+	measure 'Valor Orçado' =
+			
+			CALCULATE (
+			    SUM ( FATO_PLANEJAMENTO[Valor] ),
+			    FATO_PLANEJAMENTO[Cenario] = "Orçado"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 9a67e900-4889-443e-99d1-27e3e44cf48c
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Receita Bruta Orçada' =
+			
+			CALCULATE (
+			    [Valor Orçado],
+			    DIM_CONTA_CONTABIL[LinhaDRE] = "Receita Bruta"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: ff831597-cd75-415c-b1e9-d7c26cd4a805
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Deduções Orçadas' =
+			
+			CALCULATE (
+			    [Valor Orçado],
+			    DIM_CONTA_CONTABIL[LinhaDRE] = "Deduções da Receita"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 3e41a21e-4491-48cc-be03-e4cd9abb37fb
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Receita Líquida Orçada' =
+			
+			[Receita Bruta Orçada]
+			    + [Deduções Orçadas]
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: a1a0d29f-99ea-45b9-ac3f-3c210a4daa3d
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Gap Receita vs Orçado R$' =
+			
+			[Receita Líquida]
+			    - [Receita Líquida Orçada]
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: f6050b67-a05f-4579-a6f7-eacc21fd25e4
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Atingimento Receita %' =
+			
+			DIVIDE (
+			    [Receita Líquida],
+			    [Receita Líquida Orçada]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 11c10d25-2fd5-444a-a4c4-d2ca9d25a454
+
+	measure 'Variação Receita vs Orçado %' =
+			
+			DIVIDE (
+			    [Receita Líquida]
+			        - [Receita Líquida Orçada],
+			    [Receita Líquida Orçada]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 641d6b1e-0628-4813-b33a-98d225072ef4
+
+	measure 'CMV Orçado' =
+			
+			CALCULATE (
+			    [Valor Orçado],
+			    DIM_CONTA_CONTABIL[LinhaDRE] = "CMV"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: a194423f-77b1-4201-9676-9400bd2015bf
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'OPEX Orçado' =
+			
+			CALCULATE (
+			    [Valor Orçado],
+			    DIM_CONTA_CONTABIL[GrupoDRE] = "OPEX"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: b4cce275-bec6-4621-881f-7f2ec860b409
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'EBITDA Orçado' =
+			
+			[Receita Líquida Orçada]
+			    + [CMV Orçado]
+			    + [OPEX Orçado]
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 5a663262-7e3c-4bfe-9d39-1b918bd01c74
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Atingimento EBITDA %' =
+			
+			DIVIDE (
+			    [EBITDA],
+			    [EBITDA Orçado]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 38ad9df5-3819-4fb4-b889-6d902c87458f
+
+	measure 'Gap EBITDA vs Orçado R$' =
+			
+			[EBITDA]
+			    - [EBITDA Orçado]
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 7dda64c3-deb3-4250-9c42-aa25eeb12ecf
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Margem EBITDA Orçada %' =
+			
+			DIVIDE (
+			    [EBITDA Orçado],
+			    [Receita Líquida Orçada]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 1514ea1b-4b0c-455d-8f8d-41bab8f1fef0
+
+	measure 'Gap Margem EBITDA vs Orçado p.p.' =
+			
+			(
+			    [Margem EBITDA %]
+			        - [Margem EBITDA Orçada %]
+			) * 100
+		formatString: +0.0" p.p.";-0.0" p.p.";0.0" p.p."
+		lineageTag: 406b1a44-68db-4dc2-8046-530a728a4b40
+
+
+	measure 'Valor Forecast' =
+			
+			CALCULATE (
+			    SUM ( FATO_PLANEJAMENTO[Valor] ),
+			    FATO_PLANEJAMENTO[Cenario] = "Forecast"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 601b7caa-b652-409c-b9cc-6e9d9b141fa1
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Receita Bruta Forecast' =
+			
+			CALCULATE (
+			    [Valor Forecast],
+			    DIM_CONTA_CONTABIL[LinhaDRE] = "Receita Bruta"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 5e38f3a9-c957-4a03-86a0-c6911e201713
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Deduções Forecast' =
+			
+			CALCULATE (
+			    [Valor Forecast],
+			    DIM_CONTA_CONTABIL[LinhaDRE] = "Deduções da Receita"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 94e625a7-4cff-4b5e-bdad-c3f359dc660e
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Receita Líquida Forecast' =
+			
+			[Receita Bruta Forecast]
+			    + [Deduções Forecast]
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: f5156967-17c1-4378-8574-c5647c2ea8ff
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'CMV Forecast' =
+			
+			CALCULATE (
+			    [Valor Forecast],
+			    DIM_CONTA_CONTABIL[LinhaDRE] = "CMV"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 672a069b-8fce-4415-a690-f9212b0fa44e
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'OPEX Forecast' =
+			
+			CALCULATE (
+			    [Valor Forecast],
+			    DIM_CONTA_CONTABIL[GrupoDRE] = "OPEX"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: b4a5152b-5311-4c73-9be5-a11dfeee34bb
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'EBITDA Forecast' =
+			
+			[Receita Líquida Forecast]
+			    + [CMV Forecast]
+			    + [OPEX Forecast]
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 73ddd7b4-a170-44e1-86ab-25168ef20a42
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Margem EBITDA Forecast %' =
+			
+			DIVIDE (
+			    [EBITDA Forecast],
+			    [Receita Líquida Forecast]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 119556b9-116d-41d3-a8e2-e70969e2ef2a
+
+	measure 'Gap Forecast Receita vs Orçado R$' =
+			
+			[Receita Líquida Forecast]
+			    - [Receita Líquida Orçada]
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 2cf3e1f6-645c-483c-ba92-f751cc113446
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Gap Forecast Receita vs Orçado %' =
+			
+			DIVIDE (
+			    [Receita Líquida Forecast]
+			        - [Receita Líquida Orçada],
+			    [Receita Líquida Orçada]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 4f0051d4-cc65-4f31-9d9f-76581e7255c2
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Gap Forecast EBITDA vs Orçado R$' =
+			
+			[EBITDA Forecast]
+			    - [EBITDA Orçado]
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: ce69857a-2ab6-47d6-9968-d8723ab5fc83
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Gap Forecast EBITDA vs Orçado %' =
+			
+			DIVIDE (
+			    [EBITDA Forecast]
+			        - [EBITDA Orçado],
+			    ABS ( [EBITDA Orçado] )
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 1edd6cf1-87d3-4eca-95ce-7d040112e4db
+
+	measure 'Entradas de Caixa' =
+			
+			SUM (
+			    FATO_CAIXA_MOV[Entradas]
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 61d34693-e80d-45b5-bfa5-9702d14a8d2c
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Saídas de Caixa' =
+			
+			SUM (
+			    FATO_CAIXA_MOV[Saidas]
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: eb2a65ff-e516-4e94-bca7-9b881a3196d5
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Geração de Caixa' =
+			
+			[Entradas de Caixa]
+			    - [Saídas de Caixa]
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 25c6eac8-15d0-4c45-b43a-9737ecb9708e
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Saldo de Caixa' =
+			
+			VAR DataReferencia =
+			    CALCULATE (
+			        MAX ( FATO_CAIXA_DIARIO[Data] ),
+			        ALLSELECTED ( DIM_DATA )
+			    )
+			
+			RETURN
+			CALCULATE (
+			    SUM ( FATO_CAIXA_DIARIO[SaldoFinal] ),
+			    REMOVEFILTERS ( DIM_DATA ),
+			    FATO_CAIXA_DIARIO[Data] = DataReferencia
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: ee7db3fe-8e2f-421b-ba5f-dcbd69b56ec3
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Saldo Inicial Caixa' =
+			
+			VAR PrimeiraData =
+			    MIN ( DIM_DATA[Data] )
+			
+			RETURN
+			CALCULATE (
+			    SUM ( FATO_CAIXA_DIARIO[SaldoInicial] ),
+			    DIM_DATA[Data] = PrimeiraData
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: f96a67d6-579f-43a2-ad6f-24bb910e2a27
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Variação Caixa R$' =
+			
+			[Saldo de Caixa]
+			    - [Saldo Inicial Caixa]
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: c8cd8354-316f-4a1d-a84b-36468621875c
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Variação Caixa %' =
+			
+			DIVIDE (
+			    [Variação Caixa R$],
+			    [Saldo Inicial Caixa]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 697c21d3-85c1-4379-8972-b8bb28d5ac33
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Fluxo de Caixa Operacional' =
+			
+			CALCULATE (
+			    SUM ( FATO_CAIXA_MOV[ValorLiquido] ),
+			    FATO_CAIXA_MOV[GrupoFluxo] = "Operacional"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: b8228f58-0d4d-43a2-a7da-0a01d857006e
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Fluxo de Investimentos' =
+			
+			CALCULATE (
+			    SUM ( FATO_CAIXA_MOV[ValorLiquido] ),
+			    FATO_CAIXA_MOV[GrupoFluxo] = "Investimento"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 07ad902c-b40c-4c64-b5e5-a4a6e2594662
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Fluxo de Financiamento' =
+			
+			CALCULATE (
+			    SUM ( FATO_CAIXA_MOV[ValorLiquido] ),
+			    FATO_CAIXA_MOV[GrupoFluxo] = "Financiamento"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: ee7401e4-ec37-4f46-83f2-f52593315d9b
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Burn Rate Mensal' =
+			
+			VAR TabelaMeses =
+			    ADDCOLUMNS (
+			        VALUES ( DIM_DATA[AnoMes] ),
+			        "@Movimento",
+			            CALCULATE ( [Geração de Caixa] )
+			    )
+			
+			RETURN
+			ABS (
+			    AVERAGEX (
+			        FILTER (
+			            TabelaMeses,
+			            [@Movimento] < 0
+			        ),
+			        [@Movimento]
+			    )
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 7d0b5150-1c6b-4e7e-a552-e6bd4844d25c
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Runway Meses' =
+			
+			DIVIDE (
+			    [Saldo de Caixa],
+			    [Burn Rate Mensal]
+			)
+		formatString: 0.0" meses"
+		lineageTag: 42cb2a99-9c4e-4604-a856-0804d958e379
+
+	measure 'Títulos a Receber' =
+			
+			SUM (
+			    FATO_RECEBIVEIS[ValorTitulo]
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 014c8536-61f2-443b-86bc-79ee7e24d723
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Valor Recebido' =
+			
+			SUM (
+			    FATO_RECEBIVEIS[ValorRecebido]
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 58d96428-f78b-4ce1-bc3f-5fea8da05f49
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Saldo a Receber' =
+			
+			SUM(FATO_RECEBIVEIS[ValorTitulo])
+			    - SUM(FATO_RECEBIVEIS[ValorRecebido])
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 175621bd-5e66-4e78-a6b8-011bf8986173
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Recebíveis Vencidos' =
+			
+			CALCULATE (
+			    [Saldo a Receber],
+			    FATO_RECEBIVEIS[Status] = "Vencido"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 97ead4f6-b0e5-48d8-816c-e18c2269816f
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Recebíveis a Vencer' =
+			
+			CALCULATE (
+			    [Saldo a Receber],
+			    FATO_RECEBIVEIS[Status] = "Em aberto"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 85c81ba4-f20c-4dcc-9d06-45b1f42b9078
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Inadimplência %' =
+			
+			VAR Vencidos =
+			    CALCULATE(
+			        [Recebíveis Vencidos],
+			        TREATAS(
+			            VALUES(DIM_DATA[Data]),
+			            FATO_RECEBIVEIS[DataVencimento]
+			        )
+			    )
+			
+			VAR Saldo =
+			    CALCULATE(
+			        [Saldo a Receber],
+			        TREATAS(
+			            VALUES(DIM_DATA[Data]),
+			            FATO_RECEBIVEIS[DataVencimento]
+			        )
+			    )
+			
+			RETURN
+			DIVIDE(
+			    Vencidos,
+			    Saldo,
+			    0
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: a67b68ed-33cb-4b99-a081-72a90566ec92
+
+	measure 'Recebíveis Liquidados' =
+			
+			CALCULATE (
+			    [Valor Recebido],
+			    FATO_RECEBIVEIS[Status] = "Pago"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: cc698830-cd65-4c8e-bcc3-4a53c6389349
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Taxa de Liquidação %' =
+			
+			DIVIDE (
+			    [Recebíveis Liquidados],
+			    [Títulos a Receber]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 3db26766-51a8-439c-ad5d-c5e73cf0b82b
+
+	measure DSO =
+			
+			VAR Recebidos =
+			    FILTER (
+			        FATO_RECEBIVEIS,
+			        FATO_RECEBIVEIS[Status] = "Pago"
+			            && NOT ISBLANK (
+			                FATO_RECEBIVEIS[DataRecebimento]
+			            )
+			    )
+			
+			VAR DiasPonderados =
+			    SUMX (
+			        Recebidos,
+			        DATEDIFF (
+			            FATO_RECEBIVEIS[DataEmissao],
+			            FATO_RECEBIVEIS[DataRecebimento],
+			            DAY
+			        )
+			            * FATO_RECEBIVEIS[ValorRecebido]
+			    )
+			
+			VAR ValorBase =
+			    SUMX (
+			        Recebidos,
+			        FATO_RECEBIVEIS[ValorRecebido]
+			    )
+			
+			RETURN
+			DIVIDE (
+			    DiasPonderados,
+			    ValorBase
+			)
+		formatString: 0" dias"
+		lineageTag: ad71babb-2fb2-49f8-b3e3-aaff14ae3194
+
+
+	measure 'Atraso Médio Recebimento' =
+			
+			AVERAGEX (
+			    FILTER (
+			        FATO_RECEBIVEIS,
+			        FATO_RECEBIVEIS[Status] = "Pago"
+			            && FATO_RECEBIVEIS[DiasAtraso] > 0
+			    ),
+			    FATO_RECEBIVEIS[DiasAtraso]
+			)
+		formatString: 0" dias"
+		lineageTag: 1570e589-f4e9-4e9e-b3f5-5c2fb375a44b
+
+
+	measure 'Clientes Inadimplentes' =
+			
+			CALCULATE (
+			    DISTINCTCOUNT (
+			        FATO_RECEBIVEIS[ClienteID]
+			    ),
+			    FATO_RECEBIVEIS[Status] = "Vencido"
+			)
+		formatString: 0
+		lineageTag: 74c2b2cc-5f86-4f44-b6b7-2a27386b32f5
+
+	measure 'Títulos a Pagar' =
+			
+			SUM (
+			    FATO_PAGAVEIS[ValorTitulo]
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 30b2befd-1676-4bfe-88d0-cc8e17c46fa5
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Valor Pago' =
+			
+			SUM (
+			    FATO_PAGAVEIS[ValorPago]
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 81288425-4696-4155-9c99-09f6377eef76
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Saldo a Pagar' =
+			
+			SUMX (
+			    FATO_PAGAVEIS,
+			    FATO_PAGAVEIS[ValorTitulo]
+			        - FATO_PAGAVEIS[ValorPago]
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 2d0a39ec-7fc1-4c2d-a9fd-fb57825f9deb
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Pagáveis Vencidos' =
+			
+			CALCULATE (
+			    [Saldo a Pagar],
+			    FATO_PAGAVEIS[Status] = "Vencido"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 924392c2-5f90-481b-b205-b0bbc4801a94
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Pagáveis a Vencer' =
+			
+			CALCULATE (
+			    [Saldo a Pagar],
+			    FATO_PAGAVEIS[Status] = "Em aberto"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: b440bd34-d8e2-40d6-93b9-3f700275bed0
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure DPO =
+			
+			VAR Pagos =
+			    FILTER (
+			        FATO_PAGAVEIS,
+			        FATO_PAGAVEIS[Status] = "Pago"
+			            && NOT ISBLANK (
+			                FATO_PAGAVEIS[DataPagamento]
+			            )
+			    )
+			
+			VAR DiasPonderados =
+			    SUMX (
+			        Pagos,
+			        DATEDIFF (
+			            FATO_PAGAVEIS[DataEmissao],
+			            FATO_PAGAVEIS[DataPagamento],
+			            DAY
+			        )
+			            * FATO_PAGAVEIS[ValorPago]
+			    )
+			
+			VAR ValorBase =
+			    SUMX (
+			        Pagos,
+			        FATO_PAGAVEIS[ValorPago]
+			    )
+			
+			RETURN
+			DIVIDE (
+			    DiasPonderados,
+			    ValorBase
+			)
+		formatString: 0" dias"
+		lineageTag: 4ec4b259-5ddc-4bee-8f8a-bb160d868353
+
+
+	measure 'Gap Financeiro Dias' =
+			
+			[DSO] - [DPO]
+		formatString: 0" dias"
+		lineageTag: b6e755f5-ff19-4de8-b82c-b9a2bb4e9f52
+
+
+	measure 'Necessidade Capital de Giro' =
+			
+			[Saldo a Receber]
+			    - [Saldo a Pagar]
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: a88b7145-40f5-4b37-a3b7-dcb4bf8501e9
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Liquidez Financeira' =
+			
+			DIVIDE (
+			    [Saldo de Caixa]
+			        + [Saldo a Receber],
+			    [Saldo a Pagar]
+			)
+		formatString: 0.00"x"
+		lineageTag: 48e93953-ad8d-46f4-b099-6a82d8004ff7
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Juros Pagos' =
+			
+			CALCULATE (
+			    SUM ( FATO_DIVIDA[Juros] ),
+			    FATO_DIVIDA[Status] = "Pago"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: ac418643-069f-449a-bff7-a585b34534b8
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Amortização Paga' =
+			
+			CALCULATE (
+			    SUM ( FATO_DIVIDA[Amortizacao] ),
+			    FATO_DIVIDA[Status] = "Pago"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 9cff952f-d282-4153-a2dd-c7e8391555a0
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Serviço da Dívida' =
+			
+			[Juros Pagos]
+			    + [Amortização Paga]
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 62e8617d-331d-414f-ae4e-d5e0f23ab74a
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Saldo Devedor' =
+			
+			VAR DataReferencia =
+			    MIN ( MAX ( DIM_DATA[Data] ), [Última Data Realizada] )
+			
+			RETURN
+			SUMX (
+			    VALUES (
+			        DIM_EMPRESTIMO[EmprestimoID]
+			    ),
+			
+			    VAR EmprestimoAtual =
+			        DIM_EMPRESTIMO[EmprestimoID]
+			
+			    VAR UltimaParcela =
+			        TOPN (
+			            1,
+			            FILTER (
+			                ALL ( FATO_DIVIDA ),
+			                FATO_DIVIDA[EmprestimoID]
+			                    = EmprestimoAtual
+			                    && FATO_DIVIDA[DataVencimento]
+			                        <= DataReferencia
+			            ),
+			            FATO_DIVIDA[DataVencimento],
+			            DESC
+			        )
+			
+			    RETURN
+			        MAXX (
+			            UltimaParcela,
+			            FATO_DIVIDA[SaldoDevedor]
+			        )
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: b809ddc4-99f8-479c-9015-c45d2bff84f9
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'EBITDA 12M' =
+			
+			VAR DataReferencia =
+			    MIN ( MAX ( DIM_DATA[Data] ), [Última Data Realizada] )
+			
+			RETURN
+			CALCULATE (
+			    [EBITDA],
+			    DATESINPERIOD (
+			        DIM_DATA[Data],
+			        DataReferencia,
+			        -12,
+			        MONTH
+			    )
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 35304413-7a53-43d9-ab3c-7aff78fdd23a
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Dívida sobre EBITDA' =
+			
+			DIVIDE (
+			    [Saldo Devedor],
+			    [EBITDA 12M]
+			)
+		formatString: 0.00"x"
+		lineageTag: 7e1a9b1a-bdfa-4d01-8473-3bf954cd471f
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Serviço Dívida 12M' =
+			
+			VAR DataReferencia =
+			    MIN ( MAX ( DIM_DATA[Data] ), [Última Data Realizada] )
+			
+			RETURN
+			CALCULATE (
+			    [Serviço da Dívida],
+			    DATESINPERIOD (
+			        DIM_DATA[Data],
+			        DataReferencia,
+			        -12,
+			        MONTH
+			    )
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 7fec51cf-b3ad-4d88-bb39-e3e1fe933f04
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Cobertura Serviço Dívida' =
+			
+			DIVIDE (
+			    [EBITDA 12M],
+			    [Serviço Dívida 12M]
+			)
+		formatString: 0.00"x"
+		lineageTag: d266a087-2a25-4ea7-8e17-bd1e7962f560
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure CAPEX =
+			
+			SUM (
+			    FATO_CAPEX[ValorAquisicao]
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 078d5373-29be-4836-bb1e-9d1e354e344e
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'CAPEX AA' =
+			
+			CALCULATE (
+			    [CAPEX],
+			    DATEADD (
+			        DIM_DATA[Data],
+			        -1,
+			        YEAR
+			    )
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 7ba2f3cf-1ebb-4058-96cf-bc0defb26071
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'YoY CAPEX %' =
+			
+			DIVIDE (
+			    [CAPEX] - [CAPEX AA],
+			    [CAPEX AA]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 31b42757-852e-4e97-8fbe-bb3757e51d72
+
+	measure 'CAPEX sobre Receita %' =
+			
+			DIVIDE (
+			    [CAPEX],
+			    [Receita Líquida]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: b83c8717-ed8e-417f-8015-78f0cd69da8b
+
+	measure 'Custo Total Pessoal' =
+			
+			SUM (
+			    FATO_FOLHA[CustoTotal]
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: ba213e5a-1bf2-4371-bd98-c8d6fe04a831
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure Salários =
+			
+			SUM (
+			    FATO_FOLHA[Salario]
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: d9179439-1559-4191-9085-c874af718746
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure Encargos =
+			
+			SUM (
+			    FATO_FOLHA[Encargos]
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 3d478019-fb75-4455-9e90-3e07e7cb5605
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure Benefícios =
+			
+			SUM (
+			    FATO_FOLHA[Beneficios]
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 19b41db8-db78-47a6-8d33-c853417b4069
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure Comissões =
+			
+			SUM (
+			    FATO_FOLHA[Comissao]
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 57e782a7-987c-4f2a-b5e1-63e0a95138dd
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Folha sobre Receita %' =
+			
+			DIVIDE (
+			    [Custo Total Pessoal],
+			    [Receita Líquida]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 1b1cd4b2-74ef-4cd9-9fb6-5efb773f5839
+
+	measure 'Headcount Atual' =
+			
+			VAR UltimaCompetencia =
+			    MAX ( FATO_FOLHA[Competencia] )
+			
+			RETURN
+			CALCULATE (
+			    DISTINCTCOUNT (
+			        FATO_FOLHA[ColaboradorID]
+			    ),
+			    FATO_FOLHA[Competencia]
+			        = UltimaCompetencia
+			)
+		formatString: 0
+		lineageTag: 855fe9fc-44af-4761-ad13-7491a98f922f
+
+	measure 'Custo Médio por Colaborador' =
+			
+			AVERAGEX (
+			    VALUES ( DIM_DATA[AnoMes] ),
+			
+			    DIVIDE (
+			        CALCULATE (
+			            [Custo Total Pessoal]
+			        ),
+			        CALCULATE (
+			            DISTINCTCOUNT (
+			                FATO_FOLHA[ColaboradorID]
+			            )
+			        )
+			    )
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 9a5262af-3a16-4c2c-8833-fc5c59dff306
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Receita por Colaborador' =
+			
+			AVERAGEX (
+			    VALUES ( DIM_DATA[AnoMes] ),
+			
+			    DIVIDE (
+			        CALCULATE (
+			            [Receita Líquida]
+			        ),
+			        CALCULATE (
+			            DISTINCTCOUNT (
+			                FATO_FOLHA[ColaboradorID]
+			            )
+			        )
+			    )
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 938e875e-371f-4fa9-aa5d-baaeb03775af
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Valor Ponte Resultado' =
+			
+			SWITCH (
+			    SELECTEDVALUE ( DIM_PONTE_RESULTADO[Etapa] ),
+			
+			    "Receita Bruta", [Receita Bruta],
+			    "Deduções", [Deduções da Receita],
+			    "CMV", [CMV],
+			    "OPEX", [OPEX],
+			    "Depreciação", [Depreciação e Amortização],
+			    "Resultado Financeiro", [Resultado Financeiro],
+			    "Impostos", [Impostos sobre Lucro]
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: cf10fb33-8bbd-45c7-86b6-061a6d2a7256
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'OPEX Exibição' =
+			
+			ABS (
+			    [OPEX]
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 92e4fcf2-34d4-4522-b63c-4e6b995d5611
+
+	measure 'Texto Alerta' =
+			
+			VAR Tipo =
+			    SELECTEDVALUE ( DIM_ALERTAS[TipoAlerta] )
+			
+			RETURN
+			SWITCH (
+			    Tipo,
+			
+			    "Receita",
+			        SWITCH (
+			            TRUE(),
+			            [Variação Receita vs Orçado %] < 0,
+			                "🔴 Receita abaixo do orçado: "
+			                    & FORMAT ( [Variação Receita vs Orçado %], "0,0%" ),
+			
+			            [Variação Receita vs Orçado %] >= 0,
+			                "🟢 Receita acima do orçado: "
+			                    & FORMAT ( [Variação Receita vs Orçado %], "0,0%" )
+			        ),
+			
+			    "EBITDA",
+			        SWITCH (
+			            TRUE(),
+			            [Gap Forecast EBITDA vs Orçado %] < 0,
+			                "🔴 Forecast EBITDA abaixo do orçamento: "
+			                    & FORMAT ( [Gap Forecast EBITDA vs Orçado %], "0,0%" ),
+			
+			            [Gap Forecast EBITDA vs Orçado %] >= 0,
+			                "🟢 Forecast EBITDA em linha/acima: "
+			                    & FORMAT ( [Gap Forecast EBITDA vs Orçado %], "0,0%" )
+			        ),
+			
+			    "Margem",
+			        SWITCH (
+			            TRUE(),
+			            [Variação Margem EBITDA p.p.] < 0,
+			                "🔴 Margem EBITDA caiu "
+			                    & FORMAT (
+			                        ABS ( [Variação Margem EBITDA p.p.] ),
+			                        "0,0"
+			                    )
+			                    & " p.p.",
+			
+			            [Variação Margem EBITDA p.p.] >= 0,
+			                "🟢 Margem EBITDA subiu "
+			                    & FORMAT (
+			                        [Variação Margem EBITDA p.p.],
+			                        "0,0"
+			                    )
+			                    & " p.p."
+			        ),
+			
+			    "Inadimplência",
+			        SWITCH (
+			            TRUE(),
+			
+			            [Inadimplência %] >= 0.10,
+			                "🔴 Inadimplência crítica: "
+			                    & FORMAT ( [Inadimplência %], "0,0%" ),
+			
+			            [Inadimplência %] >= 0.05,
+			                "🟠 Inadimplência em atenção: "
+			                    & FORMAT ( [Inadimplência %], "0,0%" ),
+			
+			            "🟢 Inadimplência controlada: "
+			                & FORMAT ( [Inadimplência %], "0,0%" )
+			        ),
+			
+			    "Capital de Giro",
+			        SWITCH (
+			            TRUE(),
+			
+			            [Gap Financeiro Dias] > 15,
+			                "🔴 Gap financeiro elevado: "
+			                    & FORMAT ( [Gap Financeiro Dias], "0" )
+			                    & " dias",
+			
+			            [Gap Financeiro Dias] > 5,
+			                "🟠 Gap financeiro em atenção: "
+			                    & FORMAT ( [Gap Financeiro Dias], "0" )
+			                    & " dias",
+			
+			            "🟢 Gap financeiro controlado: "
+			                & FORMAT ( [Gap Financeiro Dias], "0" )
+			                & " dias"
+			        ),
+			
+			    "Caixa",
+			        SWITCH (
+			            TRUE(),
+			
+			            [Variação Caixa %] < 0,
+			                "🟠 Caixa reduziu "
+			                    & FORMAT (
+			                        ABS ( [Variação Caixa %] ),
+			                        "0,0%"
+			                    ),
+			
+			            "🟢 Caixa cresceu "
+			                & FORMAT ( [Variação Caixa %], "0,0%" )
+			        ),
+			
+			    BLANK()
+			)
+		lineageTag: 4d011aaa-29c1-4afd-af96-de8bcc8a24f5
+
+	measure 'Status Caixa' =
+			
+			VAR Variacao = [Variação Caixa %]
+			
+			RETURN
+			SWITCH (
+			    TRUE(),
+			
+			    Variacao > 0.05,
+			        "🟢 Caixa cresceu "
+			            & FORMAT ( Variacao, "0,0%" )
+			            & " no período",
+			
+			    Variacao >= -0.05,
+			        "🟠 Caixa estável | "
+			            & FORMAT ( Variacao, "0,0%" ),
+			
+			    "🔴 Caixa reduziu "
+			        & FORMAT ( ABS ( Variacao ), "0,0%" )
+			        & " no período"
+			)
+		lineageTag: c51fc708-0520-4a02-abb9-ac3a16995f5d
+
+	measure 'Status Contas a Receber' =
+			
+			VAR Inadimplencia =
+			    [Inadimplência %]
+			
+			VAR Vencido =
+			    [Recebíveis Vencidos]
+			
+			RETURN
+			SWITCH (
+			    TRUE(),
+			
+			    Inadimplencia > 0.10,
+			        "🔴 "
+			            & FORMAT ( Inadimplencia, "0,0%" )
+			            & " vencido | "
+			            & FORMAT ( Vencido, "R$ #,##0,,.0 Mi" ),
+			
+			    Inadimplencia > 0.05,
+			        "🟠 "
+			            & FORMAT ( Inadimplencia, "0,0%" )
+			            & " vencido | atenção",
+			
+			    "🟢 "
+			        & FORMAT ( Inadimplencia, "0,0%" )
+			        & " vencido | controlado"
+			)
+		lineageTag: 15ea71d6-7e57-4fb7-82cc-fa9e888198da
+
+	measure 'Status Contas a Pagar' =
+			
+			VAR PercentualVencido =
+			    [Pagáveis Vencidos %]
+			
+			VAR ValorVencido =
+			    [Pagáveis Vencidos]
+			
+			RETURN
+			SWITCH (
+			    TRUE(),
+			
+			    PercentualVencido > 0.05,
+			        "🔴 "
+			            & FORMAT ( PercentualVencido, "0,0%" )
+			            & " vencido | "
+			            & FORMAT ( ValorVencido, "R$ #,##0,,.0 Mi" ),
+			
+			    PercentualVencido > 0.02,
+			        "🟠 "
+			            & FORMAT ( PercentualVencido, "0,0%" )
+			            & " vencido | atenção",
+			
+			    "🟢 Obrigações sob controle"
+			)
+		lineageTag: 1a5e6a2d-6f7a-4bfd-bec6-49132df24ee1
+
+	measure 'Pagáveis Vencidos %' =
+			
+			DIVIDE (
+			    [Pagáveis Vencidos],
+			    [Saldo a Pagar]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 7c04dda6-851f-4f47-96c3-9cb054aea8ba
+
+
+	measure 'Status Liquidez' =
+			
+			VAR Liquidez =
+			    [Liquidez Financeira]
+			
+			RETURN
+			SWITCH (
+			    TRUE(),
+			
+			    Liquidez >= 1.50,
+			        "🟢 Cobertura confortável",
+			
+			    Liquidez >= 1.00,
+			        "🟠 Liquidez em atenção",
+			
+			    "🔴 Cobertura insuficiente"
+			)
+		lineageTag: cdb232ba-8cdf-497d-8e4c-42e53c1c5df2
+
+	measure 'Status DSO' =
+			
+			VAR Dias =
+			    [DSO]
+			
+			RETURN
+			"Recebo em "
+			    & FORMAT ( Dias, "0" )
+			    & " dias"
+		lineageTag: bd0f22a8-f936-4747-9e83-9f77bf0268ca
+
+	measure 'Status DPO' =
+			
+			VAR Dias =
+			    [DPO]
+			
+			RETURN
+			"Pago em "
+			    & FORMAT ( Dias, "0" )
+			    & " dias"
+		lineageTag: e2ee7321-3522-4bd6-b176-f1a532c03529
+
+	measure 'Status Gap Financeiro' =
+			
+			VAR Gap =
+			    [Gap Financeiro Dias]
+			
+			RETURN
+			SWITCH (
+			    TRUE(),
+			
+			    Gap > 15,
+			        "🔴 Gap de "
+			            & FORMAT ( Gap, "0" )
+			            & " dias | forte pressão de caixa",
+			
+			    Gap > 5,
+			        "🟠 Gap de "
+			            & FORMAT ( Gap, "0" )
+			            & " dias | atenção",
+			
+			    Gap > 0,
+			        "🟢 Gap de "
+			            & FORMAT ( Gap, "0" )
+			            & " dias | controlado",
+			
+			    "🟢 Recebemos antes de pagar"
+			)
+		lineageTag: 5ddf286c-b124-452a-b652-ab9d9ee884b2
+
+	measure 'Saldo Caixa Mês Anterior' =
+			
+			CALCULATE (
+			    [Saldo de Caixa],
+			    DATEADD (
+			        DIM_DATA[Data],
+			        -1,
+			        MONTH
+			    )
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 4a5d220b-5da0-4371-928e-9c047c1e65b1
+
+	measure 'Variação Caixa MoM %' =
+			
+			DIVIDE (
+			    [Saldo de Caixa] - [Saldo Caixa Mês Anterior],
+			    [Saldo Caixa Mês Anterior]
+			)
+		lineageTag: 4dfdb9b9-f30b-4b02-98b7-7b0569651910
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Valor Fluxo Caixa' =
+			
+			SWITCH (
+			    SELECTEDVALUE ( DIM_FLUXO_CAIXA[Fluxo] ),
+			
+			    "Operacional", [Fluxo de Caixa Operacional],
+			    "Investimentos", [Fluxo de Investimentos],
+			    "Financiamento", [Fluxo de Financiamento]
+			)
+		formatString: 0
+		lineageTag: 299f332b-7496-405b-acd8-6ba1d152a2e4
+
+	measure 'Saldo Caixa no Período' =
+			
+			VAR UltimaDataPeriodo =
+			    MAX ( FATO_CAIXA_DIARIO[Data] )
+			RETURN
+			CALCULATE (
+			    SUM ( FATO_CAIXA_DIARIO[SaldoFinal] ),
+			    FATO_CAIXA_DIARIO[Data] = UltimaDataPeriodo
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: e8852aca-a6a4-40c1-a5e4-53720d9f27e4
+
+	measure 'Última Data Realizada' =
+			
+			CALCULATE (
+			    MAX ( FATO_CAIXA_DIARIO[Data] ),
+			    ALL ( FATO_CAIXA_DIARIO )
+			)
+		formatString: General Date
+		lineageTag: ac97aa4d-92a3-4283-bb0e-a0fac5c85890
+
+	measure 'Média Geração Caixa 3M' =
+			
+			AVERAGEX (
+			    DATESINPERIOD (
+			        DIM_DATA[Data],
+			        [Última Data Realizada],
+			        -3,
+			        MONTH
+			    ),
+			    [Geração de Caixa]
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: a9ce5fa6-e81e-4837-911f-f08210c15f4c
+
+
+	measure 'Saldo Caixa Projetado' =
+			
+			VAR DataRealizada =
+			    [Última Data Realizada]
+			
+			VAR DataAtual =
+			    MAX ( DIM_DATA[Data] )
+			
+			VAR SaldoAtual =
+			    CALCULATE (
+			        [Saldo Caixa no Período],
+			        REMOVEFILTERS ( DIM_DATA ),
+			        FATO_CAIXA_DIARIO[Data] = DataRealizada
+			    )
+			
+			VAR MediaMensal =
+			    [Média Geração Caixa 3M]
+			
+			VAR MesesFuturos =
+			    DATEDIFF (
+			        EOMONTH ( DataRealizada, 0 ),
+			        EOMONTH ( DataAtual, 0 ),
+			        MONTH
+			    )
+			
+			RETURN
+			    IF (
+			        DataAtual > DataRealizada,
+			        SaldoAtual + ( MediaMensal * MesesFuturos )
+			    )
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 5d7d8d84-adbe-4047-81c2-7a2fa93c7dab
+
+
+	measure 'Saldo Caixa Realizado' =
+			
+			VAR DataRealizada =
+			    [Última Data Realizada]
+			
+			VAR DataAtual =
+			    MAX ( DIM_DATA[Data] )
+			
+			RETURN
+			    IF (
+			        DataAtual <= DataRealizada,
+			        [Saldo Caixa no Período]
+			    )
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: c79bbdf9-d5fd-40b2-ab52-10aefc7baa74
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Saldo Caixa Forecast' =
+			
+			VAR DataRealizada =
+			    [Última Data Realizada]
+			
+			VAR DataAtual =
+			    MAX ( DIM_DATA[Data] )
+			
+			RETURN
+			    IF (
+			        DataAtual >= DataRealizada,
+			        [Saldo Caixa Projetado]
+			    )
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 035ffb7e-65c2-4f65-9488-305aca4fbb52
+
+
+	measure 'Margem de Caixa %' =
+			
+			DIVIDE(
+			    [Geração de Caixa],
+			    [Entradas de Caixa]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 9ef0a49f-7f2a-4dc8-97b7-6da3564f9322
+
+	measure 'Var. Margem de Caixa p.p.' =
+			
+			VAR Atual =
+			    [Margem de Caixa %]
+			
+			VAR Anterior =
+			    CALCULATE(
+			        [Margem de Caixa %],
+			        DATEADD(
+			            DIM_DATA[Data],
+			            -1,
+			            MONTH
+			        )
+			    )
+			
+			RETURN
+			    (Atual - Anterior) * 100
+		lineageTag: 2722d0a2-f8a2-42a4-b6d9-d75e9db541a0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Medida
+		lineageTag: ebe90719-1cbd-47ff-a357-23a593026d86
+
+		annotation 43dbc3e8-3a1c-4b6f-9923-b49ff7d6691c = True
+
+	measure 'Recebíveis 60+' =
+			
+			CALCULATE(
+			    [Saldo a Receber],
+			    FATO_RECEBIVEIS[FaixaAging] IN {
+			        "61-90 dias",
+			        "90+ dias"
+			    }
+			)
+		formatString: 0
+		lineageTag: 1a0f9514-c9bc-4706-bc5e-f860d92f2ae5
+
+	measure 'Atraso Médio' =
+			
+			AVERAGEX(
+			    FILTER(
+			        FATO_RECEBIVEIS,
+			        FATO_RECEBIVEIS[Status] = "Vencido"
+			    ),
+			    FATO_RECEBIVEIS[DiasAtraso]
+			)
+		formatString: 0" dias"
+		lineageTag: 21499318-66bc-41ca-bae5-29386328f213
+
+
+	measure 'Cor Aging' =
+			
+			SWITCH(
+			    SELECTEDVALUE(FATO_RECEBIVEIS[FaixaAging]),
+			    "A vencer", "#70C58A",
+			    "1-15 dias", "#4BC092",
+			    "16-30 dias", "#479F7D",
+			    "31-60 dias", "#E5B77A",
+			    "61-90 dias", "#E88F72",
+			    "90+ dias", "#D64550",
+			    "#479F7D"
+			)
+		lineageTag: 30563820-d0e7-4824-acad-fdba757ef565
+
+	measure 'Insight Recebíveis' = ```
+			
+			VAR Indicador =
+			    SELECTEDVALUE(DIM_INSIGHTS_RECEBIVEIS[Indicador])
+			
+			RETURN
+			SWITCH(
+			    Indicador,
+			
+			    "INADIMPLÊNCIA",
+			        FORMAT([Inadimplência %], "0%")
+			        & " do saldo está vencido",
+			
+			    "60+ DIAS",
+			        FORMAT([Recebíveis 60+], "R$ #,##0,,") 
+			        & " vencidos há mais de 60 dias",
+			
+			    "90+ DIAS",
+			        FORMAT([Recebíveis 90+], "R$ #,##0,,")
+			        & " em atraso crítico",
+			
+			    "ATRASO MÉDIO",
+			        FORMAT([Atraso Médio], "0")
+			        & " dias de atraso médio",
+			
+			    "A VENCER",
+			        FORMAT([Recebíveis a Vencer], "R$ #,##0,,")
+			        & " ainda dentro do prazo"
+			)
+			```
+		lineageTag: 57d80575-cc4f-4b7d-9c9b-80bfbbd15234
+
+	measure 'Recebíveis 90+' =
+			
+			CALCULATE(
+			    [Saldo a Receber],
+			    FATO_RECEBIVEIS[FaixaAging] = "90+ dias"
+			)
+		formatString: 0
+		lineageTag: c92af91e-f6f7-4cb1-b04e-c72b780eeb62
+
+	measure 'Recebíveis 90+ %' =
+			
+			DIVIDE(
+			    [Recebíveis 90+],
+			    [Saldo a Receber]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 09e924bc-3473-4d1d-ad64-837615d8ff1c
+
+
+	measure 'Status Insight Recebíveis' =
+			
+			VAR Indicador =
+			    SELECTEDVALUE(DIM_INSIGHTS_RECEBIVEIS[Indicador])
+			
+			RETURN
+			SWITCH(
+			    Indicador,
+			
+			    "INADIMPLÊNCIA",
+			        IF([Inadimplência %] >= 0.30, "🔴", "🟢"),
+			
+			    "60+ DIAS",
+			        IF([Recebíveis 60+ %] >= 0.15, "🔴", "🟢"),
+			
+			    "90+ DIAS",
+			        IF([Recebíveis 90+ %] >= 0.08, "🔴", "🟢"),
+			
+			    "ATRASO MÉDIO",
+			        IF([Atraso Médio] >= 30, "🔴", "🟢"),
+			
+			    "A VENCER",
+			        "🟢"
+			)
+		lineageTag: 032faf61-f47f-4c5a-bbc4-3632583cdcde
+
+	measure 'Recebíveis 60+ %' =
+			
+			DIVIDE(
+			    [Recebíveis 60+],
+			    [Saldo a Receber]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 07ca1886-fe8f-4c22-b7c8-6a93bf94476d
+
+
+	measure Recebido =
+			
+			SUM(
+			    FATO_RECEBIVEIS[ValorRecebido]
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 0d6117d3-2014-4edd-9b99-793456bff25f
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Recebido no Período' =
+			
+			SUM(FATO_RECEBIVEIS[ValorRecebido])
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 5f2707fd-1c38-4d17-ae15-ad07d1fa80a4
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure '% Recebimento' =
+			
+			VAR Recebido =
+			    CALCULATE(
+			        SUM(FATO_RECEBIVEIS[ValorRecebido]),
+			        TREATAS(
+			            VALUES(DIM_DATA[Data]),
+			            FATO_RECEBIVEIS[DataRecebimento]
+			        )
+			    )
+			
+			VAR Vencimentos =
+			    CALCULATE(
+			        SUM(FATO_RECEBIVEIS[ValorTitulo]),
+			        TREATAS(
+			            VALUES(DIM_DATA[Data]),
+			            FATO_RECEBIVEIS[DataVencimento]
+			        )
+			    )
+			
+			RETURN
+			DIVIDE(
+			    Recebido,
+			    Vencimentos,
+			    0
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: e942eb7c-4e1a-4b21-98c8-315340a1b815
+
+	measure 'Recebido no Período 2' =
+			
+			CALCULATE(
+			    SUM(FATO_RECEBIVEIS[ValorRecebido]),
+			    TREATAS(
+			        VALUES(DIM_DATA[Data]),
+			        FATO_RECEBIVEIS[DataRecebimento]
+			    )
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 9bd0dfad-1d64-4ea8-a108-6e003cc93460
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Prazo Médio de Recebimento' =
+			
+			VAR BaseRecebimentos =
+			    CALCULATETABLE(
+			        FATO_RECEBIVEIS,
+			        TREATAS(
+			            VALUES(DIM_DATA[Data]),
+			            FATO_RECEBIVEIS[DataRecebimento]
+			        )
+			    )
+			
+			RETURN
+			AVERAGEX(
+			    FILTER(
+			        BaseRecebimentos,
+			        NOT ISBLANK(FATO_RECEBIVEIS[DataEmissao])
+			            &&
+			        NOT ISBLANK(FATO_RECEBIVEIS[DataRecebimento])
+			    ),
+			    DATEDIFF(
+			        FATO_RECEBIVEIS[DataEmissao],
+			        FATO_RECEBIVEIS[DataRecebimento],
+			        DAY
+			    )
+			)
+		formatString: 0
+		lineageTag: 85d9d84d-530d-437c-bd15-2574dbe51349
+
+	measure 'Vencimentos no Período' =
+			
+			CALCULATE(
+			    SUM(FATO_RECEBIVEIS[ValorTitulo]),
+			    TREATAS(
+			        VALUES(DIM_DATA[Data]),
+			        FATO_RECEBIVEIS[DataVencimento]
+			    )
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: be8b2456-8ba2-4213-904b-68d2f0293793
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Recebimentos no Período' =
+			
+			CALCULATE(
+			    SUM(FATO_RECEBIVEIS[ValorRecebido]),
+			    TREATAS(
+			        VALUES(DIM_DATA[Data]),
+			        FATO_RECEBIVEIS[DataRecebimento]
+			    )
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 85a2c006-ccb3-49ff-bd44-1c46a4740d9e
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Gap Recebimentos x Vencimentos' =
+			
+			[Recebimentos no Período]
+			    - [Vencimentos no Período]
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 424cff7f-d58b-4539-80c8-f103d7858bd8
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Cobertura de Recebimentos %' =
+			
+			DIVIDE(
+			    [Recebimentos no Período],
+			    [Vencimentos no Período],
+			    0
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 03afb452-cb25-4cfb-b150-d1747ba63830
+
+	measure 'Prazo Médio de Recebimento - Exibição' =
+			
+			FORMAT(
+			    [Prazo Médio de Recebimento],
+			    "0"
+			) & " dias"
+		lineageTag: 3872fd92-33d7-4388-a8a8-ed71479e59cb
+
+	measure 'Saldo Vencido' =
+			
+			CALCULATE(
+			    [Saldo a Receber],
+			    FATO_RECEBIVEIS[Status] = "Vencido"
+			)
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: bc207d71-43d0-4c47-82b0-bfe36d1dbf4c
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Saldo em Aberto' =
+			
+			[Saldo a Receber]
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 1e930e20-8bdd-4ee5-925d-bf8fc1409fd5
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Média Saldo Carteira' =
+			
+			AVERAGEX(
+			    ALLSELECTED(DIM_CLIENTE[ClienteID]),
+			    CALCULATE([Saldo em Aberto])
+			)
+		lineageTag: 51707961-6a57-42e3-8cc1-2273b370a260
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Média Inadimplência Carteira' =
+			
+			CALCULATE(
+			    [Inadimplência %],
+			    REMOVEFILTERS(DIM_CLIENTE)
+			)
+		lineageTag: b52fdda2-7c69-4a64-b682-fa57a33ea9a0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Cor Mapa de Risco' =
+			
+			VAR Saldo = [Saldo em Aberto]
+			VAR Inadimplencia = [Inadimplência %]
+			VAR CorteSaldo = [Média Saldo Carteira]
+			VAR CorteInadimplencia = [Média Inadimplência Carteira]
+			
+			RETURN
+			SWITCH(
+			    TRUE(),
+			
+			    Saldo >= CorteSaldo
+			        && Inadimplencia >= CorteInadimplencia,
+			        "#E74C5B",
+			
+			    Saldo < CorteSaldo
+			        && Inadimplencia >= CorteInadimplencia,
+			        "#F2C94C",
+			
+			    "#58C77A"
+			)
+		lineageTag: ad4cd35a-399c-4102-ab0d-891f9ff775d9
+
+	measure 'Recebido no Prazo' =
+			
+			CALCULATE(
+			    SUM(FATO_RECEBIVEIS[ValorRecebido]),
+			    TREATAS(
+			        VALUES(DIM_DATA[Data]),
+			        FATO_RECEBIVEIS[DataRecebimento]
+			    ),
+			    FILTER(
+			        FATO_RECEBIVEIS,
+			        NOT ISBLANK(FATO_RECEBIVEIS[DataRecebimento])
+			            &&
+			        FATO_RECEBIVEIS[DataRecebimento]
+			            <= FATO_RECEBIVEIS[DataVencimento]
+			    )
+			)
+		formatString: 0
+		lineageTag: fa6b7564-22d1-407e-9927-d21b75c2f51a
+
+	measure 'Recebido com Atraso' =
+			
+			CALCULATE(
+			    SUM(FATO_RECEBIVEIS[ValorRecebido]),
+			    TREATAS(
+			        VALUES(DIM_DATA[Data]),
+			        FATO_RECEBIVEIS[DataRecebimento]
+			    ),
+			    FILTER(
+			        FATO_RECEBIVEIS,
+			        NOT ISBLANK(FATO_RECEBIVEIS[DataRecebimento])
+			            &&
+			        FATO_RECEBIVEIS[DataRecebimento]
+			            > FATO_RECEBIVEIS[DataVencimento]
+			    )
+			)
+		formatString: 0
+		lineageTag: 73469722-d7a6-405b-888f-1e5191da7089
+
+	measure '% Recebido no Prazo' =
+			
+			DIVIDE(
+			    [Recebido no Prazo],
+			    [Recebido no Prazo] + [Recebido com Atraso],
+			    0
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 09826cb4-880c-4a9c-8824-b7765af0265a
+
+	measure '% Recebido com Atraso' =
+			
+			DIVIDE(
+			    [Recebido com Atraso],
+			    [Recebido no Prazo] + [Recebido com Atraso],
+			    0
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: b8b2b2d5-df22-4528-b974-ab513a8dae2b
+
+	measure 'Data Corte Realizado' =
+			CALCULATE ( MAX ( FATO_DRE[Competencia] ), ALL ( FATO_DRE ) )
+		formatString: dd/mm/yyyy
+		displayFolder: Layout
+		lineageTag: 4f21de07-9cd3-637b-3218-beb8cae953cb
+
+	measure 'Receita Líquida Orçada Comparável' =
+			VAR c = [Data Corte Realizado]
+			RETURN CALCULATE ( [Receita Líquida Orçada], KEEPFILTERS ( DIM_DATA[Data] <= c ) )
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		displayFolder: Layout
+		lineageTag: 1d5de6fe-a519-6f4e-14b9-49c200227124
+
+	measure 'EBITDA Orçado Comparável' =
+			VAR c = [Data Corte Realizado]
+			RETURN CALCULATE ( [EBITDA Orçado], KEEPFILTERS ( DIM_DATA[Data] <= c ) )
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		displayFolder: Layout
+		lineageTag: 02d4c067-0391-a2f7-fd06-f7549f2963a9
+
+	measure 'DRE Orçado Comparável' =
+			VAR c = [Data Corte Realizado]
+			RETURN CALCULATE ( [Valor Orçado], KEEPFILTERS ( DIM_DATA[Data] <= c ) )
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		displayFolder: Layout
+		lineageTag: 21338a3d-0907-2c6d-8fb6-0fd8b26bb866
+
+	measure 'DRE Var vs Orçado R$' =
+			[Valor DRE Realizado] - [DRE Orçado Comparável]
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		displayFolder: Layout
+		lineageTag: 910724d5-b82a-2c5f-24c6-bac296c7b79e
+
+	measure 'DRE Var vs Orçado %' =
+			DIVIDE ( [DRE Var vs Orçado R$], ABS ( [DRE Orçado Comparável] ) )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Layout
+		lineageTag: e4527676-cd0b-bdf7-d762-70f4b75ab331
+
+	measure 'DRE % da Receita Líquida' =
+			DIVIDE ( [Valor DRE Realizado], CALCULATE ( [Receita Líquida], REMOVEFILTERS ( DIM_CONTA_CONTABIL ) ) )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Layout
+		lineageTag: f2736df4-2c6e-12e7-6e42-0be92a0c3681
+
+	measure 'Atingimento Receita Comparável %' =
+			DIVIDE ( [Receita Líquida], [Receita Líquida Orçada Comparável] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Layout
+		lineageTag: b2a81bca-b3b0-6b6e-805e-161664806bc3
+
+	measure 'Gap Receita Comparável R$' =
+			[Receita Líquida] - [Receita Líquida Orçada Comparável]
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		displayFolder: Layout
+		lineageTag: ce1b4a47-f145-8c00-1834-bd1bba80d9f4
+
+	measure 'Var Receita Comparável %' =
+			DIVIDE ( [Gap Receita Comparável R$], [Receita Líquida Orçada Comparável] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Layout
+		lineageTag: 7e38dac7-de3e-4864-68f2-16737d6abfd5
+
+	measure 'Atingimento EBITDA Comparável %' =
+			DIVIDE ( [EBITDA], [EBITDA Orçado Comparável] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Layout
+		lineageTag: 6d4ab36a-924f-3d28-1288-847e534e1b3b
+
+	measure 'Gap EBITDA Comparável R$' =
+			[EBITDA] - [EBITDA Orçado Comparável]
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		displayFolder: Layout
+		lineageTag: 682f2ee7-37c6-0fe8-1374-d9de8c46d42f
+
+	measure 'Var EBITDA Comparável %' =
+			DIVIDE ( [Gap EBITDA Comparável R$], ABS ( [EBITDA Orçado Comparável] ) )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Layout
+		lineageTag: 18328aef-4796-d1e2-3d1e-817cb58ae43a
+
+	measure 'Margem EBITDA Orçada Comparável %' =
+			DIVIDE ( [EBITDA Orçado Comparável], [Receita Líquida Orçada Comparável] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Layout
+		lineageTag: 4c4bcf36-7b6d-0825-4040-96fefa20fd74
+
+	measure 'Receita Líquida AA Comparável' =
+			VAR c = [Data Corte Realizado]
+			RETURN CALCULATE ( [Receita Líquida AA], KEEPFILTERS ( DIM_DATA[Data] <= c ) )
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		displayFolder: Layout
+		lineageTag: 36e52bf2-1667-2975-05b8-ba26ab115b59
+
+	measure 'YoY Receita Comparável %' =
+			DIVIDE ( [Receita Líquida] - [Receita Líquida AA Comparável], [Receita Líquida AA Comparável] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Layout
+		lineageTag: 515aa56e-f162-57c5-1c4b-3f54ff088baa
+
+	measure 'Margem Líquida %' =
+			DIVIDE ( [Resultado Líquido], [Receita Líquida] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Layout
+		lineageTag: 52b70cac-f6ea-bbb1-a570-e5bc1b63603a
+
+	measure 'Média Mensal Entradas' =
+			AVERAGEX ( VALUES ( DIM_DATA[AnoMes] ), [Entradas de Caixa] )
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		displayFolder: Layout
+		lineageTag: baec07f6-9f68-3cc1-5397-6f5c3333f0d3
+
+	measure 'Média Mensal Saídas' =
+			AVERAGEX ( VALUES ( DIM_DATA[AnoMes] ), [Saídas de Caixa] )
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		displayFolder: Layout
+		lineageTag: 9e0a54b0-8754-3846-ef5d-5b60203c76dc
+
+	measure 'Contratos de Dívida Ativos' =
+			CALCULATE ( DISTINCTCOUNT ( FATO_DIVIDA[EmprestimoID] ), REMOVEFILTERS ( DIM_DATA ), FATO_DIVIDA[Status] = "Em aberto" )
+		formatString: 0
+		displayFolder: Layout
+		lineageTag: 453cacc4-3f15-bba7-50d0-f14ae43e7703
+
+	measure 'KPI · Receita Sub' =
+			VAR v = [Var Receita Comparável %]
+			VAR y = [YoY Receita Comparável %]
+			RETURN
+			IF ( ISBLANK ( v ), BLANK (),
+			    IF ( v >= 0, "▲ ", "▼ " ) & FORMAT ( ABS ( v ), "0.0%" ) & " vs orçado"
+			    & IF ( ISBLANK ( y ), "", "   ·   " & IF ( y >= 0, "▲ ", "▼ " ) & FORMAT ( ABS ( y ), "0.0%" ) & " vs ano ant." ) )
+		displayFolder: Layout
+		lineageTag: 8067f5ca-1028-937c-03d3-1684a971df7f
+
+	measure 'KPI · Receita Cor' =
+			IF ( [Var Receita Comparável %] >= 0, "#0F6B4E", "#B4531F" )
+		displayFolder: Layout
+		lineageTag: cf3782d7-c3c8-9131-5e31-8af36d55929a
+
+	measure 'KPI · EBITDA Sub' =
+			VAR v = [Var EBITDA Comparável %]
+			RETURN IF ( ISBLANK ( v ), BLANK (), IF ( v >= 0, "▲ ", "▼ " ) & FORMAT ( ABS ( v ), "0.0%" ) & " vs orçado" )
+		displayFolder: Layout
+		lineageTag: 5bbc83d8-083a-91b2-d140-fb49861cc6ca
+
+	measure 'KPI · EBITDA Cor' =
+			IF ( [Var EBITDA Comparável %] >= 0, "#0F6B4E", "#B4531F" )
+		displayFolder: Layout
+		lineageTag: 705ccf71-ed64-d895-11d6-5eee866d519d
+
+	measure 'KPI · Margem EBITDA Sub' =
+			VAR o = [Margem EBITDA Orçada Comparável %]
+			VAR d = ( [Margem EBITDA %] - o ) * 100
+			RETURN IF ( ISBLANK ( o ), BLANK (), "Orçado " & FORMAT ( o, "0.0%" ) & "   ·   " & IF ( d >= 0, "+", "" ) & FORMAT ( d, "0.0" ) & " p.p." )
+		displayFolder: Layout
+		lineageTag: b8d4aaad-9e16-fac5-ac73-828955b065ac
+
+	measure 'KPI · Margem EBITDA Cor' =
+			IF ( [Margem EBITDA %] >= [Margem EBITDA Orçada Comparável %], "#0F6B4E", "#B4531F" )
+		displayFolder: Layout
+		lineageTag: 1e287fe7-cb99-4a59-4340-1f5d22c35a8b
+
+	measure 'KPI · Margem Bruta Sub' =
+			"Lucro bruto " & "R$ " & FORMAT ( [Lucro Bruto] / 1000000, "#,0.0" ) & " mi"
+		displayFolder: Layout
+		lineageTag: d5d814bb-d884-b3b6-9d2c-563317d8852d
+
+	measure 'KPI · Resultado Sub' =
+			"Margem líquida " & FORMAT ( [Margem Líquida %], "0.0%" )
+		displayFolder: Layout
+		lineageTag: 279d7ae2-2790-7e19-eb6c-431b5c7268a7
+
+	measure 'KPI · Caixa Sub' =
+			"Posição em " & FORMAT ( [Última Data Realizada], "dd/mm/yyyy" )
+		displayFolder: Layout
+		lineageTag: 00487d97-28ee-65b1-036a-36173c487472
+
+	measure 'KPI · Receita Bruta Sub' =
+			"Deduções de " & FORMAT ( DIVIDE ( ABS ( [Deduções da Receita] ), [Receita Bruta] ), "0.0%" ) & " da receita bruta"
+		displayFolder: Layout
+		lineageTag: 5e188475-5041-21cd-ff33-53b147d10511
+
+	measure 'KPI · Lucro Bruto Sub' =
+			"Margem bruta " & FORMAT ( [Margem Bruta %], "0.0%" )
+		displayFolder: Layout
+		lineageTag: 6a892caf-3f5f-3be3-274a-da1961f22339
+
+	measure 'KPI · OPEX Sub' =
+			FORMAT ( [OPEX sobre Receita %], "0.0%" ) & " da receita líquida"
+		displayFolder: Layout
+		lineageTag: c9a99bed-3b90-337b-910c-9cd2167e0921
+
+	measure 'KPI · EBITDA Margem Sub' =
+			"Margem EBITDA " & FORMAT ( [Margem EBITDA %], "0.0%" )
+		displayFolder: Layout
+		lineageTag: e6200d59-8410-4af6-f851-ccda11ec3d07
+
+	measure 'KPI · Ating Receita Sub' =
+			"R$ " & FORMAT ( [Receita Líquida] / 1000000, "#,0.0" ) & " mi de R$ " & FORMAT ( [Receita Líquida Orçada Comparável] / 1000000, "#,0.0" ) & " mi orçados"
+		displayFolder: Layout
+		lineageTag: 8c2c1df9-ca20-7fa0-fd79-d6b533948a4d
+
+	measure 'KPI · Ating EBITDA Sub' =
+			"R$ " & FORMAT ( [EBITDA] / 1000000, "#,0.0" ) & " mi de R$ " & FORMAT ( [EBITDA Orçado Comparável] / 1000000, "#,0.0" ) & " mi orçados"
+		displayFolder: Layout
+		lineageTag: f75341eb-e869-2f7c-5b13-ef7025b231a1
+
+	measure 'KPI · Ating Receita Cor' =
+			IF ( [Atingimento Receita Comparável %] >= 1, "#0F6B4E", "#B4531F" )
+		displayFolder: Layout
+		lineageTag: 699f7987-4368-922e-862e-0053bf42b31a
+
+	measure 'KPI · Ating EBITDA Cor' =
+			IF ( [Atingimento EBITDA Comparável %] >= 1, "#0F6B4E", "#B4531F" )
+		displayFolder: Layout
+		lineageTag: 9b5bae37-b1c7-b297-586c-412d46286f4e
+
+	measure 'KPI · Acumulado Sub' =
+			"Acumulado até " & FORMAT ( [Data Corte Realizado], "mmm/yy" )
+		displayFolder: Layout
+		lineageTag: 8a9c2bbe-1cfe-5aa2-a43a-3c45722d917c
+
+	measure 'KPI · Forecast Sub' =
+			"Orçado no ano " & "R$ " & FORMAT ( [Receita Líquida Orçada] / 1000000, "#,0.0" ) & " mi"
+		displayFolder: Layout
+		lineageTag: b4667b15-9183-7f2e-e819-062877bbd305
+
+	measure 'KPI · Forecast Margem Sub' =
+			"Margem orçada " & FORMAT ( [Margem EBITDA Orçada %], "0.0%" )
+		displayFolder: Layout
+		lineageTag: b0b748b5-daec-780c-4249-7d226d5ee6a9
+
+	measure 'KPI · Gap Forecast Cor' =
+			IF ( [Gap Forecast Receita vs Orçado %] >= 0, "#0F6B4E", "#B4531F" )
+		displayFolder: Layout
+		lineageTag: 1ae511bc-9e3b-7212-401c-86b47cd55e58
+
+	measure 'KPI · Gap Forecast Sub' =
+			IF ( [Gap Forecast Receita vs Orçado %] >= 0, "▲ ", "▼ " ) & FORMAT ( ABS ( [Gap Forecast Receita vs Orçado %] ), "0.0%" ) & " do forecast vs orçado"
+		displayFolder: Layout
+		lineageTag: 18487bfd-a7b0-2b97-f820-53e01fa5a784
+
+	measure 'KPI · Entradas Sub' =
+			"Média mensal " & "R$ " & FORMAT ( [Média Mensal Entradas] / 1000000, "#,0.0" ) & " mi"
+		displayFolder: Layout
+		lineageTag: 30bc6014-5e91-8144-5395-6b9b5b46007f
+
+	measure 'KPI · Saídas Sub' =
+			"Média mensal " & "R$ " & FORMAT ( [Média Mensal Saídas] / 1000000, "#,0.0" ) & " mi"
+		displayFolder: Layout
+		lineageTag: c9a1edc6-c21b-e038-7361-b83e3f5f5e82
+
+	measure 'KPI · Geração Sub' =
+			"Margem de caixa " & FORMAT ( [Margem de Caixa %], "0.0%" )
+		displayFolder: Layout
+		lineageTag: e7d5f93c-a045-aeb4-710c-7970aaf4106c
+
+	measure 'KPI · FCO Sub' =
+			"Invest. " & "R$ " & FORMAT ( [Fluxo de Investimentos] / 1000000, "#,0.0" ) & " mi" & "  ·  Financ. " & "R$ " & FORMAT ( [Fluxo de Financiamento] / 1000000, "#,0.0" ) & " mi"
+		displayFolder: Layout
+		lineageTag: 05a0e2d2-6701-37a9-33b9-1fe199264994
+
+	measure 'KPI · Receber Sub' =
+			"R$ " & FORMAT ( [Recebíveis Vencidos] / 1000000, "#,0.0" ) & " mi" & " vencidos"
+		displayFolder: Layout
+		lineageTag: 85f13147-24ba-a280-ca82-f481dce0359c
+
+	measure 'KPI · Inadimplência Sub' =
+			FORMAT ( [Clientes Inadimplentes], "0" ) & " clientes com títulos vencidos"
+		displayFolder: Layout
+		lineageTag: 3fc27cac-2b0b-24a0-52a4-dd7d22370474
+
+	measure 'KPI · Pagar Sub' =
+			"R$ " & FORMAT ( [Pagáveis Vencidos] / 1000000, "#,0.0" ) & " mi" & " vencidos"
+		displayFolder: Layout
+		lineageTag: c9f1d913-a3cb-2947-666d-54296580c301
+
+	measure 'KPI · DSO Sub' =
+			"Prazo médio de recebimento"
+		displayFolder: Layout
+		lineageTag: b79488e4-3ef8-7ce5-a407-bc64885964ee
+
+	measure 'KPI · DPO Sub' =
+			"Prazo médio de pagamento"
+		displayFolder: Layout
+		lineageTag: 26883f9b-5d01-24ef-eb0d-1da6ecf3f53e
+
+	measure 'KPI · Dívida Sub' =
+			FORMAT ( [Contratos de Dívida Ativos], "0" ) & " contratos em aberto"
+		displayFolder: Layout
+		lineageTag: 1f5d344c-4586-8cef-e13d-0bd467332eb4
+
+	measure 'KPI · Alavancagem Sub' =
+			"EBITDA 12M " & "R$ " & FORMAT ( [EBITDA 12M] / 1000000, "#,0.0" ) & " mi"
+		displayFolder: Layout
+		lineageTag: 24848923-691c-cdf8-0c58-2fe4b5d3825d
+
+	measure 'KPI · Cobertura Sub' =
+			"Serviço da dívida 12M " & "R$ " & FORMAT ( [Serviço Dívida 12M] / 1000000, "#,0.0" ) & " mi"
+		displayFolder: Layout
+		lineageTag: 17bf6245-89de-bcd0-5b25-df85039626cb
+
+	measure 'KPI · CAPEX Sub' =
+			FORMAT ( [CAPEX sobre Receita %], "0.0%" ) & " da receita líquida"
+		displayFolder: Layout
+		lineageTag: 8f9087d3-a2f9-6d92-192a-34e9df3855d8
+
+	measure 'KPI · Headcount Sub' =
+			"Custo médio R$ " & FORMAT ( [Custo Médio por Colaborador] / 1000, "#,0.0" ) & " mil/mês"
+		displayFolder: Layout
+		lineageTag: e0e9361f-7709-d3ac-071c-302a0a79444a
+
+	measure 'KPI · Folha Sub' =
+			"Custo total " & "R$ " & FORMAT ( [Custo Total Pessoal] / 1000000, "#,0.0" ) & " mi"
+		displayFolder: Layout
+		lineageTag: 3d8e1af4-65fe-6210-3a78-ee4b1c5c5b17
+
+	measure 'KPI · Neutro Cor' =
+			"#5B6B73"
+		displayFolder: Layout
+		lineageTag: 8001b032-31b5-9277-0aa0-b4ca0ae1b07d
+
+	column Medidas
+		lineageTag: 82036d20-8e7f-4631-b39e-401a140f94d6
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Medidas]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Medidas = calculated
+		mode: import
+		source =
+				
+				DATATABLE(
+				    "Medidas", STRING,
+				    {
+				        { "" }
+				    }
+				)
+
+	annotation PBI_Id = b11ab0eabfda470c8e10ac8fdfbc2715
+

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Valora - Financeiro Executivo"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "923bd85e-4959-465d-b35f-080b7c1ddeb1"
+  }
+}

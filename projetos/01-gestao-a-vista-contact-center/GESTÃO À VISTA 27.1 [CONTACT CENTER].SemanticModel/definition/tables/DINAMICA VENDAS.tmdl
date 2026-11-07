@@ -1,0 +1,46 @@
+table 'DINAMICA VENDAS'
+	lineageTag: 4458f914-cb5d-428b-83f0-17762c6a5c64
+
+	column Value1
+		lineageTag: 8bb19a9e-7792-4c38-9cf9-435d1942e738
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Value1]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Value2
+		lineageTag: 60bab724-1b99-4e0a-bced-6a560f07b39e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Value2]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Value3
+		formatString: 0
+		lineageTag: 6530f4af-a1af-4817-97e7-953b7eb818a8
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'DINAMICA VENDAS' = calculated
+		mode: import
+		source =
+				{
+				    ("SUPER CANAL", NAMEOF('TB CALL CENTER'[SUPER_CANAL]), 0),
+				    ("MODALIDADE", NAMEOF('TB CALL CENTER'[MODALIDADE]), 1),
+				    ("CURSO", NAMEOF('TB CALL CENTER'[CURSO]), 2),
+				    ("UNIDADE", NAMEOF('TB CALL CENTER'[NOME_SIGA]), 3),
+				    ("GERENTE", NAMEOF('TB CALL CENTER'[GERENTE]), 4),
+				    ("REGIONAL", NAMEOF('TB CALL CENTER'[NOME_REGIONAL]), 5),
+				    ("DIRETOR", NAMEOF('TB CALL CENTER'[DIRETOR]), 6),
+				    ("EPS", NAMEOF('TB CALL CENTER'[EPS]), 7),
+				    ("DATA", NAMEOF('Dim_Data TAB'[Date]), 8),
+				    ("PRODUTO", NAMEOF('TB CALL CENTER'[TIPO_CURSO]), 9),
+				    ("CANAL", NAMEOF('TB CALL CENTER'[CANAL]), 10)}
+
+	annotation PBI_Id = 4910a32b845f4b64833c48fe9e76b300
+

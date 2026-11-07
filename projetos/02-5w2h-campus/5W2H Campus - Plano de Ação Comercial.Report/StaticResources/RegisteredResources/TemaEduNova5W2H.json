@@ -1,0 +1,237 @@
+{
+  "name": "EduNova · Controle Campus 5W2H",
+  "dataColors": [
+    "#0C718B",
+    "#F08A24",
+    "#14A38B",
+    "#E8A317",
+    "#D96BA0",
+    "#3D7BE0",
+    "#13505E",
+    "#D9473F",
+    "#4FABC1",
+    "#2E3138"
+  ],
+  "background": "#FFFFFF",
+  "foreground": "#2E3138",
+  "tableAccent": "#0C718B",
+  "good": "#1E9E5A",
+  "neutral": "#E8A317",
+  "bad": "#D9473F",
+  "maximum": "#0C718B",
+  "center": "#D7E6E9",
+  "minimum": "#D6F2F8",
+  "textClasses": {
+    "callout": {
+      "fontSize": 28,
+      "fontFace": "Calibri",
+      "color": "#2E3138"
+    },
+    "title": {
+      "fontSize": 13,
+      "fontFace": "Calibri",
+      "color": "#2E3138"
+    },
+    "header": {
+      "fontSize": 12,
+      "fontFace": "Calibri",
+      "color": "#2E3138"
+    },
+    "label": {
+      "fontSize": 11,
+      "fontFace": "Calibri",
+      "color": "#4B4F5A"
+    },
+    "largeTitle": {
+      "fontSize": 16,
+      "fontFace": "Calibri",
+      "color": "#2E3138"
+    },
+    "smallLabel": {
+      "fontSize": 10,
+      "fontFace": "Calibri",
+      "color": "#6B6F7B"
+    }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "border": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#D7E6E9"
+              }
+            },
+            "radius": 10
+          }
+        ],
+        "dropShadow": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#13505E"
+              }
+            },
+            "transparency": 94,
+            "position": "Outer",
+            "preset": "Custom",
+            "shadowBlur": 12,
+            "shadowDistance": 2,
+            "angle": 90,
+            "shadowSpread": 0
+          }
+        ],
+        "padding": [
+          {
+            "top": 10,
+            "bottom": 10,
+            "left": 14,
+            "right": 14
+          }
+        ],
+        "title": [
+          {
+            "fontColor": {
+              "solid": {
+                "color": "#2E3138"
+              }
+            },
+            "fontSize": 13,
+            "fontFamily": "Calibri",
+            "bold": true
+          }
+        ],
+        "subTitle": [
+          {
+            "fontColor": {
+              "solid": {
+                "color": "#6B6F7B"
+              }
+            },
+            "fontSize": 10,
+            "fontFamily": "Calibri"
+          }
+        ],
+        "valueAxis": [
+          {
+            "gridlineColor": {
+              "solid": {
+                "color": "#E4F0F2"
+              }
+            },
+            "labelColor": {
+              "solid": {
+                "color": "#6B6F7B"
+              }
+            },
+            "fontFamily": "Calibri"
+          }
+        ],
+        "categoryAxis": [
+          {
+            "labelColor": {
+              "solid": {
+                "color": "#6B6F7B"
+              }
+            },
+            "fontFamily": "Calibri"
+          }
+        ],
+        "legend": [
+          {
+            "labelColor": {
+              "solid": {
+                "color": "#4B4F5A"
+              }
+            },
+            "fontFamily": "Calibri"
+          }
+        ],
+        "visualHeader": [
+          {
+            "foreground": {
+              "solid": {
+                "color": "#6B6F7B"
+              }
+            },
+            "border": {
+              "solid": {
+                "color": "#D7E6E9"
+              }
+            },
+            "background": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#EEF6F7"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "outspace": [
+          {
+            "color": {
+              "solid": {
+                "color": "#EEF6F7"
+              }
+            },
+            "transparency": 0
+          }
+        ]
+      }
+    },
+    "textbox": {
+      "*": {
+        "dropShadow": [
+          {
+            "show": false
+          }
+        ]
+      }
+    },
+    "actionButton": {
+      "*": {
+        "dropShadow": [
+          {
+            "show": false
+          }
+        ]
+      }
+    },
+    "slicer": {
+      "*": {
+        "dropShadow": [
+          {
+            "show": false
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,78 @@
+table DIM_CLIENTE
+	lineageTag: bdd6c49a-89bb-4ff9-9f89-1017f6f5fbd6
+
+	column ClienteID
+		dataType: string
+		lineageTag: 6e42a0f2-edb9-46f8-a249-5d1be0c152b6
+		summarizeBy: none
+		sourceColumn: ClienteID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cliente
+		dataType: string
+		lineageTag: e898eb99-6afd-46b7-babc-172fae07b8ec
+		summarizeBy: none
+		sourceColumn: Cliente
+
+		annotation SummarizationSetBy = Automatic
+
+	column Segmento
+		dataType: string
+		lineageTag: 646fd3dc-fbc2-4283-8d35-48c6e93fc20f
+		summarizeBy: none
+		sourceColumn: Segmento
+
+		annotation SummarizationSetBy = Automatic
+
+	column Porte
+		dataType: string
+		lineageTag: bdc84fc4-5d4a-487d-8dfa-0f6249a89570
+		summarizeBy: none
+		sourceColumn: Porte
+
+		annotation SummarizationSetBy = Automatic
+
+	column PrazoPadraoDias
+		dataType: int64
+		formatString: 0
+		lineageTag: 70ffd9d5-7be0-44bc-b595-dcd63537dc15
+		summarizeBy: none
+		sourceColumn: PrazoPadraoDias
+
+		annotation SummarizationSetBy = Automatic
+
+	column RiscoCredito
+		dataType: string
+		lineageTag: 2fe2b3dd-c1b1-4e21-be2b-986a4aa9e567
+		summarizeBy: none
+		sourceColumn: RiscoCredito
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnidadeOrigemID
+		dataType: string
+		lineageTag: 1f840453-902a-48e9-9eec-a45759342dd2
+		summarizeBy: none
+		sourceColumn: UnidadeOrigemID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_CLIENTE = m
+		mode: import
+		source =
+				let
+				    // DIM_CLIENTE: base fictícia embutida no modelo (csv compactado)
+				    Bin = Binary.Decompress(Binary.FromText(Text.Combine({
+				        "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"
+				    }), BinaryEncoding.Base64), Compression.Deflate),
+				    Fonte = Csv.Document(Bin, [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Cabecalhos = Table.PromoteHeaders(Fonte, [PromoteAllScalars = true]),
+				    Nulos = Table.TransformColumns(Cabecalhos, List.Transform(Table.ColumnNames(Cabecalhos), (c) => {c, (v) => if v = "" then null else v})),
+				    Colunas = Table.SelectColumns(Nulos, {"ClienteID", "Cliente", "Segmento", "Porte", "PrazoPadraoDias", "RiscoCredito", "UnidadeOrigemID"}, MissingField.UseNull),
+				    Tipos = Table.TransformColumnTypes(Colunas, {{"ClienteID", type text}, {"Cliente", type text}, {"Segmento", type text}, {"Porte", type text}, {"PrazoPadraoDias", Int64.Type}, {"RiscoCredito", type text}, {"UnidadeOrigemID", type text}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

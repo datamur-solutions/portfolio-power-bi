@@ -1,0 +1,155 @@
+table PARAM_REDUCAO_TMA
+	lineageTag: 779e5eb1-c38c-42ab-bc2e-6347f23689e3
+
+	measure 'Redução TMA %' =
+			
+			SELECTEDVALUE(
+			    'PARAM_REDUCAO_TMA'[Value],
+			    0.10
+			)
+		lineageTag: c5e70c1c-e2ae-49cf-b524-dae8983b59ac
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'TMA Meta Seg' =
+			
+			[TMA Atual Seg]
+			    * (1 - [Redução TMA %])
+		lineageTag: 1179e1de-9de6-458e-8e0e-79e8e986815e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'TMA Meta Formatado' =
+			
+			VAR _Segundos = [TMA Meta Seg]
+			VAR _Minutos = INT(DIVIDE(_Segundos, 60))
+			VAR _SegRestante = MOD(ROUND(_Segundos, 0), 60)
+			
+			RETURN
+			FORMAT(_Minutos, "00") &
+			":" &
+			FORMAT(_SegRestante, "00")
+		lineageTag: 32164301-6286-4b03-a656-20a06f3d2c63
+
+	measure 'Capacidade Atendimento TMA' =
+			
+			DIVIDE(
+			    [Tempo Total Atendimento Seg],
+			    [TMA Meta Seg],
+			    0
+			)
+		lineageTag: 64d21158-e474-4fcf-a608-917bddebcd77
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Atendimentos Potenciais TMA' =
+			
+			VAR _Capacidade =
+			    [Capacidade Atendimento TMA]
+			
+			VAR _Atual =
+			    [ATENDIDO]
+			
+			RETURN
+			MAX(
+			    0,
+			    ROUND(
+			        _Capacidade - _Atual,
+			        0
+			    )
+			)
+		lineageTag: 718bd92a-8dc9-4942-b720-48c0a53d9405
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Efetivos Potenciais TMA' =
+			
+			ROUND(
+			    [Atendimentos Potenciais TMA]
+			        * [EFETIVO/BASE],
+			    0
+			)
+		lineageTag: f93d6cec-df4f-4ded-912f-e7eed406f046
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Matrículas Potenciais TMA' =
+			
+			ROUND(
+			    [Efetivos Potenciais TMA]
+			        * [Conv Efetivo Matrícula %],
+			    0
+			)
+		lineageTag: 5654869c-6057-47a0-87a2-0cf494bcc409
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Pagamentos Potenciais TMA' =
+			
+			ROUND(
+			    [Efetivos Potenciais TMA]
+			        * [Conv Efetivo Pag %],
+			    0
+			)
+		lineageTag: a0d3f8c2-41c2-4aa5-b785-715f94c57443
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Matrículas Projetadas TMA' =
+			
+			[MATRICULAS]
+			    + [Matrículas Potenciais TMA]
+		lineageTag: 69dda8e9-6ddd-498d-969a-55ce41943260
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Pagamentos Projetados TMA' =
+			
+			[Pagamentos]
+			    + [Pagamentos Potenciais TMA]
+		lineageTag: f09c5099-bb14-46ff-86a9-2f5454cde616
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Ganho Capacidade TMA %' =
+			
+			DIVIDE(
+			    [Atendimentos Potenciais TMA],
+			    [ATENDIDO],
+			    0
+			)
+		lineageTag: 2a0fc389-9da6-414b-9de1-8718133bae55
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Medida
+		lineageTag: a1650e41-b13d-4657-b10d-777a653b54e1
+
+		annotation 43dbc3e8-3a1c-4b6f-9923-b49ff7d6691c = True
+
+	measure 'Medida 2'
+		lineageTag: 6c771759-0358-4659-9152-bfde86ca219c
+
+		annotation 43dbc3e8-3a1c-4b6f-9923-b49ff7d6691c = True
+
+	column Value
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: a2882537-27e1-49bb-873b-d846c71a1177
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition PARAM_REDUCAO_TMA = calculated
+		mode: import
+		source =
+				
+				GENERATESERIES(
+				    0,
+				    0.30,
+				    0.05
+				)
+
+	annotation PBI_Id = 13e3cbe6c5b14993841f6bf1402b255e
+

@@ -1,0 +1,694 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.2.0/schema.json",
+  "name": "4286241299193a473ed5",
+  "position": {
+    "x": 20,
+    "y": 128,
+    "z": 1014,
+    "width": 1240,
+    "height": 840,
+    "tabOrder": 13
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Projeção de inscritos (INS) e de matrículas (MAT)",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontWeight": "bold",
+                      "fontSize": "12pt",
+                      "color": "#13505E"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Soma da meta de inscritos (ou de matrículas) cadastrada nas ações do período. É o resultado esperado do plano.",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "11pt",
+                      "color": "#4B4F5A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "5pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Realizado",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontWeight": "bold",
+                      "fontSize": "12pt",
+                      "color": "#13505E"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Inscritos e matrículas lançados pelo consultor no fechamento de cada ação.",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "11pt",
+                      "color": "#4B4F5A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "5pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Atingimento",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontWeight": "bold",
+                      "fontSize": "12pt",
+                      "color": "#13505E"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Realizado ÷ projeção das ações já finalizadas (com resultado lançado). Ações ainda em andamento não entram, para não punir o que não terminou.",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "11pt",
+                      "color": "#4B4F5A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "5pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Plano preenchido (unidades)",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontWeight": "bold",
+                      "fontSize": "12pt",
+                      "color": "#13505E"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Unidades com pelo menos uma ação cadastrada no período ÷ unidades com consultor ativo. Referência: 90%.",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "11pt",
+                      "color": "#4B4F5A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "5pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Consultores com plano de ação lançado",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontWeight": "bold",
+                      "fontSize": "12pt",
+                      "color": "#13505E"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Consultores ativos (HC) que cadastraram ação no período ÷ consultores ativos. Referência: 90%.",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "11pt",
+                      "color": "#4B4F5A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "5pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Fechamento das ações",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontWeight": "bold",
+                      "fontSize": "12pt",
+                      "color": "#13505E"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Ações finalizadas com resultado (status diferente de Planejada, ou realizado/custo lançado) ÷ ações cadastradas. Referência: 85%.",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "11pt",
+                      "color": "#4B4F5A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "5pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Base de consultores, unidades e hierarquia",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontWeight": "bold",
+                      "fontSize": "12pt",
+                      "color": "#13505E"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Vem da lista fixa Consultores 5W2H (cadastro de RH), completa e independente das ações: todos os consultores ativos aparecem, com ou sem ação.",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "11pt",
+                      "color": "#4B4F5A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "5pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Ações por HC",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontWeight": "bold",
+                      "fontSize": "12pt",
+                      "color": "#13505E"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Ações cadastradas ÷ consultores que cadastraram.",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "11pt",
+                      "color": "#4B4F5A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "5pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Quem cadastrou",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontWeight": "bold",
+                      "fontSize": "12pt",
+                      "color": "#13505E"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Compara o campo \"Criado por\" da ação com o consultor e o coordenador. No prazo = cadastrada até o dia de início da ação.",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "11pt",
+                      "color": "#4B4F5A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "5pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Produtos",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontWeight": "bold",
+                      "fontSize": "12pt",
+                      "color": "#13505E"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Ação com 1 produto: o total vai para o produto. Com 2 ou mais: usa a abertura por produto. Sem produto: \"Não informado\". \"Todos\" vale para os 4 produtos.",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "11pt",
+                      "color": "#4B4F5A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "5pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Conversão",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontWeight": "bold",
+                      "fontSize": "12pt",
+                      "color": "#13505E"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Matrículas ÷ inscritos. Prevista: projeção MAT ÷ projeção INS. Realizada: MAT ÷ INS realizados. Ações de conversão: Objetivo = Conversão (matrículas).",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "11pt",
+                      "color": "#4B4F5A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "5pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Custo",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontWeight": "bold",
+                      "fontSize": "12pt",
+                      "color": "#13505E"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Previsto no cadastro e realizado no fechamento (R$). Estouro = realizado − previsto das ações com custo realizado. Custo por inscrito = custo realizado ÷ inscritos realizados.",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "11pt",
+                      "color": "#4B4F5A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "5pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Semana",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontWeight": "bold",
+                      "fontSize": "12pt",
+                      "color": "#13505E"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Segunda a sábado, cortada na virada do mês, contada pela data de início da ação (S1 a S5).",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "11pt",
+                      "color": "#4B4F5A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "5pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Ações vencidas (aba Vencidas)",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontWeight": "bold",
+                      "fontSize": "12pt",
+                      "color": "#13505E"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Ações com Data Fim anterior à DT BASE. \"Sem fechamento\" = vencida e ainda Planejada; atraso em dias desde o Fim.",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "11pt",
+                      "color": "#4B4F5A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "5pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Mapa",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontWeight": "bold",
+                      "fontSize": "12pt",
+                      "color": "#13505E"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "A UF vem do nome da unidade (sigla depois de \"/\", sigla isolada ou nome do estado) e, se faltar, da filial. Unidades sem UF ficam fora do mapa e aparecem na tabela de localização.",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "11pt",
+                      "color": "#4B4F5A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "5pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Fonte",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontWeight": "bold",
+                      "fontSize": "12pt",
+                      "color": "#13505E"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Listas Ações 5W2H e Consultores 5W2H (app 5W2H Campus), embutidas no modelo e lidas pelo nome interno das colunas. Leads não entram no painel.",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "11pt",
+                      "color": "#4B4F5A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "5pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "24D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "24D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "24D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "24D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

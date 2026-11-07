@@ -1,0 +1,23 @@
+table DIM_CANAL
+	lineageTag: a3e886ec-c9ed-4fa2-977a-a23c8d5464a7
+
+	column ds_canal
+		lineageTag: eda2cefc-1b04-420f-bda2-434de9b9621f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: CAPCOM[ds_canal]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_CANAL = calculated
+		mode: import
+		source =
+				
+				FILTER(
+				    DISTINCT('CAPCOM'[ds_canal]),
+				    NOT(ISBLANK('CAPCOM'[ds_canal]))
+				        && 'CAPCOM'[ds_canal] <> ""
+				)
+
+	annotation PBI_Id = 54ba4d0eead545af9a99603c88663ba4
+

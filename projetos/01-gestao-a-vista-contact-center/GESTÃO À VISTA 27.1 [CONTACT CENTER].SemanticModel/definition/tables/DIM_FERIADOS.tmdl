@@ -1,0 +1,36 @@
+table DIM_FERIADOS
+	lineageTag: eb8e58b4-552f-46a3-ba74-30594a8d6bb4
+
+	column Data
+		formatString: Short Date
+		lineageTag: f6348bbb-976e-4779-aa91-a7a9d1183664
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Data]
+
+		variation Variation
+			isDefault
+			relationship: 0f08a9b9-2717-4c19-b407-f34e1def0429
+			defaultHierarchy: LocalDateTable_58039698-72d0-45fe-aaa7-3c26ff968e95.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_FERIADOS = calculated
+		mode: import
+		source =
+				
+				UNION(
+				    ROW("Data", DATE(2026, 1, 1)),
+				    ROW("Data", DATE(2026, 4, 21)),
+				    ROW("Data", DATE(2026, 5, 1)),
+				    ROW("Data", DATE(2026, 7, 9)),
+				    ROW("Data", DATE(2026, 9, 7)),
+				    ROW("Data", DATE(2026, 10, 12)),
+				    ROW("Data", DATE(2026, 11, 2)),
+				    ROW("Data", DATE(2026, 11, 15)),
+				    ROW("Data", DATE(2026, 11, 20)),
+				    ROW("Data", DATE(2026, 12, 25))
+				)
+
+	annotation PBI_Id = 9f92c7d0c56b48d886abab57f3fb8fad
+

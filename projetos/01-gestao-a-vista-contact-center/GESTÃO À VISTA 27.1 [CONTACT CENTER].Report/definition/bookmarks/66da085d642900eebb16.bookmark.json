@@ -1,0 +1,1364 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/2.1.0/schema.json",
+  "displayName": "GERENCIAL ABERTO",
+  "name": "66da085d642900eebb16",
+  "options": {
+    "targetVisualNames": [
+      "e1206c2a5d496e407d00",
+      "05eae647887a58299b5b",
+      "5ada2d6fe4de84500535",
+      "3268a69e34cab20d6e0d",
+      "ea251ba408c51bc5c3d1",
+      "3a333166ae395abc1698",
+      "768f19d684e27ee986a2",
+      "cbdc1decd8380a556966",
+      "a269b4a227a82153a2ab",
+      "f042a0834abd1e6d061b",
+      "97af534d808e40140a70",
+      "c9548eb6020d3a580845",
+      "05dab5d294444960b150",
+      "09b389efa9903430edc5",
+      "065e8a5ad0404a389813",
+      "00cfe55b0174639921c5",
+      "50fa66eb2eda41eca5da"
+    ],
+    "suppressData": true
+  },
+  "explorationState": {
+    "version": "1.11",
+    "activeSection": "7e255560407d29276e8d",
+    "filters": {
+      "byName": {
+        "3f7237325a1a46c2c14e": {
+          "name": "3f7237325a1a46c2c14e",
+          "type": "Categorical",
+          "filter": {
+            "Version": 2,
+            "From": [
+              {
+                "Name": "t",
+                "Entity": "TB CALL CENTER",
+                "Type": 0
+              }
+            ],
+            "Where": [
+              {
+                "Condition": {
+                  "Not": {
+                    "Expression": {
+                      "In": {
+                        "Expressions": [
+                          {
+                            "Column": {
+                              "Expression": {
+                                "SourceRef": {
+                                  "Source": "t"
+                                }
+                              },
+                              "Property": "TIPO_CURSO"
+                            }
+                          }
+                        ],
+                        "Values": [
+                          [
+                            {
+                              "Literal": {
+                                "Value": "null"
+                              }
+                            }
+                          ]
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "expression": {
+            "Column": {
+              "Expression": {
+                "SourceRef": {
+                  "Entity": "TB CALL CENTER"
+                }
+              },
+              "Property": "TIPO_CURSO"
+            }
+          },
+          "howCreated": 1
+        }
+      }
+    },
+    "sections": {
+      "7e255560407d29276e8d": {
+        "visualContainers": {
+          "2b5eea96900d6e79aaa7": {
+            "singleVisual": {
+              "visualType": "image",
+              "objects": {}
+            }
+          },
+          "cf42694e5b0cc780e1a9": {
+            "singleVisual": {
+              "visualType": "image",
+              "objects": {}
+            }
+          },
+          "b6392c6c8eb966d77a7a": {
+            "singleVisual": {
+              "visualType": "shape",
+              "objects": {}
+            }
+          },
+          "17446e1b02a4039c4241": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "0b9ca06f30055e7a94d9",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "DT BASE"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "cardVisual",
+              "objects": {}
+            }
+          },
+          "0e2856883d8666402534": {
+            "singleVisual": {
+              "visualType": "image",
+              "objects": {}
+            }
+          },
+          "b1fd1435316e91cd3503": {
+            "singleVisual": {
+              "visualType": "shape",
+              "objects": {}
+            }
+          },
+          "7e5df5da03c08073b48e": {
+            "singleVisual": {
+              "visualType": "shape",
+              "objects": {}
+            }
+          },
+          "753492c2d005360c9dee": {
+            "singleVisual": {
+              "visualType": "image",
+              "objects": {}
+            }
+          },
+          "b66b4df65c8311e909e1": {
+            "singleVisual": {
+              "visualType": "image",
+              "objects": {}
+            }
+          },
+          "a90884a78c8c83462eb1": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "818bd956b8d616b5c713",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "SUPER_CANAL"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "c7d12ceb8e7b064b0a5d",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "EPS"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "e654e525c95868ee008d",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "MODALIDADE"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "c4af5b61a35c6009a763",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "VENDAS"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "6efe6e1da174b026c483",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "MATRICULADOSCC"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "b71065e50abc6c3a529d",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "PROD MAT DIA ÚTIL / HC"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "386eb3934ae8d6a50820",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "MAT/VENDA"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "437aefae658c33460810",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "CURSO"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "7ad77c06285a9a55ae6c",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "NOME_SIGA"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "0184596c2d210e60bb80",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "GERENTE"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "dd497d835ea6e2052adc",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "NOME_REGIONAL"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "0a9449a040e534902c88",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "DIRETOR"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "2f2e7cf54014508a0957",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dim_Data"
+                        }
+                      },
+                      "Property": "Ano-Mês"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "d91a00d1179047a2d678",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "TIPO_CURSO"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "pivotTable",
+              "objects": {},
+              "orderBy": [
+                {
+                  "Direction": 2,
+                  "Expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "MATRICULADOSCC"
+                    }
+                  }
+                }
+              ],
+              "activeProjections": {
+                "Rows": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "SUPER_CANAL"
+                    }
+                  }
+                ],
+                "Columns": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "EPS"
+                    }
+                  }
+                ]
+              },
+              "projections": {
+                "Rows": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "SUPER_CANAL"
+                    }
+                  },
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "MODALIDADE"
+                    }
+                  },
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "CURSO"
+                    }
+                  },
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "NOME_SIGA"
+                    }
+                  },
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "GERENTE"
+                    }
+                  },
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "NOME_REGIONAL"
+                    }
+                  },
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "DIRETOR"
+                    }
+                  },
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "EPS"
+                    }
+                  },
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dim_Data"
+                        }
+                      },
+                      "Property": "Ano-Mês"
+                    }
+                  },
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "TIPO_CURSO"
+                    }
+                  }
+                ],
+                "Columns": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "EPS"
+                    }
+                  }
+                ],
+                "Values": [
+                  {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "VENDAS"
+                    }
+                  },
+                  {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "MATRICULADOSCC"
+                    }
+                  },
+                  {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "PROD MAT DIA ÚTIL / HC"
+                    }
+                  },
+                  {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "MAT/VENDA"
+                    }
+                  }
+                ]
+              },
+              "parameters": {
+                "Rows": [
+                  {
+                    "expr": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "FILTROS DINAMICOS"
+                          }
+                        },
+                        "Property": "FILTROS DINAMICOS"
+                      }
+                    },
+                    "index": 0,
+                    "length": 10
+                  }
+                ]
+              }
+            }
+          },
+          "05eae647887a58299b5b": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "63d8a225c54b24939b6a",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "ESTADO"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ],
+              "byType": [
+                {
+                  "name": "d603ecc1cf030f0b79e6",
+                  "type": "Exclude",
+                  "filter": {
+                    "Version": 2,
+                    "From": [
+                      {
+                        "Name": "t",
+                        "Entity": "TB CALL CENTER",
+                        "Type": 0
+                      }
+                    ],
+                    "Where": [
+                      {
+                        "Condition": {
+                          "Not": {
+                            "Expression": {
+                              "In": {
+                                "Expressions": [
+                                  {
+                                    "Column": {
+                                      "Expression": {
+                                        "SourceRef": {
+                                          "Source": "t"
+                                        }
+                                      },
+                                      "Property": "ESTADO"
+                                    }
+                                  }
+                                ],
+                                "Values": [
+                                  [
+                                    {
+                                      "Literal": {
+                                        "Value": "null"
+                                      }
+                                    }
+                                  ]
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "howCreated": 4
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {
+                "merge": {
+                  "data": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "'Dropdown'"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "ESTADO"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "5ada2d6fe4de84500535": {
+            "singleVisual": {
+              "visualType": "image",
+              "objects": {}
+            }
+          },
+          "ea251ba408c51bc5c3d1": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "ff2a2440b0c82082b805",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "GERENTE"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ],
+              "byType": [
+                {
+                  "name": "c687a45fee8f807dba64",
+                  "type": "Exclude",
+                  "filter": {
+                    "Version": 2,
+                    "From": [
+                      {
+                        "Name": "t",
+                        "Entity": "TB CALL CENTER",
+                        "Type": 0
+                      }
+                    ],
+                    "Where": [
+                      {
+                        "Condition": {
+                          "Not": {
+                            "Expression": {
+                              "In": {
+                                "Expressions": [
+                                  {
+                                    "Column": {
+                                      "Expression": {
+                                        "SourceRef": {
+                                          "Source": "t"
+                                        }
+                                      },
+                                      "Property": "GERENTE"
+                                    }
+                                  }
+                                ],
+                                "Values": [
+                                  [
+                                    {
+                                      "Literal": {
+                                        "Value": "null"
+                                      }
+                                    }
+                                  ]
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "howCreated": 4
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {
+                "merge": {
+                  "data": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "'Dropdown'"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "GERENTE"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "3a333166ae395abc1698": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "6b43bbfce77dc78e947c",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DIM_EPS"
+                        }
+                      },
+                      "Property": "EPS"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {
+                "merge": {
+                  "data": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "'Dropdown'"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DIM_EPS"
+                        }
+                      },
+                      "Property": "EPS"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "768f19d684e27ee986a2": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "b35b25f4a83d977bb8ce",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "CURSO"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {
+                "merge": {
+                  "data": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "'Dropdown'"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "CURSO"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "cbdc1decd8380a556966": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "883dfa0390c2b371c0d8",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "MODALIDADE"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {
+                "merge": {
+                  "data": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "'Dropdown'"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "MODALIDADE"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "a269b4a227a82153a2ab": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "6ec89afe27e5ce26d144",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "TIPO_CURSO"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {
+                "merge": {
+                  "data": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "'Dropdown'"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "TIPO_CURSO"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "f042a0834abd1e6d061b": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "28cbd210601080ca1832",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "NOME_SIGA"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ],
+              "byType": [
+                {
+                  "name": "daf57b3509b3353dcba0",
+                  "type": "Exclude",
+                  "filter": {
+                    "Version": 2,
+                    "From": [
+                      {
+                        "Name": "t",
+                        "Entity": "TB CALL CENTER",
+                        "Type": 0
+                      }
+                    ],
+                    "Where": [
+                      {
+                        "Condition": {
+                          "Not": {
+                            "Expression": {
+                              "In": {
+                                "Expressions": [
+                                  {
+                                    "Column": {
+                                      "Expression": {
+                                        "SourceRef": {
+                                          "Source": "t"
+                                        }
+                                      },
+                                      "Property": "NOME_SIGA"
+                                    }
+                                  }
+                                ],
+                                "Values": [
+                                  [
+                                    {
+                                      "Literal": {
+                                        "Value": "null"
+                                      }
+                                    }
+                                  ]
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "howCreated": 4
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {
+                "merge": {
+                  "data": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "'Dropdown'"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "NOME_SIGA"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "97af534d808e40140a70": {
+            "singleVisual": {
+              "visualType": "actionButton",
+              "objects": {}
+            }
+          },
+          "c9548eb6020d3a580845": {
+            "singleVisual": {
+              "visualType": "image",
+              "objects": {}
+            }
+          },
+          "09b389efa9903430edc5": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "f3103818d8b59a853010",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DIM SUPER_CANAL"
+                        }
+                      },
+                      "Property": "SUPER_CANAL_DE_PARA"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {
+                "merge": {
+                  "data": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "'Dropdown'"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DIM SUPER_CANAL"
+                        }
+                      },
+                      "Property": "SUPER_CANAL_DE_PARA"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "065e8a5ad0404a389813": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "b9509b311e0d3b00d7ce",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "NOME_REGIONAL"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {
+                "merge": {
+                  "data": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "'Dropdown'"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "NOME_REGIONAL"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "00cfe55b0174639921c5": {
+            "singleVisual": {
+              "visualType": "shape",
+              "objects": {}
+            }
+          },
+          "50fa66eb2eda41eca5da": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "5f2f388795b48290a625",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "TABULACAO_HUMANA_2"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {
+                "merge": {
+                  "data": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "'Dropdown'"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "TB CALL CENTER"
+                        }
+                      },
+                      "Property": "TABULACAO_HUMANA_2"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "visualContainerGroups": {
+          "ecf00eeccaa325ab0c49": {
+            "isHidden": true
+          },
+          "3244a088090b5420bd64": {
+            "isHidden": true
+          },
+          "39788c70e76b35c4d01a": {
+            "isHidden": true
+          },
+          "e1206c2a5d496e407d00": {
+            "isHidden": false
+          }
+        }
+      }
+    },
+    "objects": {
+      "merge": {
+        "outspacePane": [
+          {
+            "properties": {
+              "expanded": {
+                "expr": {
+                  "Literal": {
+                    "Value": "false"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

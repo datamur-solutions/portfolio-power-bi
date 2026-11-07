@@ -1,0 +1,52 @@
+table 'Meta Alô'
+	lineageTag: b9cca354-a002-47fd-aed0-68664e6f5c26
+
+	measure 'Meta Alô Selecionada' =
+			
+			SELECTEDVALUE(
+			    'Meta Alô'[Value],
+			    0.70
+			)
+		lineageTag: 8ee803a2-fe46-4fe6-9542-a4a62d8b89e9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Atendimentos Potenciais Alô 2' =
+			
+			VAR _AtendimentoMeta =
+			    [Mailing] * [Meta Alô Selecionada]
+			
+			RETURN
+			MAX(
+			    0,
+			    ROUND(
+			        _AtendimentoMeta - [ATENDIDO],
+			        0
+			    )
+			)
+		lineageTag: 291c54ae-b633-477a-983a-980b19dd4d76
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Value
+		lineageTag: 74427011-f6af-4806-ae86-c735bf4ea087
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'Meta Alô' = calculated
+		mode: import
+		source =
+				
+				GENERATESERIES(
+				    0,
+				    0.30,
+				    0.05
+				)
+
+	annotation PBI_Id = a582e9f51f464377a02ea89b70c14367
+

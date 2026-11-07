@@ -1,0 +1,252 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 0,
+            "y": 0
+          },
+          "nodeIndex": "CAPCOM",
+          "nodeLineageTag": "36ca62c1-0825-4542-ac4a-97f1efc1acb9",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 270,
+            "y": 0
+          },
+          "nodeIndex": "OMNI CHAT",
+          "nodeLineageTag": "0d09c34c-273a-4d33-a075-df24c8a85a63",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 620,
+            "y": 0
+          },
+          "nodeIndex": "Dim_Data",
+          "nodeLineageTag": "9703208f-6697-4ae1-af5e-72de33217e48",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 620.095883878943,
+            "y": 216.43835616438355
+          },
+          "nodeIndex": "DIM_CONSULTOR",
+          "nodeLineageTag": "7e0277e3-0f1d-41aa-a7e4-f302946a4794",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 904.095883878943,
+            "y": 108.21917808219177
+          },
+          "nodeIndex": "Dim_Funil",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 623.15561021853239,
+            "y": 434.52088786880825
+          },
+          "nodeIndex": "DIM_PRODUTO",
+          "nodeLineageTag": "5d017ad3-e252-4a11-a461-536ca2315c8e",
+          "size": {
+            "height": 161.0386018165234,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 346.63790509341533,
+            "y": 426.67795917059084
+          },
+          "nodeIndex": "DIM_COHORT",
+          "nodeLineageTag": "b2a484b5-9f3a-48a9-a4f7-264b85fe9cde",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 62.559952996158927,
+            "y": 406.39830745887093
+          },
+          "nodeIndex": "DIM_CURSO",
+          "nodeLineageTag": "d64607a3-1b3f-412d-a306-e6cf9e088521",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 452.22247234972571,
+            "y": 662.54422486886813
+          },
+          "nodeIndex": "DIM_SUPERCANAL",
+          "nodeLineageTag": "2edef212-b8b7-4b8c-aec8-591e28be9dc1",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 728.21806033169378,
+            "y": 465.95928435224221
+          },
+          "nodeIndex": "DIM_UNIDADE",
+          "nodeLineageTag": "67dee331-8755-403a-a876-e8a763a09dad",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1188.0958838789429,
+            "y": 0
+          },
+          "nodeIndex": "DIM_INSIGHTS_EXECUTIVOS",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1472.0958838789429,
+            "y": 331.27211243443406
+          },
+          "nodeIndex": "PARAM_REDUCAO_TMA",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1756.0958838789429,
+            "y": 331.27211243443406
+          },
+          "nodeIndex": "Meta Alô",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1051.7832575090808,
+            "y": 336.73240318785867
+          },
+          "nodeIndex": "DIM_REGIONAL",
+          "nodeLineageTag": "450d6626-a72c-40d1-8d6c-3808ffcb0c9d",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1010.5277458870776,
+            "y": 513.281804215256
+          },
+          "nodeIndex": "DIM_SEGMENTO",
+          "nodeLineageTag": "89b99e81-23d2-4197-bce1-9ad2395eed70",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1127.5176354496375,
+            "y": 701.99963999229726
+          },
+          "nodeIndex": "DIM_GERENTE",
+          "nodeLineageTag": "f125e88c-e50e-4ddc-a655-356b1bb30493",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 877.11894531130963,
+            "y": 744.4341127768995
+          },
+          "nodeIndex": "DIM_CANAL",
+          "nodeLineageTag": "a3e886ec-c9ed-4fa2-977a-a23c8d5464a7",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1325.8729674742847,
+            "y": 470.16762778108864
+          },
+          "nodeIndex": "DIM_COHORT ATEND",
+          "nodeLineageTag": "f91ee4fa-5391-479e-89f0-e68abb9ac10b",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas as tabelas",
+      "zoomValue": 49.004308313414569,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas as tabelas",
+  "defaultDiagram": "Todas as tabelas"
+}

@@ -1,0 +1,2465 @@
+table _Medidas
+	lineageTag: 8993fbf2-78c0-5e35-bbf8-ccdc4ac10cf9
+
+	/// Primeiro dia do período analisado: início do mês filtrado ou a data inicial escolhida.
+	measure 'Data Início' =
+			VAR meses = CALCULATETABLE ( VALUES ( Semanas[Mês] ), ALLSELECTED () )
+			VAR semMin = CALCULATE ( MIN ( Semanas[Data Início] ), REMOVEFILTERS (), TREATAS ( meses, Semanas[Mês] ) )
+			VAR selMin = CALCULATE ( MIN ( dCalendario[Data] ), ALLSELECTED ( dCalendario ) )
+			RETURN MAX ( semMin, selMin )
+		formatString: dd/MM/yyyy
+		displayFolder: 0 · Janela de datas
+		lineageTag: 91b8828c-a550-5190-be7f-1b4431fbf232
+
+	/// Último dia útil (seg a sáb) do mês filtrado.
+	measure 'Data Fim Período' =
+			VAR meses = CALCULATETABLE ( VALUES ( Semanas[Mês] ), ALLSELECTED () )
+			RETURN CALCULATE ( MAX ( Semanas[Data Fim] ), REMOVEFILTERS (), TREATAS ( meses, Semanas[Mês] ) )
+		formatString: dd/MM/yyyy
+		displayFolder: 0 · Janela de datas
+		lineageTag: ef951758-c43f-5b5a-a2a3-fc46ffe3588d
+
+	/// Hoje (horário de São Paulo) ou a DataReferencia, limitada à data final do período filtrado. Ações com Data Fim anterior a ela estão vencidas.
+	measure 'Data Corte' =
+			VAR i = [Data Início]
+			VAR f = [Data Fim Período]
+			// data de referência do parâmetro DataReferencia (fixa em 23/10/2026 no portfólio)
+			VAR hoje = COALESCE ( MAX ( Config[Data de Referência] ), DATE ( 2026, 10, 23 ) )
+			VAR selMax = CALCULATE ( MAX ( dCalendario[Data] ), ALLSELECTED ( dCalendario ) )
+			VAR lim = MIN ( MIN ( selMax, f ), hoje )
+			RETURN CALCULATE ( MAX ( dCalendario[Data] ), REMOVEFILTERS ( dCalendario ), dCalendario[Data] >= i, dCalendario[Data] <= lim )
+		formatString: dd/MM/yyyy
+		displayFolder: 0 · Janela de datas
+		lineageTag: 576229da-7272-5620-8792-94b8f1f91112
+
+	measure 'Dias Corridos' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			RETURN IF ( ISBLANK ( c ), 0, COUNTROWS ( FILTER ( ALL ( dCalendario[Data] ), dCalendario[Data] >= i && dCalendario[Data] <= c ) ) )
+		formatString: 0
+		displayFolder: 0 · Janela de datas
+		lineageTag: d40a262c-611b-5f2e-b00b-6c5192a13813
+
+	measure 'Dias Restantes' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			VAR f = [Data Fim Período]
+			RETURN COUNTROWS ( FILTER ( ALL ( dCalendario[Data] ), dCalendario[Data] >= i && dCalendario[Data] <= f && ( ISBLANK ( c ) || dCalendario[Data] > c ) ) ) + 0
+		formatString: 0
+		displayFolder: 0 · Janela de datas
+		lineageTag: 9f788164-2d02-5b4c-81a2-e0d89c43c008
+
+	/// Inscritos registrados do início do período até a data de corte.
+	measure 'INS Realizado' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			RETURN
+			    IF ( NOT ISBLANK ( c ), CALCULATE ( SUM ( Dias[INS] ), KEEPFILTERS ( Dias[Data] >= i ), KEEPFILTERS ( Dias[Data] <= c ) ) )
+		formatString: #,0
+		displayFolder: 1 · INS e pace
+		lineageTag: 5bffc3fa-d53c-5f17-845a-5cb0292bc636
+
+	/// Meta de INS das semanas, proporcional aos dias do período.
+	measure 'Meta INS Período' =
+			VAR i = [Data Início]
+			VAR f = [Data Fim Período]
+			RETURN CALCULATE ( SUM ( Dias[Meta INS Dia] ), REMOVEFILTERS ( dCalendario ), Dias[Data] >= i, Dias[Data] <= f )
+		formatString: #,0
+		displayFolder: 1 · INS e pace
+		lineageTag: ebb66ae9-e972-55de-a273-ace183f0829f
+
+	/// Pace ideal: meta semanal distribuída por dia (seg a sáb), acumulada até a data de corte.
+	measure 'INS Ideal' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			RETURN
+			    IF ( NOT ISBLANK ( c ), CALCULATE ( SUM ( Dias[Meta INS Dia] ), KEEPFILTERS ( Dias[Data] >= i ), KEEPFILTERS ( Dias[Data] <= c ) ) )
+		formatString: #,0
+		displayFolder: 1 · INS e pace
+		lineageTag: da990719-db29-50a2-b91d-9746200f7cf8
+
+	/// Razão pace real ÷ pace ideal, usada só para a cor e o status (≥100% no ritmo; 85–99% atenção; <85% crítico). Nos visuais o pace aparece em número.
+	measure 'Pace INS' = DIVIDE ( [INS Realizado], [INS Ideal] )
+		formatString: 0%
+		displayFolder: 1 · INS e pace
+		lineageTag: d8b899c8-73b1-52af-9273-3f3a6fdc7120
+
+	/// Realizado − pace ideal. Negativo = atraso.
+	measure 'Gap INS' = IF ( [INS Ideal] > 0, COALESCE ( [INS Realizado], 0 ) - [INS Ideal] )
+		formatString: +#,0;-#,0;0
+		displayFolder: 1 · INS e pace
+		lineageTag: 86765f12-28fe-57df-a2bd-02605dae7713
+
+	/// Pace real ÷ pace ideal − 1. Apoio para a leitura; o pace é mostrado em número.
+	measure 'Variação Pace INS' = IF ( NOT ISBLANK ( [Pace INS] ), [Pace INS] - 1 )
+		formatString: +0%;-0%;0%
+		displayFolder: 1 · INS e pace
+		lineageTag: 05e14290-86f7-5ea4-aaf8-e4ada08a5e8d
+
+	/// Onde o período fecha mantendo o ritmo atual.
+	measure 'Tendência INS' = [Pace INS] * [Meta INS Período]
+		formatString: #,0
+		displayFolder: 1 · INS e pace
+		lineageTag: a389f2fb-3930-5967-91a3-5009fabc1a5d
+
+	measure 'Projeção % Meta' = DIVIDE ( [Tendência INS], [Meta INS Período] )
+		formatString: 0%
+		displayFolder: 1 · INS e pace
+		lineageTag: 0b1fdad9-2a34-5e26-95fe-667196d30bd4
+
+	measure 'Falta INS' = MAX ( 0, [Meta INS Período] - COALESCE ( [INS Realizado], 0 ) )
+		formatString: #,0
+		displayFolder: 1 · INS e pace
+		lineageTag: d685d81d-9771-5636-9ddf-267cee375680
+
+	/// INS por dia corrido.
+	measure 'Ritmo Atual' = DIVIDE ( [INS Realizado], [Dias Corridos] )
+		formatString: #,0.0
+		displayFolder: 1 · INS e pace
+		lineageTag: 44cf7a81-403b-54d9-824a-a791e26e42a7
+
+	/// (Meta − realizado) ÷ dias restantes.
+	measure 'INS por Dia Necessário' = DIVIDE ( [Falta INS], [Dias Restantes] )
+		formatString: #,0.0
+		displayFolder: 1 · INS e pace
+		lineageTag: 3ed55310-1d2f-580b-9b13-760cbff3d1a3
+
+	measure 'Aceleração Necessária' = IF ( [Ritmo Atual] > 0, DIVIDE ( [INS por Dia Necessário], [Ritmo Atual] ) - 1 )
+		formatString: +0%;-0%;0%
+		displayFolder: 1 · INS e pace
+		lineageTag: 4745fb55-3f65-5adf-bc3c-1e40b9267104
+
+	measure Consultores = DISTINCTCOUNT ( Semanas[Chave Consultor] )
+		formatString: #,0
+		displayFolder: 1 · INS e pace
+		lineageTag: 0e23eb9a-a741-55b0-aa75-4be93ec7d3a9
+
+	/// INS por dia que cada consultor precisa fazer nos dias restantes.
+	measure 'Necessário por Consultor' = DIVIDE ( [INS por Dia Necessário], [Consultores] )
+		formatString: #,0.00
+		displayFolder: 1 · INS e pace
+		lineageTag: e1f27a4c-86c0-5da1-ae4b-fcb063b7dedc
+
+	measure 'INS Médio por Consultor' = DIVIDE ( [INS Realizado], [Consultores] )
+		formatString: #,0.0
+		displayFolder: 1 · INS e pace
+		lineageTag: 3c2a5503-3432-5387-9f77-b22f0c33e45e
+
+	measure 'Meta MAT Período' =
+			VAR i = [Data Início]
+			VAR f = [Data Fim Período]
+			RETURN
+			    IF ( NOT ISBLANK ( f ),
+			        SWITCH ( TRUE (),
+			            ISFILTERED ( dProduto ), SUMX ( MatProduto,
+			            MatProduto[Meta MAT]
+			                * DIVIDE ( MAX ( 0, NETWORKDAYS ( MAX ( MatProduto[Data Início], i ), MIN ( MatProduto[Data Fim], f ), 11 ) ), MatProduto[Dias Válidos] ) ),
+			            ISFILTERED ( dModalidade ), SUMX ( MatModalidade,
+			            MatModalidade[Meta MAT]
+			                * DIVIDE ( MAX ( 0, NETWORKDAYS ( MAX ( MatModalidade[Data Início], i ), MIN ( MatModalidade[Data Fim], f ), 11 ) ), MatModalidade[Dias Válidos] ) ),
+			            SUMX ( 'Ações',
+			            'Ações'[Meta MAT]
+			                * DIVIDE ( MAX ( 0, NETWORKDAYS ( MAX ( 'Ações'[Data Início], i ), MIN ( 'Ações'[Data Fim], f ), 11 ) ), 'Ações'[Dias Válidos] ) ) ) )
+		formatString: #,0
+		displayFolder: 2 · MAT
+		lineageTag: 62f866a6-165d-554c-9138-353a7cc8fd9f
+
+	measure 'MAT Ideal' =
+			VAR i = [Data Início]
+			VAR f = [Data Corte]
+			RETURN
+			    IF ( NOT ISBLANK ( f ),
+			        SWITCH ( TRUE (),
+			            ISFILTERED ( dProduto ), SUMX ( MatProduto,
+			            MatProduto[Meta MAT]
+			                * DIVIDE ( MAX ( 0, NETWORKDAYS ( MAX ( MatProduto[Data Início], i ), MIN ( MatProduto[Data Fim], f ), 11 ) ), MatProduto[Dias Válidos] ) ),
+			            ISFILTERED ( dModalidade ), SUMX ( MatModalidade,
+			            MatModalidade[Meta MAT]
+			                * DIVIDE ( MAX ( 0, NETWORKDAYS ( MAX ( MatModalidade[Data Início], i ), MIN ( MatModalidade[Data Fim], f ), 11 ) ), MatModalidade[Dias Válidos] ) ),
+			            SUMX ( 'Ações',
+			            'Ações'[Meta MAT]
+			                * DIVIDE ( MAX ( 0, NETWORKDAYS ( MAX ( 'Ações'[Data Início], i ), MIN ( 'Ações'[Data Fim], f ), 11 ) ), 'Ações'[Dias Válidos] ) ) ) )
+		formatString: #,0
+		displayFolder: 2 · MAT
+		lineageTag: e935e2e2-e118-5f5c-b5a1-e9924057ccef
+
+	/// Matrículas realizadas das ações já iniciadas até a data de corte. Sem filtro de produto/modalidade usa o total da ação; com filtro, a abertura.
+	measure 'MAT Realizado' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			RETURN
+			    IF ( NOT ISBLANK ( c ),
+			        SWITCH ( TRUE (),
+			            ISFILTERED ( dProduto ), SUMX ( FILTER ( MatProduto, MatProduto[Data Início] <= c && MatProduto[Data Fim] >= i ), MatProduto[Real MAT] ),
+			            ISFILTERED ( dModalidade ), SUMX ( FILTER ( MatModalidade, MatModalidade[Data Início] <= c && MatModalidade[Data Fim] >= i ), MatModalidade[Real MAT] ),
+			            SUMX ( FILTER ( 'Ações', 'Ações'[Data Início] <= c && 'Ações'[Data Fim] >= i ), 'Ações'[Real MAT] ) ) )
+		formatString: #,0
+		displayFolder: 2 · MAT
+		lineageTag: 036d60fe-3fea-5dfa-9cd0-4001f9cd540b
+
+	measure 'Pace MAT' = DIVIDE ( [MAT Realizado], [MAT Ideal] )
+		formatString: 0%
+		displayFolder: 2 · MAT
+		lineageTag: 0a832693-291b-52be-9ea9-e96b56c91c2f
+
+	measure 'Gap MAT' = IF ( [MAT Ideal] > 0, COALESCE ( [MAT Realizado], 0 ) - [MAT Ideal] )
+		formatString: +#,0;-#,0;0
+		displayFolder: 2 · MAT
+		lineageTag: 19c156cc-f385-5776-8ff9-17e9990c8398
+
+	measure 'Tendência MAT' = [Pace MAT] * [Meta MAT Período]
+		formatString: #,0
+		displayFolder: 2 · MAT
+		lineageTag: ba8fc056-9211-57ab-b17f-b42ddd223f53
+
+	measure 'Projeção % Meta MAT' = DIVIDE ( [Tendência MAT], [Meta MAT Período] )
+		formatString: 0%
+		displayFolder: 2 · MAT
+		lineageTag: cae27ad2-b6ca-51db-bd45-cc97d6bdd16a
+
+	/// Para gráficos por semana.
+	measure 'Meta MAT Semana' = SWITCH ( TRUE (), ISFILTERED ( dProduto ), SUM ( MatProduto[Meta MAT] ), ISFILTERED ( dModalidade ), SUM ( MatModalidade[Meta MAT] ), SUM ( 'Ações'[Meta MAT] ) )
+		formatString: #,0
+		displayFolder: 2 · MAT
+		lineageTag: e179af5e-eee3-5313-80eb-c3b83cf3d900
+
+	/// Para gráficos por semana.
+	measure 'MAT Realizado Semana' = SWITCH ( TRUE (), ISFILTERED ( dProduto ), SUM ( MatProduto[Real MAT] ), ISFILTERED ( dModalidade ), SUM ( MatModalidade[Real MAT] ), SUM ( 'Ações'[Real MAT] ) )
+		formatString: #,0
+		displayFolder: 2 · MAT
+		lineageTag: 195d7d28-47a1-5d05-88e5-1fe93f010125
+
+	/// Conversão de inscritos em matrículas.
+	measure 'MAT a cada 100 INS' = DIVIDE ( [MAT Realizado], [INS Realizado] ) * 100
+		formatString: #,0.0
+		displayFolder: 3 · Funil e conversão
+		lineageTag: 469ab94f-c0e1-5436-83c9-93b9a9401ed3
+
+	/// Curva de Pareto: use com Semanas[Consultor] ordenado por INS.
+	measure '% Acumulado INS' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			VAR cur = [INS Realizado] + 0
+			VAR t = ADDCOLUMNS ( ALLSELECTED ( Semanas[Consultor] ), "@i", CALCULATE ( SUM ( Dias[INS] ), Dias[Data] >= i, Dias[Data] <= c ) + 0 )
+			VAR tot = SUMX ( t, [@i] )
+			RETURN IF ( NOT ISBLANK ( c ), DIVIDE ( SUMX ( FILTER ( t, [@i] >= cur ), [@i] ), tot ) )
+		formatString: 0%
+		displayFolder: 3 · Funil e conversão
+		lineageTag: a40cfa5f-8b49-5416-add7-5348dd6bc6f0
+
+	/// Parcela dos INS gerada pelos 20% de consultores mais produtivos.
+	measure 'Participação Top 20%' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			VAR t = ADDCOLUMNS ( VALUES ( Semanas[Consultor] ), "@i", CALCULATE ( SUM ( Dias[INS] ), Dias[Data] >= i, Dias[Data] <= c ) + 0 )
+			VAR k = MAX ( 1, ROUND ( COUNTROWS ( t ) * 0.2, 0 ) )
+			RETURN DIVIDE ( SUMX ( TOPN ( k, t, [@i], DESC ), [@i] ), SUMX ( t, [@i] ) )
+		formatString: 0%
+		displayFolder: 3 · Funil e conversão
+		lineageTag: 8f8c077e-7bd1-5493-afbe-3beb5977e2a6
+
+	measure 'Consultores sem INS' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			VAR t = ADDCOLUMNS ( VALUES ( Semanas[Consultor] ), "@i", CALCULATE ( SUM ( Dias[INS] ), Dias[Data] >= i, Dias[Data] <= c ) + 0 )
+			RETURN IF ( NOT ISBLANK ( c ), COUNTROWS ( FILTER ( t, [@i] = 0 ) ) + 0 )
+		formatString: #,0
+		displayFolder: 3 · Funil e conversão
+		lineageTag: e4b469d9-2bbc-5c5d-8501-5dc1d656b0fe
+
+	measure 'Total Semanas' = COUNTROWS ( Semanas )
+		formatString: #,0
+		displayFolder: 4 · Plano e execução
+		lineageTag: e08b4650-d582-5067-8ae1-772944348fb1
+
+	measure 'Semanas com Ação' = CALCULATE ( COUNTROWS ( Semanas ), Semanas[Tem Ação] = TRUE () )
+		formatString: #,0
+		displayFolder: 4 · Plano e execução
+		lineageTag: 8c119f36-a039-5143-8408-6996f681eaec
+
+	/// Plano preenchido: unidades com pelo menos uma ação cadastrada no período ÷ unidades com consultor ativo. Referência 90%.
+	measure 'Plano Preenchido' = DIVIDE ( [Unidades com Plano], [Unidades Ativas] )
+		formatString: 0%
+		displayFolder: 4 · Plano e execução
+		lineageTag: 082a005c-97b2-5624-a77e-acc0f796d6e3
+
+	/// Ações cadastradas no app (todas, qualquer status).
+	measure 'Ações Planejadas' = COUNTROWS ( 'Ações' )
+		formatString: #,0
+		displayFolder: 4 · Plano e execução
+		lineageTag: 28e0b4c2-bff7-5117-9c8d-459d1dabb1d8
+
+	/// Ações cuja semana já começou até a data de corte.
+	measure 'Ações Iniciadas' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] <= c && 'Ações'[Data Fim] >= i )
+			RETURN IF ( NOT ISBLANK ( c ), COUNTROWS ( F ) )
+		formatString: #,0
+		displayFolder: 4 · Plano e execução
+		lineageTag: 0eb61f25-b910-59de-a3da-7e1a62b1f44d
+
+	/// Ações cujo Fim é anterior à data de corte.
+	measure 'Ações Vencidas' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Fim] < c && 'Ações'[Data Fim] >= i )
+			RETURN IF ( NOT ISBLANK ( c ), COUNTROWS ( F ) )
+		formatString: #,0
+		displayFolder: 4 · Plano e execução
+		lineageTag: 51c68db5-618a-56e8-b339-3a22156cf838
+
+	/// Ações já iniciadas com status de fechamento (Realizada, Realizada parcialmente ou Não realizada).
+	measure 'Ações Concluídas' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] <= c && 'Ações'[Data Fim] >= i && 'Ações'[Status] <> "Planejada" )
+			RETURN IF ( NOT ISBLANK ( c ), COUNTROWS ( F ) )
+		formatString: #,0
+		displayFolder: 4 · Plano e execução
+		lineageTag: e1b50b16-6e93-59f7-88a0-05d5a165705a
+
+	measure 'Ações Realizadas' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] <= c && 'Ações'[Data Fim] >= i && 'Ações'[Status] = "Realizada" )
+			RETURN IF ( NOT ISBLANK ( c ), COUNTROWS ( F ) )
+		formatString: #,0
+		displayFolder: 4 · Plano e execução
+		lineageTag: d8a7a0e1-05b9-5d84-bf71-baf25fd45642
+
+	measure 'Ações Realizadas Parcialmente' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] <= c && 'Ações'[Data Fim] >= i && 'Ações'[Status] = "Realizada parcialmente" )
+			RETURN IF ( NOT ISBLANK ( c ), COUNTROWS ( F ) )
+		formatString: #,0
+		displayFolder: 4 · Plano e execução
+		lineageTag: 5744333f-3825-5f7e-9fc7-f433eaa188ef
+
+	measure 'Ações Não Realizadas' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] <= c && 'Ações'[Data Fim] >= i && 'Ações'[Status] = "Não realizada" )
+			RETURN IF ( NOT ISBLANK ( c ), COUNTROWS ( F ) )
+		formatString: #,0
+		displayFolder: 4 · Plano e execução
+		lineageTag: 812bfdd3-7f4b-5d10-9da4-e44fb90e62d4
+
+	/// Das ações fechadas: (Realizada + ½ Realizada parcialmente) ÷ ações fechadas.
+	measure 'Taxa de Realização' = DIVIDE ( COALESCE ( [Ações Realizadas], 0 ) + 0.5 * COALESCE ( [Ações Realizadas Parcialmente], 0 ), [Ações Concluídas] )
+		formatString: 0%
+		displayFolder: 4 · Plano e execução
+		lineageTag: f9f8381d-edd7-5a3a-962c-cf110847ed32
+
+	/// Ações vencidas que continuam com status Planejada (sem fechamento).
+	measure 'Ações Atrasadas' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Fim] < c && 'Ações'[Data Fim] >= i && 'Ações'[Status] = "Planejada" )
+			RETURN IF ( NOT ISBLANK ( c ), COUNTROWS ( F ) )
+		formatString: #,0
+		displayFolder: 4 · Plano e execução
+		lineageTag: 0d57ed2f-1999-5ac8-a937-bd0e43f920bb
+
+	/// Ações já iniciadas com algum realizado lançado ou status diferente de Planejada.
+	measure 'Ações com Fechamento' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] <= c && 'Ações'[Data Fim] >= i && 'Ações'[Tem Fechamento] )
+			RETURN IF ( NOT ISBLANK ( c ), COUNTROWS ( F ) )
+		formatString: #,0
+		displayFolder: 4 · Plano e execução
+		lineageTag: 5c2d91f8-4eee-51d1-acae-a4fc1b924a69
+
+	/// Conclusão das ações: ações já iniciadas com fechamento (Realizada, Realizada parcialmente ou Não realizada) ÷ ações já iniciadas. Referência 85%.
+	measure Execução = DIVIDE ( [Ações Concluídas], [Ações Iniciadas] )
+		formatString: 0%
+		displayFolder: 4 · Plano e execução
+		lineageTag: b582a60e-a0ed-5eb0-b02a-96ddd38bd802
+
+	/// Fechamento lançado: ações já iniciadas com algum realizado (INS, MAT ou leads) ou status diferente de Planejada ÷ ações já iniciadas. Referência 85%.
+	measure 'Disciplina de Registro' = DIVIDE ( [Ações com Fechamento], [Ações Iniciadas] )
+		formatString: 0%
+		displayFolder: 4 · Plano e execução
+		lineageTag: c9eef49f-e935-5581-a043-9b61a92e9dc1
+
+	/// Ações vencidas com status de fechamento.
+	measure 'Vencidas Fechadas' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Fim] < c && 'Ações'[Data Fim] >= i && 'Ações'[Status] <> "Planejada" )
+			RETURN IF ( NOT ISBLANK ( c ), COUNTROWS ( F ) )
+		formatString: #,0
+		displayFolder: 4d · Ações vencidas
+		lineageTag: acd5623a-6d0b-5dc8-8cd8-78c68cf0d936
+
+	/// Ações vencidas fechadas ÷ ações vencidas.
+	measure '% Vencidas Fechadas' = DIVIDE ( [Vencidas Fechadas], [Ações Vencidas] )
+		formatString: 0%
+		displayFolder: 4d · Ações vencidas
+		lineageTag: 2367322c-a578-5e7e-9e56-c3ffcb72cd02
+
+	/// Dias, em média, desde o Fim das ações vencidas que continuam como Planejada.
+	measure 'Atraso Médio (dias)' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Fim] < c && 'Ações'[Data Fim] >= i && 'Ações'[Status] = "Planejada" )
+			RETURN IF ( NOT ISBLANK ( c ), AVERAGEX ( F, INT ( c - 'Ações'[Data Fim] ) ) )
+		formatString: #,0.0
+		displayFolder: 4d · Ações vencidas
+		lineageTag: 1aebd0c6-daea-5d3a-82d4-0bc92f19766c
+
+	/// Dias desde o Fim (só ações vencidas sem fechamento).
+	measure 'Dias em Atraso' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Fim] < c && 'Ações'[Data Fim] >= i && 'Ações'[Status] = "Planejada" )
+			RETURN IF ( NOT ISBLANK ( c ), MAXX ( F, INT ( c - 'Ações'[Data Fim] ) ) )
+		formatString: #,0
+		displayFolder: 4d · Ações vencidas
+		lineageTag: 50c2c894-2e82-5620-9f13-e02780d3a27b
+
+	/// Meta de INS das ações vencidas sem fechamento: resultado que ainda não foi informado.
+	measure 'Meta INS em Atraso' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Fim] < c && 'Ações'[Data Fim] >= i && 'Ações'[Status] = "Planejada" )
+			RETURN IF ( NOT ISBLANK ( c ), SUMX ( F, 'Ações'[Meta INS] ) + 0 )
+		formatString: #,0
+		displayFolder: 4d · Ações vencidas
+		lineageTag: 332125df-cbd5-5109-96ac-7794c8f829a4
+
+	measure 'INS das Vencidas' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Fim] < c && 'Ações'[Data Fim] >= i )
+			RETURN IF ( NOT ISBLANK ( c ), SUMX ( F, 'Ações'[Real INS] ) )
+		formatString: #,0
+		displayFolder: 4d · Ações vencidas
+		lineageTag: 9f70754d-6791-5a52-a2af-d713639814f8
+
+	measure 'Leitura Vencidas' =
+			VAR v = [Ações Vencidas]
+			VAR a = [Ações Atrasadas] + 0
+			RETURN IF ( ISBLANK ( v ) || v = 0, "Nenhuma ação vencida até a DT BASE: todas as ações do período ainda estão dentro do prazo.",
+			    FORMAT ( v, "#,0" ) & " ações já passaram do Fim. " & FORMAT ( v - a, "#,0" ) & " foram fechadas (" & FORMAT ( DIVIDE ( v - a, v ), "0%" ) & ") e "
+			        & FORMAT ( a, "#,0" ) & " seguem como Planejada" & IF ( a > 0, ", com " & FORMAT ( [Meta INS em Atraso], "#,0" ) & " INS de meta sem resultado informado e atraso médio de " & FORMAT ( [Atraso Médio (dias)], "#,0" ) & " dias.", "." ) )
+		displayFolder: 4d · Ações vencidas
+		lineageTag: fbae9f22-d0d3-55f4-a103-54600296c809
+
+	measure 'Execução das Ações' = [Execução]
+		formatString: 0%
+		displayFolder: 4 · Plano e execução
+		lineageTag: 8f1ec271-5f58-55c9-9e33-804de5cf9838
+
+	measure 'INS das Ações' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] <= c && 'Ações'[Data Fim] >= i )
+			RETURN IF ( NOT ISBLANK ( c ), SUMX ( F, 'Ações'[Real INS] ) )
+		formatString: #,0
+		displayFolder: 4 · Plano e execução
+		lineageTag: 9024e599-f646-524d-93a3-3bb6aba71e9e
+
+	measure 'Meta INS das Ações' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] <= c && 'Ações'[Data Fim] >= i )
+			RETURN IF ( NOT ISBLANK ( c ), SUMX ( F, 'Ações'[Meta INS] ) )
+		formatString: #,0
+		displayFolder: 4 · Plano e execução
+		lineageTag: 1b9f6164-ee49-5bb6-a07d-552ba205e150
+
+	/// Realizado ÷ meta de inscritos das ações já iniciadas.
+	measure 'Atingimento INS das Ações' = DIVIDE ( [INS das Ações], [Meta INS das Ações] )
+		formatString: 0%
+		displayFolder: 4 · Plano e execução
+		lineageTag: 1175d8f5-2112-5de4-9c52-1b45a04aee1e
+
+	measure 'MAT das Ações' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] <= c && 'Ações'[Data Fim] >= i )
+			RETURN IF ( NOT ISBLANK ( c ), SUMX ( F, 'Ações'[Real MAT] ) )
+		formatString: #,0
+		displayFolder: 4 · Plano e execução
+		lineageTag: 1505766e-fd06-54eb-8f7c-62e372f463ff
+
+	/// INS ÷ ações já iniciadas.
+	measure 'INS por Ação' = DIVIDE ( [INS das Ações], [Ações Iniciadas] )
+		formatString: #,0.0
+		displayFolder: 4 · Plano e execução
+		lineageTag: 76b4818c-b9bc-56fe-aa9f-f88fcd3c0d36
+
+	/// Dias de ação programados (de Início a Fim, segunda a sábado).
+	measure 'Ações Programadas' = COUNTROWS ( 'AgendaAções' )
+		formatString: #,0
+		displayFolder: 4 · Plano e execução
+		lineageTag: 24588c06-9e70-585a-b2f7-3d9aef3c94fc
+
+	/// Consultores ativos no cadastro (Consultores 5W2H) na seleção.
+	measure 'HC Ativo' = CALCULATE ( DISTINCTCOUNT ( Semanas[Chave Consultor] ), Semanas[Ativo] = TRUE () )
+		formatString: #,0
+		displayFolder: 4 · Plano e execução
+		lineageTag: 932eb700-602f-5ca4-a499-f268be536416
+
+	/// Consultores ativos com pelo menos uma ação já iniciada no período (Início até a data de corte e Fim a partir do início do período).
+	measure 'Consultores em Ação' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			VAR f = [Data Fim Período]
+			VAR t = ADDCOLUMNS ( CALCULATETABLE ( VALUES ( Semanas[Chave Consultor] ), Semanas[Ativo] = TRUE () ),
+			    "@ini", CALCULATE ( COUNTROWS ( 'Ações' ), 'Ações'[Data Início] <= c, 'Ações'[Data Fim] >= i ) + 0,
+			    "@fut", CALCULATE ( COUNTROWS ( 'Ações' ), 'Ações'[Data Início] > c, 'Ações'[Data Início] <= f ) + 0 )
+			RETURN IF ( NOT ISBLANK ( c ), COUNTROWS ( FILTER ( t, [@ini] > 0 ) ) + 0 )
+		formatString: #,0
+		displayFolder: 4b · Equipe em ação
+		lineageTag: 23f6c005-7ce6-582e-ae40-00fe06acfaf2
+
+	/// Consultores ativos sem ação iniciada, mas com ação cadastrada para depois da data de corte, dentro do período.
+	measure 'Consultores só com Ação Futura' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			VAR f = [Data Fim Período]
+			VAR t = ADDCOLUMNS ( CALCULATETABLE ( VALUES ( Semanas[Chave Consultor] ), Semanas[Ativo] = TRUE () ),
+			    "@ini", CALCULATE ( COUNTROWS ( 'Ações' ), 'Ações'[Data Início] <= c, 'Ações'[Data Fim] >= i ) + 0,
+			    "@fut", CALCULATE ( COUNTROWS ( 'Ações' ), 'Ações'[Data Início] > c, 'Ações'[Data Início] <= f ) + 0 )
+			RETURN IF ( NOT ISBLANK ( c ), COUNTROWS ( FILTER ( t, [@ini] = 0 && [@fut] > 0 ) ) + 0 )
+		formatString: #,0
+		displayFolder: 4b · Equipe em ação
+		lineageTag: 0d0e573f-34ac-526a-be97-87b9cc4af93b
+
+	/// Consultores ativos sem nenhuma ação no período (nem iniciada, nem programada).
+	measure 'Consultores sem Ação' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			VAR f = [Data Fim Período]
+			VAR t = ADDCOLUMNS ( CALCULATETABLE ( VALUES ( Semanas[Chave Consultor] ), Semanas[Ativo] = TRUE () ),
+			    "@ini", CALCULATE ( COUNTROWS ( 'Ações' ), 'Ações'[Data Início] <= c, 'Ações'[Data Fim] >= i ) + 0,
+			    "@fut", CALCULATE ( COUNTROWS ( 'Ações' ), 'Ações'[Data Início] > c, 'Ações'[Data Início] <= f ) + 0 )
+			RETURN IF ( NOT ISBLANK ( c ), COUNTROWS ( FILTER ( t, [@ini] = 0 && [@fut] = 0 ) ) + 0 )
+		formatString: #,0
+		displayFolder: 4b · Equipe em ação
+		lineageTag: 192d8306-79ac-52b1-900e-927bfd8815e9
+
+	/// Consultores ativos com ação iniciada ÷ consultores ativos. Referência 90%.
+	measure '% Equipe em Ação' = DIVIDE ( [Consultores em Ação], [HC Ativo] )
+		formatString: 0%
+		displayFolder: 4b · Equipe em ação
+		lineageTag: d6d01b35-10bd-5881-ba73-1d31325635bb
+
+	measure '% Equipe sem Ação' = DIVIDE ( [Consultores sem Ação], [HC Ativo] )
+		formatString: 0%
+		displayFolder: 4b · Equipe em ação
+		lineageTag: f5c0c0ee-453f-596b-8cfe-90c0a7899a0d
+
+	/// Ações já iniciadas ÷ consultores em ação.
+	measure 'Ações por Consultor em Ação' = DIVIDE ( [Ações Iniciadas], [Consultores em Ação] )
+		formatString: #,0.0
+		displayFolder: 4b · Equipe em ação
+		lineageTag: d7e3ae43-485c-51ac-9908-568c86b031f6
+
+	measure 'Situação na Equipe' =
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			VAR f = [Data Fim Período]
+			VAR ativo = CALCULATE ( COUNTROWS ( Semanas ), Semanas[Ativo] = TRUE () ) > 0
+			VAR ini = CALCULATE ( COUNTROWS ( 'Ações' ), 'Ações'[Data Início] <= c, 'Ações'[Data Fim] >= i ) + 0
+			VAR fut = CALCULATE ( COUNTROWS ( 'Ações' ), 'Ações'[Data Início] > c, 'Ações'[Data Início] <= f ) + 0
+			RETURN IF ( NOT ISBLANK ( c ) && HASONEVALUE ( Semanas[Chave Consultor] ) && ativo,
+			    SWITCH ( TRUE (), ini > 0, "Em ação", fut > 0, "Só ação futura", "Sem ação no período" ) )
+		displayFolder: 4b · Equipe em ação
+		lineageTag: f2a4efd3-a75f-5465-81b2-363c493c8434
+
+	/// Situação só dos consultores ativos que ainda não estão em ação (vazio para os demais).
+	measure 'Pendência na Equipe' =
+			VAR s = [Situação na Equipe]
+			RETURN IF ( NOT ISBLANK ( s ) && s <> "Em ação", s )
+		displayFolder: 4b · Equipe em ação
+		lineageTag: 721992b1-4c43-51bf-b1d0-487a14443516
+
+	measure 'Próxima Ação' =
+			VAR c = [Data Corte]
+			RETURN IF ( NOT ISBLANK ( [Pendência na Equipe] ), CALCULATE ( MIN ( 'Ações'[Data Início] ), 'Ações'[Data Início] > c ) )
+		formatString: dd/MM/yyyy
+		displayFolder: 4b · Equipe em ação
+		lineageTag: 939ce9ca-daf2-599a-9967-a8215a1d8492
+
+	measure 'Ações Futuras Pendentes' =
+			VAR c = [Data Corte]
+			RETURN IF ( NOT ISBLANK ( [Pendência na Equipe] ), CALCULATE ( COUNTROWS ( 'Ações' ), 'Ações'[Data Início] > c ) + 0 )
+		formatString: #,0
+		displayFolder: 4b · Equipe em ação
+		lineageTag: 508df70c-824d-5c40-b8ed-fd30baa433ba
+
+	measure 'Cor Situação na Equipe' = SWITCH ( [Situação na Equipe], "Em ação", "#157A45", "Só ação futura", "#A86E00", "Sem ação no período", "#B8322B" )
+		displayFolder: 4b · Equipe em ação
+		lineageTag: 6137af0f-32dd-5e9e-8a87-32e7ee5390a3
+
+	/// Semanas já iniciadas de consultores ativos sem ação cadastrada.
+	measure 'Semanas sem Ação' = CALCULATE ( COUNTROWS ( Semanas ), Semanas[Tem Ação] = FALSE (), Semanas[Ativo] = TRUE (), Semanas[Data Início] <= [Data Corte] ) + 0
+		formatString: #,0
+		displayFolder: 4 · Plano e execução
+		lineageTag: f02e98b9-abdf-5743-80d9-1179e7f4fe40
+
+	measure 'Estados com Operação' = CALCULATE ( DISTINCTCOUNT ( Semanas[UF] ), Semanas[UF] <> "" )
+		formatString: #,0
+		displayFolder: 4c · Mapa
+		lineageTag: 352ebf43-1e68-51bb-a85a-b2836d87380c
+
+	measure Unidades = CALCULATE ( DISTINCTCOUNT ( Semanas[Unidade] ), Semanas[Unidade] <> "" )
+		formatString: #,0
+		displayFolder: 4c · Mapa
+		lineageTag: 5201059b-1686-5416-a42a-8c87bb83600e
+
+	/// Unidades com UF identificada (entram no mapa).
+	measure 'Unidades Localizadas' = CALCULATE ( DISTINCTCOUNT ( Semanas[Unidade] ), Semanas[Unidade] <> "", Semanas[UF] <> "" )
+		formatString: #,0
+		displayFolder: 4c · Mapa
+		lineageTag: 0dd408ae-3dc4-5a2b-94d5-7705d3d4ec43
+
+	/// Unidades sem UF no nome da unidade nem da filial: ficam fora do mapa. Ajuste o nome no cadastro (ex.: "CIDADE/UF").
+	measure 'Unidades sem UF' = CALCULATE ( DISTINCTCOUNT ( Semanas[Unidade] ), Semanas[Unidade] <> "", Semanas[UF] = "" ) + 0
+		formatString: #,0
+		displayFolder: 4c · Mapa
+		lineageTag: d50b0a15-4854-5259-adcf-8ee4a637d85d
+
+	measure '% Unidades Localizadas' = DIVIDE ( [Unidades Localizadas], [Unidades] )
+		formatString: 0%
+		displayFolder: 4c · Mapa
+		lineageTag: e8b30bbc-3230-5a07-bdaa-6cfa1b193926
+
+	measure 'Referência 85%' = 0.85
+		formatString: 0%
+		displayFolder: 4 · Plano e execução
+		lineageTag: d171e811-c77b-5dde-9826-59e4a15d94a6
+
+	measure 'Referência 90%' = 0.9
+		formatString: 0%
+		displayFolder: 4 · Plano e execução
+		lineageTag: 5a93c42b-f90c-577d-9520-4a1178fd6d10
+
+	measure 'Máximo 100%' = 1
+		formatString: 0%
+		displayFolder: 4 · Plano e execução
+		lineageTag: f5f16696-f944-571f-9978-1d8be8d072f5
+
+	measure 'Ganho de Ritmo' = SELECTEDVALUE ( GanhoRitmo[Ganho de ritmo (%)], 15 ) / 100
+		formatString: +0%;-0%;0%
+		displayFolder: 5 · Simulador
+		lineageTag: 51a45822-b0a8-5ba7-a9f7-62652271db6e
+
+	measure 'Projeção Simulada' =
+			VAR p = [Pace INS]
+			RETURN IF ( NOT ISBLANK ( p ), COALESCE ( [INS Realizado], 0 ) + MAX ( 0, [Meta INS Período] - [INS Ideal] ) * p * ( 1 + [Ganho de Ritmo] ) )
+		formatString: #,0
+		displayFolder: 5 · Simulador
+		lineageTag: ebf8be01-44f6-5828-96c3-d4d5b5c7bf69
+
+	measure 'Projeção Simulada % Meta' = DIVIDE ( [Projeção Simulada], [Meta INS Período] )
+		formatString: 0%
+		displayFolder: 5 · Simulador
+		lineageTag: 388c3d97-4662-5fb1-b0be-f78f13601ea6
+
+	measure 'Diferença Simulada' = [Projeção Simulada] - [Meta INS Período]
+		formatString: +#,0;-#,0;0
+		displayFolder: 5 · Simulador
+		lineageTag: d859e157-98df-59ff-8cb8-3e419f9e2027
+
+	/// Quanto o ritmo dos dias restantes precisa subir para fechar 100% da meta.
+	measure 'Ganho Necessário' =
+			VAR resto = MAX ( 0, [Meta INS Período] - [INS Ideal] ) * [Pace INS]
+			RETURN IF ( resto > 0, DIVIDE ( [Meta INS Período] - COALESCE ( [INS Realizado], 0 ), resto ) - 1 )
+		formatString: +0%;-0%;0%
+		displayFolder: 5 · Simulador
+		lineageTag: d6ffdede-48ac-5efb-9984-85c2cc005be5
+
+	measure 'INS Realizado Acumulado' =
+			VAR d = MAX ( dCalendario[Data] )
+			VAR i = [Data Início]
+			VAR c = [Data Corte]
+			RETURN IF ( NOT ISBLANK ( c ) && d >= i && d <= c,
+			    CALCULATE ( SUM ( Dias[INS] ), REMOVEFILTERS ( dCalendario ), Dias[Data] >= i, Dias[Data] <= d ) + 0 )
+		formatString: #,0
+		displayFolder: 6 · Curva diária
+		lineageTag: 976276e8-6af3-5ef5-8131-acd51bbdeb76
+
+	measure 'Pace Ideal Acumulado' =
+			VAR d = MAX ( dCalendario[Data] )
+			VAR i = [Data Início]
+			VAR f = [Data Fim Período]
+			RETURN IF ( d >= i && d <= f, CALCULATE ( SUM ( Dias[Meta INS Dia] ), REMOVEFILTERS ( dCalendario ), Dias[Data] >= i, Dias[Data] <= d ) )
+		formatString: #,0
+		displayFolder: 6 · Curva diária
+		lineageTag: 5c88f877-0888-5ea9-971a-c6979c4776c9
+
+	measure 'Projeção Acumulada' =
+			VAR d = MAX ( dCalendario[Data] )
+			VAR c = [Data Corte]
+			VAR f = [Data Fim Período]
+			VAR p = CALCULATE ( [Pace INS], ALLSELECTED ( dCalendario ) )
+			VAR realC = CALCULATE ( [INS Realizado], ALLSELECTED ( dCalendario ) )
+			VAR idealC = CALCULATE ( [INS Ideal], ALLSELECTED ( dCalendario ) )
+			RETURN IF ( NOT ISBLANK ( p ) && d >= c && d <= f, realC + ( [Pace Ideal Acumulado] - idealC ) * p )
+		formatString: #,0
+		displayFolder: 6 · Curva diária
+		lineageTag: 07a43548-b418-5c75-a7be-5505c1844b00
+
+	measure 'Meta (linha)' =
+			VAR d = MAX ( dCalendario[Data] )
+			RETURN IF ( d >= [Data Início] && d <= [Data Fim Período], CALCULATE ( [Meta INS Período], ALLSELECTED ( dCalendario ) ) )
+		formatString: #,0
+		displayFolder: 6 · Curva diária
+		lineageTag: 9ef0d409-edb1-56b1-a55c-f956eb689888
+
+	measure 'INS no Dia' =
+			VAR d = MAX ( dCalendario[Data] )
+			RETURN IF ( d <= [Data Corte], SUM ( Dias[INS] ) + 0 )
+		formatString: #,0
+		displayFolder: 6 · Curva diária
+		lineageTag: 5345bd9e-d4c4-5274-8fd1-db17eaae12f0
+
+	measure 'Pace do Dia' = SUM ( Dias[Meta INS Dia] )
+		formatString: #,0.0
+		displayFolder: 6 · Curva diária
+		lineageTag: f5dcd283-60bd-5621-afa3-ac2ba8feaf33
+
+	measure 'Status Pace INS' =
+			VAR p = [Pace INS]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "– Sem base", p >= 1.0, "▲ No ritmo", p >= 0.85, "● Atenção", "▼ Crítico" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 3614915b-1d0c-5d48-8fa1-077dfea8f2e8
+
+	/// Cor da barra/ponto (formatação condicional por valor do campo).
+	measure 'Cor Pace INS' =
+			VAR p = [Pace INS]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#B7CACD", p >= 1.0, "#1E9E5A", p >= 0.85, "#E8A317", "#D9473F" )
+		displayFolder: 7 · Status e cores
+		lineageTag: e21a3b56-cf7a-523f-8603-71ffeee80fb1
+
+	measure 'Cor Texto Pace INS' =
+			VAR p = [Pace INS]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#6B6F7B", p >= 1.0, "#157A45", p >= 0.85, "#A86E00", "#B8322B" )
+		displayFolder: 7 · Status e cores
+		lineageTag: b07e3ac1-c810-52de-9555-9cf304d1d2e3
+
+	measure 'Cor Fundo Pace INS' =
+			VAR p = [Pace INS]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#FFFFFF", p >= 1.0, "#E3F4EA", p >= 0.85, "#FDF1D8", "#FBE6E4" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 31081057-248a-53b5-bb31-74fe3f472fda
+
+	measure 'Status Projeção' =
+			VAR p = [Projeção % Meta]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "– Sem base", p >= 1.0, "▲ No ritmo", p >= 0.85, "● Atenção", "▼ Crítico" )
+		displayFolder: 7 · Status e cores
+		lineageTag: c770b25b-8cee-5e6c-b7de-d80bf481857a
+
+	/// Cor da barra/ponto (formatação condicional por valor do campo).
+	measure 'Cor Projeção' =
+			VAR p = [Projeção % Meta]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#B7CACD", p >= 1.0, "#1E9E5A", p >= 0.85, "#E8A317", "#D9473F" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 1319fbc2-ce66-59cb-99dc-bd73470c2e75
+
+	measure 'Cor Texto Projeção' =
+			VAR p = [Projeção % Meta]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#6B6F7B", p >= 1.0, "#157A45", p >= 0.85, "#A86E00", "#B8322B" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 5a5e3e51-8101-5046-9273-da1bd05d2fd0
+
+	measure 'Cor Fundo Projeção' =
+			VAR p = [Projeção % Meta]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#FFFFFF", p >= 1.0, "#E3F4EA", p >= 0.85, "#FDF1D8", "#FBE6E4" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 072bd165-a7af-5b86-b9c2-84ebec64da07
+
+	measure 'Status Pace MAT' =
+			VAR p = [Pace MAT]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "– Sem base", p >= 1.0, "▲ No ritmo", p >= 0.85, "● Atenção", "▼ Crítico" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 5fea7870-09ee-53fb-bec6-3d1def55ecd6
+
+	/// Cor da barra/ponto (formatação condicional por valor do campo).
+	measure 'Cor Pace MAT' =
+			VAR p = [Pace MAT]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#B7CACD", p >= 1.0, "#1E9E5A", p >= 0.85, "#E8A317", "#D9473F" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 914a137c-c76b-5ef4-9ee3-91dd2af508e7
+
+	measure 'Cor Texto Pace MAT' =
+			VAR p = [Pace MAT]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#6B6F7B", p >= 1.0, "#157A45", p >= 0.85, "#A86E00", "#B8322B" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 8e0b3162-3ec8-5f34-a2e4-000a6aba746a
+
+	measure 'Cor Fundo Pace MAT' =
+			VAR p = [Pace MAT]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#FFFFFF", p >= 1.0, "#E3F4EA", p >= 0.85, "#FDF1D8", "#FBE6E4" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 09a8072b-0609-5d20-a711-e68b4ecb9ba1
+
+	measure 'Status Execução' =
+			VAR p = [Execução]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "– Sem base", p >= 0.85, "▲ No ritmo", p >= 0.65, "● Atenção", "▼ Crítico" )
+		displayFolder: 7 · Status e cores
+		lineageTag: a8698e78-4a93-5ac7-9703-ddf3aa7ad134
+
+	/// Cor da barra/ponto (formatação condicional por valor do campo).
+	measure 'Cor Execução' =
+			VAR p = [Execução]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#B7CACD", p >= 0.85, "#1E9E5A", p >= 0.65, "#E8A317", "#D9473F" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 6cfaae54-9d92-5178-a7f9-17de30d16cb9
+
+	measure 'Cor Texto Execução' =
+			VAR p = [Execução]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#6B6F7B", p >= 0.85, "#157A45", p >= 0.65, "#A86E00", "#B8322B" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 66461d98-f54a-5ee9-8bdd-b5b29dd15e94
+
+	measure 'Cor Fundo Execução' =
+			VAR p = [Execução]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#FFFFFF", p >= 0.85, "#E3F4EA", p >= 0.65, "#FDF1D8", "#FBE6E4" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 62e345b2-e401-5d22-bfe3-58ccee07e9d1
+
+	measure 'Status Registro' =
+			VAR p = [Disciplina de Registro]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "– Sem base", p >= 0.85, "▲ No ritmo", p >= 0.65, "● Atenção", "▼ Crítico" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 0ceb4802-624e-5106-a5fb-5d3eee854e47
+
+	/// Cor da barra/ponto (formatação condicional por valor do campo).
+	measure 'Cor Registro' =
+			VAR p = [Disciplina de Registro]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#B7CACD", p >= 0.85, "#1E9E5A", p >= 0.65, "#E8A317", "#D9473F" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 5356d471-362b-5da5-a42c-09c3bf4c7ba9
+
+	measure 'Cor Texto Registro' =
+			VAR p = [Disciplina de Registro]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#6B6F7B", p >= 0.85, "#157A45", p >= 0.65, "#A86E00", "#B8322B" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 66501163-ac4a-54b0-9610-117066dfce75
+
+	measure 'Cor Fundo Registro' =
+			VAR p = [Disciplina de Registro]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#FFFFFF", p >= 0.85, "#E3F4EA", p >= 0.65, "#FDF1D8", "#FBE6E4" )
+		displayFolder: 7 · Status e cores
+		lineageTag: e785d480-bbf2-5033-95f7-b59c32847037
+
+	measure 'Status Plano' =
+			VAR p = [Plano Preenchido]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "– Sem base", p >= 0.9, "▲ No ritmo", p >= 0.7, "● Atenção", "▼ Crítico" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 6001f1ac-4ea6-51f0-b7f6-bb34d5010ee8
+
+	/// Cor da barra/ponto (formatação condicional por valor do campo).
+	measure 'Cor Plano' =
+			VAR p = [Plano Preenchido]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#B7CACD", p >= 0.9, "#1E9E5A", p >= 0.7, "#E8A317", "#D9473F" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 4f7daa29-76ac-523f-a669-9701bc976c0a
+
+	measure 'Cor Texto Plano' =
+			VAR p = [Plano Preenchido]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#6B6F7B", p >= 0.9, "#157A45", p >= 0.7, "#A86E00", "#B8322B" )
+		displayFolder: 7 · Status e cores
+		lineageTag: e5d3ca9a-9d53-5fd3-a38c-47e97307c70c
+
+	measure 'Cor Fundo Plano' =
+			VAR p = [Plano Preenchido]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#FFFFFF", p >= 0.9, "#E3F4EA", p >= 0.7, "#FDF1D8", "#FBE6E4" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 66fd4c97-2fe3-5eda-92a9-c8eabf98c4de
+
+	measure 'Status Equipe' =
+			VAR p = [% Equipe em Ação]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "– Sem base", p >= 0.9, "▲ No ritmo", p >= 0.75, "● Atenção", "▼ Crítico" )
+		displayFolder: 7 · Status e cores
+		lineageTag: c26e05dc-1661-5d95-9be7-b49fa048824e
+
+	/// Cor da barra/ponto (formatação condicional por valor do campo).
+	measure 'Cor Equipe' =
+			VAR p = [% Equipe em Ação]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#B7CACD", p >= 0.9, "#1E9E5A", p >= 0.75, "#E8A317", "#D9473F" )
+		displayFolder: 7 · Status e cores
+		lineageTag: be56c45d-710f-54da-bff7-90e699927f76
+
+	measure 'Cor Texto Equipe' =
+			VAR p = [% Equipe em Ação]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#6B6F7B", p >= 0.9, "#157A45", p >= 0.75, "#A86E00", "#B8322B" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 4307d0f0-280f-504d-bd0e-48fdc5fc5af1
+
+	measure 'Cor Fundo Equipe' =
+			VAR p = [% Equipe em Ação]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#FFFFFF", p >= 0.9, "#E3F4EA", p >= 0.75, "#FDF1D8", "#FBE6E4" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 86ab8bfd-27f2-54d6-93d2-25c03453015f
+
+	measure 'Status Cobertura' =
+			VAR p = [% Consultores com Plano]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "– Sem base", p >= 0.9, "▲ No ritmo", p >= 0.75, "● Atenção", "▼ Crítico" )
+		displayFolder: 7 · Status e cores
+		lineageTag: e4b9649b-d148-5a87-8be0-a6da699c6145
+
+	/// Cor da barra/ponto (formatação condicional por valor do campo).
+	measure 'Cor Cobertura' =
+			VAR p = [% Consultores com Plano]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#B7CACD", p >= 0.9, "#1E9E5A", p >= 0.75, "#E8A317", "#D9473F" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 64d83e79-667f-55d4-a544-02837157cb38
+
+	measure 'Cor Texto Cobertura' =
+			VAR p = [% Consultores com Plano]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#6B6F7B", p >= 0.9, "#157A45", p >= 0.75, "#A86E00", "#B8322B" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 42dc2f9e-4e37-51bc-bf21-5eb75295d0f4
+
+	measure 'Cor Fundo Cobertura' =
+			VAR p = [% Consultores com Plano]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#FFFFFF", p >= 0.9, "#E3F4EA", p >= 0.75, "#FDF1D8", "#FBE6E4" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 9eae6571-b51b-5946-b4f5-a7d9b74bf877
+
+	measure 'Status Fechamento' =
+			VAR p = [Fechamento das Ações]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "– Sem base", p >= 0.85, "▲ No ritmo", p >= 0.65, "● Atenção", "▼ Crítico" )
+		displayFolder: 7 · Status e cores
+		lineageTag: ed2d790d-3f47-58d9-87d8-b9fe5751da10
+
+	/// Cor da barra/ponto (formatação condicional por valor do campo).
+	measure 'Cor Fechamento' =
+			VAR p = [Fechamento das Ações]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#B7CACD", p >= 0.85, "#1E9E5A", p >= 0.65, "#E8A317", "#D9473F" )
+		displayFolder: 7 · Status e cores
+		lineageTag: b6c91ef1-2c1f-56e4-b0ef-a0272edc8e33
+
+	measure 'Cor Texto Fechamento' =
+			VAR p = [Fechamento das Ações]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#6B6F7B", p >= 0.85, "#157A45", p >= 0.65, "#A86E00", "#B8322B" )
+		displayFolder: 7 · Status e cores
+		lineageTag: df8e56b2-e419-533f-a636-462cef19c125
+
+	measure 'Cor Fundo Fechamento' =
+			VAR p = [Fechamento das Ações]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#FFFFFF", p >= 0.85, "#E3F4EA", p >= 0.65, "#FDF1D8", "#FBE6E4" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 4cc36474-43d6-53bc-8fe2-093ad3ea4dd8
+
+	measure 'Status Atingimento INS' =
+			VAR p = [Atingimento INS]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "– Sem base", p >= 1.0, "▲ No ritmo", p >= 0.85, "● Atenção", "▼ Crítico" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 8ec8e7d7-33b9-5fb7-8f6f-1837106cc334
+
+	/// Cor da barra/ponto (formatação condicional por valor do campo).
+	measure 'Cor Atingimento INS' =
+			VAR p = [Atingimento INS]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#B7CACD", p >= 1.0, "#1E9E5A", p >= 0.85, "#E8A317", "#D9473F" )
+		displayFolder: 7 · Status e cores
+		lineageTag: e462b2fb-c11c-5ab0-bbd7-31e4c4d27783
+
+	measure 'Cor Texto Atingimento INS' =
+			VAR p = [Atingimento INS]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#6B6F7B", p >= 1.0, "#157A45", p >= 0.85, "#A86E00", "#B8322B" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 724390d9-2960-5b43-9c79-88ddf6b7245d
+
+	measure 'Cor Fundo Atingimento INS' =
+			VAR p = [Atingimento INS]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#FFFFFF", p >= 1.0, "#E3F4EA", p >= 0.85, "#FDF1D8", "#FBE6E4" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 52aef083-9a95-5467-af1b-c289ba7a0f8a
+
+	measure 'Status Atingimento MAT' =
+			VAR p = [Atingimento MAT]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "– Sem base", p >= 1.0, "▲ No ritmo", p >= 0.85, "● Atenção", "▼ Crítico" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 85ad530a-964c-53f4-b3d9-b911c5d466c5
+
+	/// Cor da barra/ponto (formatação condicional por valor do campo).
+	measure 'Cor Atingimento MAT' =
+			VAR p = [Atingimento MAT]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#B7CACD", p >= 1.0, "#1E9E5A", p >= 0.85, "#E8A317", "#D9473F" )
+		displayFolder: 7 · Status e cores
+		lineageTag: fe64eded-5518-5a9c-b291-f47a1dbe5364
+
+	measure 'Cor Texto Atingimento MAT' =
+			VAR p = [Atingimento MAT]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#6B6F7B", p >= 1.0, "#157A45", p >= 0.85, "#A86E00", "#B8322B" )
+		displayFolder: 7 · Status e cores
+		lineageTag: 6daae27e-ff6e-5532-bde7-8f5ac7b88fa9
+
+	measure 'Cor Fundo Atingimento MAT' =
+			VAR p = [Atingimento MAT]
+			RETURN SWITCH ( TRUE (), ISBLANK ( p ), "#FFFFFF", p >= 1.0, "#E3F4EA", p >= 0.85, "#FDF1D8", "#FBE6E4" )
+		displayFolder: 7 · Status e cores
+		lineageTag: d33d191f-2ca5-5a51-9ad0-7f01fc05312f
+
+	measure 'Cor Conversão' =
+			VAR v = [MAT a cada 100 INS]
+			VAR media = CALCULATE ( [MAT a cada 100 INS], ALLSELECTED ( Semanas ) )
+			RETURN IF ( ISBLANK ( v ), "#B7CACD", IF ( v >= media, "#14A38B", "#F08A24" ) )
+		displayFolder: 7 · Status e cores
+		lineageTag: df8a7bc8-727a-53fa-913a-d59c7ab9e7ff
+
+	/// Ações cadastradas no período (Início dentro do período), qualquer status.
+	measure 'Ações Cadastradas' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim && ( TRUE () ) )
+			RETURN IF ( NOT ISBLANK ( fim ), COUNTROWS ( F ) + 0 )
+		formatString: #,0
+		displayFolder: 0b · Projeção e realizado
+		lineageTag: a2423c59-6fde-5a57-b035-eed5b0ee9d95
+
+	/// Projeção de inscritos: soma da meta de inscritos cadastrada nas ações do período.
+	measure 'Projeção INS' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim && ( TRUE () ) )
+			VAR ids = SELECTCOLUMNS ( F, "id", 'Ações'[IdAção] )
+			RETURN IF ( NOT ISBLANK ( fim ),
+			    SWITCH ( TRUE (),
+			        ISFILTERED ( dProduto ), CALCULATE ( SUM ( MatProduto[Meta INS] ), TREATAS ( ids, MatProduto[IdAção] ) ),
+			        ISFILTERED ( dModalidade ), CALCULATE ( SUM ( MatModalidade[Meta INS] ), TREATAS ( ids, MatModalidade[IdAção] ) ),
+			        SUMX ( F, 'Ações'[Meta INS] ) ) )
+		formatString: #,0
+		displayFolder: 0b · Projeção e realizado
+		lineageTag: c5af81d5-74ff-506d-b40c-92c050dd7d64
+
+	/// Inscritos realizados lançados no fechamento das ações do período.
+	measure 'Realizado INS' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim && ( TRUE () ) )
+			VAR ids = SELECTCOLUMNS ( F, "id", 'Ações'[IdAção] )
+			RETURN IF ( NOT ISBLANK ( fim ),
+			    SWITCH ( TRUE (),
+			        ISFILTERED ( dProduto ), CALCULATE ( SUM ( MatProduto[Real INS] ), TREATAS ( ids, MatProduto[IdAção] ) ),
+			        ISFILTERED ( dModalidade ), CALCULATE ( SUM ( MatModalidade[Real INS] ), TREATAS ( ids, MatModalidade[IdAção] ) ),
+			        SUMX ( F, 'Ações'[Real INS] ) ) )
+		formatString: #,0
+		displayFolder: 0b · Projeção e realizado
+		lineageTag: cba696af-aa39-5ca6-a8d7-89dedd9395d2
+
+	/// Projeção de inscritos só das ações já finalizadas (com resultado).
+	measure 'Projeção INS Fechadas' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim && ( 'Ações'[Tem Fechamento] ) )
+			VAR ids = SELECTCOLUMNS ( F, "id", 'Ações'[IdAção] )
+			RETURN IF ( NOT ISBLANK ( fim ),
+			    SWITCH ( TRUE (),
+			        ISFILTERED ( dProduto ), CALCULATE ( SUM ( MatProduto[Meta INS] ), TREATAS ( ids, MatProduto[IdAção] ) ),
+			        ISFILTERED ( dModalidade ), CALCULATE ( SUM ( MatModalidade[Meta INS] ), TREATAS ( ids, MatModalidade[IdAção] ) ),
+			        SUMX ( F, 'Ações'[Meta INS] ) ) )
+		formatString: #,0
+		displayFolder: 0b · Projeção e realizado
+		lineageTag: 50d17944-4c4c-574c-964a-bb046d969b74
+
+	/// Realizado ÷ projeção de inscritos das ações finalizadas.
+	measure 'Atingimento INS' = DIVIDE ( [Realizado INS], [Projeção INS Fechadas] )
+		formatString: 0%
+		displayFolder: 0b · Projeção e realizado
+		lineageTag: f9dea18b-f1ac-5168-a512-f924acd9bb4a
+
+	/// Projeção de matrículas: soma da meta de matrículas cadastrada nas ações do período.
+	measure 'Projeção MAT' =
+			
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim )
+			RETURN SUMX ( F, MIN ( COALESCE ( 'Ações'[Meta MAT], 0 ), COALESCE ( 'Ações'[Meta INS], 0 ) ) )
+		formatString: #,0
+		displayFolder: 0b · Projeção e realizado
+		lineageTag: e2ced165-b7ad-5d3c-8b1a-ca2918fc0e66
+
+	/// Matrículas realizadas lançadas no fechamento das ações do período.
+	measure 'Realizado MAT' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim && ( TRUE () ) )
+			VAR ids = SELECTCOLUMNS ( F, "id", 'Ações'[IdAção] )
+			RETURN IF ( NOT ISBLANK ( fim ),
+			    SWITCH ( TRUE (),
+			        ISFILTERED ( dProduto ), CALCULATE ( SUM ( MatProduto[Real MAT] ), TREATAS ( ids, MatProduto[IdAção] ) ),
+			        ISFILTERED ( dModalidade ), CALCULATE ( SUM ( MatModalidade[Real MAT] ), TREATAS ( ids, MatModalidade[IdAção] ) ),
+			        SUMX ( F, 'Ações'[Real MAT] ) ) )
+		formatString: #,0
+		displayFolder: 0b · Projeção e realizado
+		lineageTag: 25875f7e-34b5-558d-a5bb-436576e0ca49
+
+	measure 'Projeção MAT Fechadas' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim && ( 'Ações'[Tem Fechamento] ) )
+			VAR ids = SELECTCOLUMNS ( F, "id", 'Ações'[IdAção] )
+			RETURN IF ( NOT ISBLANK ( fim ),
+			    SWITCH ( TRUE (),
+			        ISFILTERED ( dProduto ), CALCULATE ( SUM ( MatProduto[Meta MAT] ), TREATAS ( ids, MatProduto[IdAção] ) ),
+			        ISFILTERED ( dModalidade ), CALCULATE ( SUM ( MatModalidade[Meta MAT] ), TREATAS ( ids, MatModalidade[IdAção] ) ),
+			        SUMX ( F, 'Ações'[Meta MAT] ) ) )
+		formatString: #,0
+		displayFolder: 0b · Projeção e realizado
+		lineageTag: 3f1cea37-af9f-5eb9-be76-8be0bd758b6e
+
+	/// Realizado ÷ projeção de matrículas das ações finalizadas.
+	measure 'Atingimento MAT' = DIVIDE ( [Realizado MAT], [Projeção MAT Fechadas] )
+		formatString: 0%
+		displayFolder: 0b · Projeção e realizado
+		lineageTag: 14dc0c2b-ee62-540c-82a1-f2883ad5ef5f
+
+	/// Projeção de matrículas ÷ projeção de inscritos.
+	measure 'Conversão Prevista' = DIVIDE ( [Projeção MAT], [Projeção INS] )
+		formatString: 0.0%
+		displayFolder: 0b · Projeção e realizado
+		lineageTag: d2bb7c22-25d7-5f43-806e-92990864d7cb
+
+	/// Matrículas realizadas ÷ inscritos realizados.
+	measure 'Conversão Realizada' =
+			
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim )
+			RETURN DIVIDE ( SUMX ( F, MIN ( COALESCE ( 'Ações'[Real MAT], 0 ), COALESCE ( 'Ações'[Real INS], 0 ) ) ), SUMX ( F, 'Ações'[Real INS] ) )
+		formatString: 0.0%
+		displayFolder: 0b · Projeção e realizado
+		lineageTag: 1e574a31-09a7-570a-8f77-7597fe856ed1
+
+	/// Ações do período com resultado lançado (status diferente de Planejada ou realizado/custo realizado preenchido).
+	measure 'Ações Finalizadas' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim && ( 'Ações'[Tem Fechamento] ) )
+			RETURN IF ( NOT ISBLANK ( fim ), COUNTROWS ( F ) + 0 )
+		formatString: #,0
+		displayFolder: 0b · Projeção e realizado
+		lineageTag: 1cc38420-0117-5827-b32e-e2b61eed6b8c
+
+	measure 'Qtd Planejadas' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim && ( 'Ações'[Status] = "Planejada" ) )
+			RETURN IF ( NOT ISBLANK ( fim ), COUNTROWS ( F ) + 0 )
+		formatString: #,0
+		displayFolder: 0b · Projeção e realizado
+		lineageTag: 170632ca-8c24-5de8-acfd-92a4e9bf523e
+
+	measure 'Qtd Realizadas' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim && ( 'Ações'[Status] = "Realizada" ) )
+			RETURN IF ( NOT ISBLANK ( fim ), COUNTROWS ( F ) + 0 )
+		formatString: #,0
+		displayFolder: 0b · Projeção e realizado
+		lineageTag: 6ddc1095-c06e-5939-b615-a747cdb10d4c
+
+	measure 'Qtd Parciais' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim && ( 'Ações'[Status] = "Realizada parcialmente" ) )
+			RETURN IF ( NOT ISBLANK ( fim ), COUNTROWS ( F ) + 0 )
+		formatString: #,0
+		displayFolder: 0b · Projeção e realizado
+		lineageTag: a6a73fb0-a2a2-5e2c-aae0-0d82e2fe2d51
+
+	measure 'Qtd Não Realizadas' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim && ( 'Ações'[Status] = "Não realizada" ) )
+			RETURN IF ( NOT ISBLANK ( fim ), COUNTROWS ( F ) + 0 )
+		formatString: #,0
+		displayFolder: 0b · Projeção e realizado
+		lineageTag: 9f5459bc-714e-57f7-9c0b-6d21614557c6
+
+	/// Ações finalizadas com resultado ÷ ações cadastradas (preenchidas). Referência 85%.
+	measure 'Fechamento das Ações' = DIVIDE ( [Ações Finalizadas], [Ações Cadastradas] )
+		formatString: 0%
+		displayFolder: 0b · Projeção e realizado
+		lineageTag: 270036b3-92c3-5d11-9b0a-d2fa3a312de1
+
+	measure 'Ações de Conversão' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim && ( 'Ações'[Objetivo da Ação] = "Conversão (matrículas)" ) )
+			RETURN IF ( NOT ISBLANK ( fim ), COUNTROWS ( F ) + 0 )
+		formatString: #,0
+		displayFolder: 0b · Projeção e realizado
+		lineageTag: 413ff702-d70b-5430-9069-d3a4c4f8aa39
+
+	measure 'Ações de Captação' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim && ( 'Ações'[Objetivo da Ação] = "Captação (inscritos)" ) )
+			RETURN IF ( NOT ISBLANK ( fim ), COUNTROWS ( F ) + 0 )
+		formatString: #,0
+		displayFolder: 0b · Projeção e realizado
+		lineageTag: 1a4eb774-3601-52a0-bd1c-70f01e9dc897
+
+	/// Meta de matrículas das ações com objetivo de conversão.
+	measure 'Projeção MAT Conversão' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim && ( 'Ações'[Objetivo da Ação] = "Conversão (matrículas)" ) )
+			VAR ids = SELECTCOLUMNS ( F, "id", 'Ações'[IdAção] )
+			RETURN IF ( NOT ISBLANK ( fim ),
+			    SWITCH ( TRUE (),
+			        ISFILTERED ( dProduto ), CALCULATE ( SUM ( MatProduto[Meta MAT] ), TREATAS ( ids, MatProduto[IdAção] ) ),
+			        ISFILTERED ( dModalidade ), CALCULATE ( SUM ( MatModalidade[Meta MAT] ), TREATAS ( ids, MatModalidade[IdAção] ) ),
+			        SUMX ( F, 'Ações'[Meta MAT] ) ) )
+		formatString: #,0
+		displayFolder: 0b · Projeção e realizado
+		lineageTag: 9922562a-6a19-574c-bb08-d1c039049a28
+
+	measure 'Realizado MAT Conversão' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim && ( 'Ações'[Objetivo da Ação] = "Conversão (matrículas)" ) )
+			VAR ids = SELECTCOLUMNS ( F, "id", 'Ações'[IdAção] )
+			RETURN IF ( NOT ISBLANK ( fim ),
+			    SWITCH ( TRUE (),
+			        ISFILTERED ( dProduto ), CALCULATE ( SUM ( MatProduto[Real MAT] ), TREATAS ( ids, MatProduto[IdAção] ) ),
+			        ISFILTERED ( dModalidade ), CALCULATE ( SUM ( MatModalidade[Real MAT] ), TREATAS ( ids, MatModalidade[IdAção] ) ),
+			        SUMX ( F, 'Ações'[Real MAT] ) ) )
+		formatString: #,0
+		displayFolder: 0b · Projeção e realizado
+		lineageTag: f7f29650-0233-5509-994d-2c9f92a0931a
+
+	measure 'Atingimento MAT Conversão' = DIVIDE ( [Realizado MAT Conversão], [Projeção MAT Conversão] )
+		formatString: 0%
+		displayFolder: 0b · Projeção e realizado
+		lineageTag: e5efe06f-0d50-5e86-a450-928115d2ee48
+
+	/// Custo previsto das ações do período.
+	measure 'Custo Previsto' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim && ( TRUE () ) )
+			RETURN IF ( NOT ISBLANK ( fim ), SUMX ( F, 'Ações'[Custo Previsto] ) )
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		displayFolder: 0c · Custo
+		lineageTag: b89db637-7b52-545f-a582-ca13cbf0f303
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	/// Custo realizado lançado no fechamento.
+	measure 'Custo Realizado' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim && ( TRUE () ) )
+			RETURN IF ( NOT ISBLANK ( fim ), SUMX ( F, 'Ações'[Custo Realizado] ) )
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		displayFolder: 0c · Custo
+		lineageTag: d0004768-ae29-5267-98fe-489b6c676a57
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	/// Custo previsto só das ações que já têm custo realizado (base de comparação).
+	measure 'Custo Previsto das Fechadas' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim && ( NOT ISBLANK ( 'Ações'[Custo Realizado] ) ) )
+			RETURN IF ( NOT ISBLANK ( fim ), SUMX ( F, 'Ações'[Custo Previsto] ) )
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		displayFolder: 0c · Custo
+		lineageTag: fbece1c9-4175-557e-8135-df5d27cd84cb
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	/// Custo realizado − custo previsto das mesmas ações. Positivo = gastou mais que o previsto.
+	measure 'Estouro de Custo' = IF ( NOT ISBLANK ( [Custo Realizado] ), [Custo Realizado] - COALESCE ( [Custo Previsto das Fechadas], 0 ) )
+		displayFolder: 0c · Custo
+		lineageTag: 85f5216b-d3ab-5f71-8b05-e6c6076cd850
+
+		formatStringDefinition = "+\R$ #,##0;-\R$ #,##0;\R$ 0"
+
+	measure '% Estouro de Custo' = DIVIDE ( [Estouro de Custo], [Custo Previsto das Fechadas] )
+		formatString: +0%;-0%;0%
+		displayFolder: 0c · Custo
+		lineageTag: c6d7e28f-0dcf-5d61-b3a2-8d88dff91624
+
+	/// Custo previsto ÷ projeção de inscritos.
+	measure 'Custo por INS Previsto' = DIVIDE ( [Custo Previsto], CALCULATE ( [Projeção INS], REMOVEFILTERS ( dProduto ), REMOVEFILTERS ( dModalidade ) ) )
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		displayFolder: 0c · Custo
+		lineageTag: bd9d092e-1e11-5afc-a6ae-0a009361401b
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	/// Custo previsto ÷ projeção de matrículas.
+	measure 'Custo por MAT Previsto' = DIVIDE ( [Custo Previsto], CALCULATE ( [Projeção MAT], REMOVEFILTERS ( dProduto ), REMOVEFILTERS ( dModalidade ) ) )
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		displayFolder: 0c · Custo
+		lineageTag: d3b02253-26e1-5bfb-90bc-05e33e154da9
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	/// Custo realizado ÷ inscritos realizados (ações com custo realizado).
+	measure 'Custo por INS Realizado' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim && NOT ISBLANK ( 'Ações'[Custo Realizado] ) )
+			RETURN DIVIDE ( SUMX ( F, 'Ações'[Custo Realizado] ), SUMX ( F, 'Ações'[Real INS] ) )
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		displayFolder: 0c · Custo
+		lineageTag: d5ccadc5-8d5d-550b-a1d2-f6f8a8d21c2d
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	/// Custo realizado ÷ matrículas realizadas (ações com custo realizado).
+	measure 'Custo por MAT Realizado' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim && NOT ISBLANK ( 'Ações'[Custo Realizado] ) )
+			RETURN DIVIDE ( SUMX ( F, 'Ações'[Custo Realizado] ), SUMX ( F, 'Ações'[Real MAT] ) )
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		displayFolder: 0c · Custo
+		lineageTag: 5d7ad0f4-3ca5-5510-866c-6a9c30fba59d
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Cor Estouro' =
+			VAR e = [% Estouro de Custo]
+			RETURN SWITCH ( TRUE (), ISBLANK ( e ), "#6B6F7B", e > 0.1, "#B8322B", e > 0, "#A86E00", "#157A45" )
+		displayFolder: 0c · Custo
+		lineageTag: 26730067-6eb9-56a0-8ccf-e05cada595c7
+
+	/// Consultores ativos (cadastro Consultores 5W2H) com pelo menos uma ação cadastrada no período.
+	measure 'Consultores com Plano' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR t = ADDCOLUMNS ( CALCULATETABLE ( VALUES ( Semanas[Chave Consultor] ), Semanas[Ativo] = TRUE () ),
+			    "@n", CALCULATE ( COUNTROWS ( 'Ações' ), 'Ações'[Data Início] >= i, 'Ações'[Data Início] <= fim ) + 0 )
+			RETURN IF ( NOT ISBLANK ( fim ), COUNTROWS ( FILTER ( t, [@n] > 0 ) ) + 0 )
+		formatString: #,0
+		displayFolder: 0a · Cobertura
+		lineageTag: c36ec44d-f607-55ac-8416-2c1922264833
+
+	/// Consultores ativos sem nenhuma ação cadastrada no período.
+	measure 'Consultores sem Plano' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR t = ADDCOLUMNS ( CALCULATETABLE ( VALUES ( Semanas[Chave Consultor] ), Semanas[Ativo] = TRUE () ),
+			    "@n", CALCULATE ( COUNTROWS ( 'Ações' ), 'Ações'[Data Início] >= i, 'Ações'[Data Início] <= fim ) + 0 )
+			RETURN IF ( NOT ISBLANK ( fim ), COUNTROWS ( FILTER ( t, [@n] = 0 ) ) + 0 )
+		formatString: #,0
+		displayFolder: 0a · Cobertura
+		lineageTag: 656f8aaf-a09b-53af-89c7-5633f0d36869
+
+	/// Consultores com plano de ação lançado ÷ consultores ativos (HC). Referência 90%.
+	measure '% Consultores com Plano' = DIVIDE ( [Consultores com Plano], [HC Ativo] )
+		formatString: 0%
+		displayFolder: 0a · Cobertura
+		lineageTag: 473e80b5-5125-5998-abe8-fb2af0f1369e
+
+	/// Ações cadastradas ÷ consultores que cadastraram.
+	measure 'Ações por Consultor com Plano' = DIVIDE ( [Ações Cadastradas], [Consultores com Plano] )
+		formatString: #,0.0
+		displayFolder: 0a · Cobertura
+		lineageTag: bafa1ec9-3f5d-5bbe-b08b-8e3af04d5a22
+
+	/// Unidades com consultor ativo no cadastro.
+	measure 'Unidades Ativas' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR t = ADDCOLUMNS ( CALCULATETABLE ( VALUES ( Semanas[Unidade] ), Semanas[Ativo] = TRUE (), Semanas[Unidade] <> "" ),
+			    "@n", CALCULATE ( COUNTROWS ( 'Ações' ), 'Ações'[Data Início] >= i, 'Ações'[Data Início] <= fim ) + 0 )
+			RETURN IF ( NOT ISBLANK ( fim ), COUNTROWS ( t ) + 0 )
+		formatString: #,0
+		displayFolder: 0a · Cobertura
+		lineageTag: cf29ddd9-74bf-53c5-bb82-c203ba73af6f
+
+	/// Unidades com pelo menos uma ação cadastrada no período.
+	measure 'Unidades com Plano' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR t = ADDCOLUMNS ( CALCULATETABLE ( VALUES ( Semanas[Unidade] ), Semanas[Ativo] = TRUE (), Semanas[Unidade] <> "" ),
+			    "@n", CALCULATE ( COUNTROWS ( 'Ações' ), 'Ações'[Data Início] >= i, 'Ações'[Data Início] <= fim ) + 0 )
+			RETURN IF ( NOT ISBLANK ( fim ), COUNTROWS ( FILTER ( t, [@n] > 0 ) ) + 0 )
+		formatString: #,0
+		displayFolder: 0a · Cobertura
+		lineageTag: 6211cb38-4321-513f-9318-31969e82e7be
+
+	measure 'Unidades sem Plano' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR t = ADDCOLUMNS ( CALCULATETABLE ( VALUES ( Semanas[Unidade] ), Semanas[Ativo] = TRUE (), Semanas[Unidade] <> "" ),
+			    "@n", CALCULATE ( COUNTROWS ( 'Ações' ), 'Ações'[Data Início] >= i, 'Ações'[Data Início] <= fim ) + 0 )
+			RETURN IF ( NOT ISBLANK ( fim ), COUNTROWS ( FILTER ( t, [@n] = 0 ) ) + 0 )
+		formatString: #,0
+		displayFolder: 0a · Cobertura
+		lineageTag: 321b29f7-3e7e-51a5-978a-37e006b1ab2d
+
+	/// Marca o consultor ativo sem ação (vazio para os demais, assim a lista mostra só quem falta).
+	measure 'Sem Plano (lista)' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR t = ADDCOLUMNS ( CALCULATETABLE ( VALUES ( Semanas[Chave Consultor] ), Semanas[Ativo] = TRUE () ),
+			    "@n", CALCULATE ( COUNTROWS ( 'Ações' ), 'Ações'[Data Início] >= i, 'Ações'[Data Início] <= fim ) + 0 )
+			RETURN IF ( NOT ISBLANK ( fim ) && HASONEVALUE ( Semanas[Chave Consultor] ) && COUNTROWS ( t ) = 1 && MAXX ( t, [@n] ) = 0, "Sem ação no período" )
+		displayFolder: 0a · Cobertura
+		lineageTag: 66d96d0a-ed06-526a-854a-6ce4fcd73b90
+
+	measure 'Ações pelo Consultor' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim && ( 'Ações'[Cadastrado por] = "Consultor" ) )
+			RETURN IF ( NOT ISBLANK ( fim ), COUNTROWS ( F ) + 0 )
+		formatString: #,0
+		displayFolder: 0a · Cobertura
+		lineageTag: 87bfb963-03e7-5c2d-b0ef-0f8680840a2c
+
+	measure 'Ações pelo Coordenador' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim && ( 'Ações'[Cadastrado por] = "Coordenador" ) )
+			RETURN IF ( NOT ISBLANK ( fim ), COUNTROWS ( F ) + 0 )
+		formatString: #,0
+		displayFolder: 0a · Cobertura
+		lineageTag: 21789fea-4d84-5df7-86a1-59bb94397890
+
+	measure 'Ações por Outra Pessoa' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim && ( 'Ações'[Cadastrado por] IN { "Outra pessoa", "Não informado" } ) )
+			RETURN IF ( NOT ISBLANK ( fim ), COUNTROWS ( F ) + 0 )
+		formatString: #,0
+		displayFolder: 0a · Cobertura
+		lineageTag: d72fd4a2-dc94-57ba-8214-105965447157
+
+	/// Ações cadastradas até o dia de início ÷ ações cadastradas.
+	measure '% Cadastro no Prazo' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR F = FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim && ( 'Ações'[Prazo do Cadastro] = "No prazo" ) )
+			RETURN IF ( NOT ISBLANK ( fim ), DIVIDE ( COUNTROWS ( F ) + 0, [Ações Cadastradas] ) )
+		formatString: 0%
+		displayFolder: 0a · Cobertura
+		lineageTag: 0954d3a9-6468-525c-bb4d-f1500f8a333e
+
+	/// Ações do período que trabalham o produto (uma ação com 2 produtos conta nos dois).
+	measure 'Ações no Produto' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR ids = SELECTCOLUMNS ( FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim ), "id", 'Ações'[IdAção] )
+			RETURN IF ( NOT ISBLANK ( fim ), CALCULATE ( DISTINCTCOUNT ( MatProduto[IdAção] ), TREATAS ( ids, MatProduto[IdAção] ) ) + 0 )
+		formatString: #,0
+		displayFolder: 0d · Produtos
+		lineageTag: 0a19ffe4-6dd4-5e7e-aea8-20bad99ca1d2
+
+	measure 'Consultores no Produto' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR ids = SELECTCOLUMNS ( FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim ), "id", 'Ações'[IdAção] )
+			RETURN IF ( NOT ISBLANK ( fim ), CALCULATE ( DISTINCTCOUNT ( Semanas[Chave Consultor] ), TREATAS ( ids, MatProduto[IdAção] ), CROSSFILTER ( MatProduto[IdSemana], Semanas[IdSemana], BOTH ) ) + 0 )
+		formatString: #,0
+		displayFolder: 0d · Produtos
+		lineageTag: c5280e76-f2d7-53ec-9402-efaf37fed3b6
+
+	measure 'Ações na Modalidade' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR ids = SELECTCOLUMNS ( FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim ), "id", 'Ações'[IdAção] )
+			RETURN IF ( NOT ISBLANK ( fim ), CALCULATE ( DISTINCTCOUNT ( MatModalidade[IdAção] ), TREATAS ( ids, MatModalidade[IdAção] ) ) + 0 )
+		formatString: #,0
+		displayFolder: 0d · Produtos
+		lineageTag: b628df12-1afc-5fc1-98da-a144d8a4e618
+
+	measure 'Consultores na Modalidade' =
+			VAR i = [Data Início]
+			VAR fim = [Data Fim Período]
+			VAR ids = SELECTCOLUMNS ( FILTER ( 'Ações', 'Ações'[Data Início] >= i && 'Ações'[Data Início] <= fim ), "id", 'Ações'[IdAção] )
+			RETURN IF ( NOT ISBLANK ( fim ), CALCULATE ( DISTINCTCOUNT ( Semanas[Chave Consultor] ), TREATAS ( ids, MatModalidade[IdAção] ), CROSSFILTER ( MatModalidade[IdSemana], Semanas[IdSemana], BOTH ) ) + 0 )
+		formatString: #,0
+		displayFolder: 0d · Produtos
+		lineageTag: 720f79a1-0bc8-50f1-98fb-9b2ce5645bee
+
+	/// Produtos (Graduação, Pós, Técnico, Profissionalizante) sem nenhuma ação no período.
+	measure 'Produtos sem Ação' = COUNTROWS ( FILTER ( CALCULATETABLE ( VALUES ( dProduto[Produto] ), dProduto[Chave] <> "NaoInformado" ), [Ações no Produto] = 0 ) ) + 0
+		formatString: #,0
+		displayFolder: 0d · Produtos
+		lineageTag: 7fc99a35-f235-5251-90b9-81ef0a57d975
+
+	measure 'Cor Ações no Produto' = IF ( [Ações no Produto] = 0, "#B8322B", "#2E3138" )
+		displayFolder: 0d · Produtos
+		lineageTag: bf166725-bb6d-5a19-bc7f-efc587f53d36
+
+	measure 'Fundo Ações no Produto' = IF ( [Ações no Produto] = 0, "#FBE6E4", "#FFFFFF" )
+		displayFolder: 0d · Produtos
+		lineageTag: 7983c34f-c1d0-5b10-98cd-d58ab803ce68
+
+	/// Texto do cabeçalho com a data de corte.
+	measure 'Data Base Texto' =
+			VAR c = [Data Corte]
+			RETURN "DT BASE " & IF ( ISBLANK ( c ), "—", FORMAT ( c, "dd/MM/yyyy" ) )
+		displayFolder: 8 · Textos e recomendações
+		lineageTag: 1ea7b755-6776-5f90-bdbf-32f5e9e4344f
+
+	measure Escopo =
+			SWITCH ( TRUE (),
+			    ISFILTERED ( Semanas[Consultor] ) && HASONEVALUE ( Semanas[Consultor] ), VALUES ( Semanas[Consultor] ),
+			    ISFILTERED ( Semanas[Coordenador] ) && HASONEVALUE ( Semanas[Coordenador] ), VALUES ( Semanas[Coordenador] ),
+			    ISFILTERED ( Semanas[Unidade] ) && HASONEVALUE ( Semanas[Unidade] ), VALUES ( Semanas[Unidade] ),
+			    ISFILTERED ( Semanas[Regional] ) && HASONEVALUE ( Semanas[Regional] ), "Regional " & VALUES ( Semanas[Regional] ),
+			    "O Campus" )
+		displayFolder: 8 · Textos e recomendações
+		lineageTag: 09ff0cc7-f481-58cc-8253-094427a50128
+
+	measure 'Leitura do Período' =
+			VAR p = [Pace INS]
+			VAR c = [Data Corte]
+			VAR txtRitmo = IF ( [Dias Restantes] > 0, " Para bater a meta são necessários " & FORMAT ( [INS por Dia Necessário], "#,0.0" ) & " INS por dia nos " & [Dias Restantes] & " dias restantes; hoje a média é " & FORMAT ( [Ritmo Atual], "#,0.0" ) & ".", "" )
+			RETURN
+			    IF ( ISBLANK ( p ),
+			        [Escopo] & " tem " & FORMAT ( [Meta INS Período], "#,0" ) & " INS de meta no período. O pace aparece a partir do primeiro dia com meta.",
+			        [Escopo] & ": pace real de " & FORMAT ( [INS Realizado] + 0, "#,0" ) & " INS contra pace ideal de " & FORMAT ( [INS Ideal], "#,0" ) & " até " & FORMAT ( c, "dd/MM" )
+			            & " (gap " & FORMAT ( [Gap INS], "+#,0;-#,0;0" ) & "). Mantido o ritmo, fecha com " & FORMAT ( [Tendência INS], "#,0" ) & " de " & FORMAT ( [Meta INS Período], "#,0" )
+			            & " INS. MAT: " & FORMAT ( [MAT Realizado] + 0, "#,0" ) & " de " & FORMAT ( [MAT Ideal], "#,0" ) & " esperadas." & txtRitmo )
+		displayFolder: 8 · Textos e recomendações
+		lineageTag: 05462b26-5d0a-5a1d-b786-56377c4bbaf4
+
+	measure 'Pior Regional' =
+			VAR t = FILTER ( ADDCOLUMNS ( VALUES ( Semanas[Regional] ), "@p", [Pace INS] ), NOT ISBLANK ( [@p] ) )
+			RETURN MAXX ( TOPN ( 1, t, [@p], ASC ), Semanas[Regional] & " · " & FORMAT ( CALCULATE ( [INS Realizado] + 0 ), "#,0" ) & " de " & FORMAT ( CALCULATE ( [INS Ideal] ), "#,0" ) & " INS do pace ideal" )
+		displayFolder: 8 · Textos e recomendações
+		lineageTag: 56563e3d-2fd3-5e3f-9967-83390fd8f86a
+
+	measure 'Maior Gap Coordenador' =
+			VAR t = FILTER ( ADDCOLUMNS ( VALUES ( Semanas[Coordenador] ), "@g", [Gap INS] ), NOT ISBLANK ( [@g] ) && [@g] < 0 )
+			RETURN MAXX ( TOPN ( 1, t, [@g], ASC ), Semanas[Coordenador] & " · " & FORMAT ( [@g], "+#,0;-#,0" ) & " INS" )
+		displayFolder: 8 · Textos e recomendações
+		lineageTag: 34a87560-a00c-5cf3-bd88-005c8931d0f2
+
+	measure 'Ação Mais Eficiente' =
+			VAR t = FILTER ( ADDCOLUMNS ( VALUES ( 'Ações'[Tipo] ), "@v", [INS por Ação], "@n", [Ações Iniciadas] ), 'Ações'[Tipo] <> "(tipo não informado)" && [@n] >= 2 && NOT ISBLANK ( [@v] ) )
+			RETURN MAXX ( TOPN ( 1, t, [@v], DESC ), 'Ações'[Tipo] & " · " & FORMAT ( [@v], "#,0.0" ) & " INS por ação" )
+		displayFolder: 8 · Textos e recomendações
+		lineageTag: 9e1215b5-088b-5592-800a-f95bf39c7f30
+
+	measure 'Resumo Pendências' =
+			VAR a = [Ações Atrasadas]
+			VAR v = [Ações Vencidas]
+			RETURN IF ( ISBLANK ( v ) || v = 0, "Nenhuma ação vencida até a data de corte", FORMAT ( a + 0, "#,0" ) & " de " & FORMAT ( v, "#,0" ) & " ações vencidas sem conclusão" )
+		displayFolder: 8 · Textos e recomendações
+		lineageTag: f5a38885-cdd7-5bc3-acf4-9423d479a21f
+
+	measure 'Alerta Plano' =
+			VAR t = FILTER ( ADDCOLUMNS ( VALUES ( Semanas[Coordenador] ), "@p", [Plano Preenchido] ), NOT ISBLANK ( [@p] ) && [@p] < 0.9 )
+			VAR n = COUNTROWS ( t )
+			RETURN IF ( n > 0, n & " coordenador(es) com plano abaixo de 90% nas semanas já iniciadas. Menor: " & MAXX ( TOPN ( 1, t, [@p], ASC ), Semanas[Coordenador] & " (" & FORMAT ( [@p], "0%" ) & ")" ) & ". Cobrar o cadastro das ações da semana.", "Plano preenchido em todas as coordenações." )
+		displayFolder: 8 · Textos e recomendações
+		lineageTag: a2579752-996b-518e-8931-5d9d93a1bf91
+
+	measure 'Alerta Registro' =
+			VAR t = FILTER ( ADDCOLUMNS ( VALUES ( Semanas[Coordenador] ), "@d", [Disciplina de Registro], "@e", [Ações Iniciadas] ), [@e] >= 2 && [@d] < 0.8 )
+			VAR n = COUNTROWS ( t )
+			RETURN IF ( n > 0, n & " coordenador(es) com fechamento abaixo de 80% das ações iniciadas. Menor: " & MAXX ( TOPN ( 1, t, [@d], ASC ), Semanas[Coordenador] & " (" & FORMAT ( [@d], "0%" ) & ")" ) & ". Lançar o fechamento até segunda-feira.", "Fechamento das ações em dia." )
+		displayFolder: 8 · Textos e recomendações
+		lineageTag: eaa8ed37-90d1-5e71-b5ba-3d1ff7339251
+
+	measure 'Alerta Conversão' =
+			VAR media = DIVIDE ( [MAT Realizado], [INS Realizado] )
+			VAR t = FILTER ( ADDCOLUMNS ( VALUES ( Semanas[Unidade] ), "@i", [INS Realizado], "@m", [MAT Realizado] ), [@i] >= 15 && DIVIDE ( [@m], [@i] ) < media * 0.7 )
+			VAR ganho = SUMX ( t, [@i] * media - [@m] )
+			RETURN IF ( COUNTROWS ( t ) > 0, COUNTROWS ( t ) & " unidade(s) convertem menos de 70% da média (" & FORMAT ( media * 100, "#,0.0" ) & " MAT/100 INS). Na média seriam +" & FORMAT ( ganho, "#,0" ) & " MAT. Acionar a régua de pós-inscrição.", "Nenhuma unidade com conversão INS → MAT muito abaixo da média." )
+		displayFolder: 8 · Textos e recomendações
+		lineageTag: 4ffa6a9c-00d2-58f7-8f81-1bfcb9e9007e
+
+	measure 'Alerta Ação' =
+			VAR t = FILTER ( ADDCOLUMNS ( VALUES ( 'Ações'[Tipo] ), "@v", [INS por Ação], "@n", [Ações Iniciadas] ), 'Ações'[Tipo] <> "(tipo não informado)" && [@n] >= 2 && NOT ISBLANK ( [@v] ) )
+			VAR melhor = TOPN ( 1, t, [@v], DESC )
+			VAR pior = TOPN ( 1, t, [@v], ASC )
+			VAR vm = MAXX ( melhor, [@v] )
+			VAR vp = MAXX ( pior, [@v] )
+			RETURN IF ( COUNTROWS ( t ) >= 2 && vm > vp * 1.3, "Escalar " & MAXX ( melhor, 'Ações'[Tipo] ) & " (" & FORMAT ( vm, "#,0.0" ) & " INS por ação) e rever " & MAXX ( pior, 'Ações'[Tipo] ) & " (" & FORMAT ( vp, "#,0.0" ) & ").", "Sem diferença relevante de eficiência entre os tipos de ação (ou poucas ações iniciadas)." )
+		displayFolder: 8 · Textos e recomendações
+		lineageTag: 121fc512-19fd-5efb-97dc-651a5008b999
+
+	measure 'Alerta Equipe' =
+			VAR t = FILTER ( ADDCOLUMNS ( VALUES ( Semanas[Coordenador] ), "@s", [Consultores sem Ação] + [Consultores só com Ação Futura], "@h", [HC Ativo] ), [@s] > 0 )
+			VAR n = SUMX ( t, [@s] )
+			VAR h = [HC Ativo]
+			RETURN IF ( ISBLANK ( [Data Corte] ), BLANK (), IF ( n > 0, FORMAT ( n, "#,0" ) & " de " & FORMAT ( h, "#,0" ) & " consultores ativos ainda sem ação em execução. Maior concentração: "
+			    & MAXX ( TOPN ( 1, t, [@s], DESC ), Semanas[Coordenador] & " (" & [@s] & " de " & [@h] & ")" ) & ".", "Toda a equipe ativa tem ação em execução." ) )
+		displayFolder: 8 · Textos e recomendações
+		lineageTag: 6560229f-5369-544c-8721-ec7fd3471c11
+
+	measure 'Exibir · Data Início' =
+			VAR v = [Data Início]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "dd/MM/yyyy" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: f268fa98-2da9-5b88-ab8e-d61d03968e5a
+
+	measure 'Exibir · Data Fim Período' =
+			VAR v = [Data Fim Período]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "dd/MM/yyyy" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 71c3049b-b239-5308-8e27-ffe535fffb98
+
+	measure 'Exibir · Data Corte' =
+			VAR v = [Data Corte]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "dd/MM/yyyy" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 7851d561-1ec1-50e5-8b2c-c5af976d5ee2
+
+	measure 'Exibir · Dias Corridos' =
+			VAR v = [Dias Corridos]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 58ad17be-2fd0-5af7-9096-b921ad0bd3a2
+
+	measure 'Exibir · Dias Restantes' =
+			VAR v = [Dias Restantes]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 5ba20cb6-622c-5c2f-a659-70ca6aab55fc
+
+	measure 'Exibir · INS Realizado' =
+			VAR v = [INS Realizado]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 7e891284-6145-56d2-bd19-715eb5a13b50
+
+	measure 'Exibir · Meta INS Período' =
+			VAR v = [Meta INS Período]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 69753277-ac21-5601-8ab9-10f90adb4744
+
+	measure 'Exibir · INS Ideal' =
+			VAR v = [INS Ideal]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 37b3f656-4c07-512c-bbe1-403bcec554be
+
+	measure 'Exibir · Pace INS' =
+			VAR v = [Pace INS]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: e8498f62-d796-5518-8b34-7d59c7f35e5e
+
+	measure 'Exibir · Gap INS' =
+			VAR v = [Gap INS]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "+#,0;-#,0;0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: aa84ae13-a164-50e5-bf9c-8890f9f1b365
+
+	measure 'Exibir · Variação Pace INS' =
+			VAR v = [Variação Pace INS]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "+0%;-0%;0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 965f03a0-0ba7-5718-b6ac-8427c67e4572
+
+	measure 'Exibir · Tendência INS' =
+			VAR v = [Tendência INS]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 191f2162-f31a-5d55-87ea-f092f5a2d83e
+
+	measure 'Exibir · Projeção % Meta' =
+			VAR v = [Projeção % Meta]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 75f097c6-c23d-5c89-b594-1d5cb75b9ddf
+
+	measure 'Exibir · Falta INS' =
+			VAR v = [Falta INS]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 0b01d50f-2887-52ae-aa72-e8e3027cf52c
+
+	measure 'Exibir · Ritmo Atual' =
+			VAR v = [Ritmo Atual]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0.0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 901f1728-c650-581a-bdb6-bd069666ab95
+
+	measure 'Exibir · INS por Dia Necessário' =
+			VAR v = [INS por Dia Necessário]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0.0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: b79f1822-5a3c-5a13-bc5d-75875be64e5a
+
+	measure 'Exibir · Aceleração Necessária' =
+			VAR v = [Aceleração Necessária]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "+0%;-0%;0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 83b889d1-e451-5007-939f-e6ac30de67b7
+
+	measure 'Exibir · Consultores' =
+			VAR v = [Consultores]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 6545bed6-b1fe-5946-9eea-34c4a9f65cdb
+
+	measure 'Exibir · Necessário por Consultor' =
+			VAR v = [Necessário por Consultor]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0.00" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 04ca99d5-177f-5ea6-8d71-e5b41571fde6
+
+	measure 'Exibir · INS Médio por Consultor' =
+			VAR v = [INS Médio por Consultor]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0.0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 8abea277-9545-5c87-823e-e069faadc58b
+
+	measure 'Exibir · Meta MAT Período' =
+			VAR v = [Meta MAT Período]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: a98c6cda-39c0-5397-b6ea-62c68afd7959
+
+	measure 'Exibir · MAT Ideal' =
+			VAR v = [MAT Ideal]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 5a013bd3-5362-5fb6-aad2-5a7759784a44
+
+	measure 'Exibir · MAT Realizado' =
+			VAR v = [MAT Realizado]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 0570e5d9-3de8-5926-95bf-85039c11b309
+
+	measure 'Exibir · Pace MAT' =
+			VAR v = [Pace MAT]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 46c8d4f7-bd20-5acb-a0c2-29236a5a6365
+
+	measure 'Exibir · Gap MAT' =
+			VAR v = [Gap MAT]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "+#,0;-#,0;0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: bc6dbcff-1ca6-55b6-bbb5-f13ff4ef8f78
+
+	measure 'Exibir · Tendência MAT' =
+			VAR v = [Tendência MAT]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 98c83ae5-38c9-5e85-ad22-a8fa0e7e5f7e
+
+	measure 'Exibir · Projeção % Meta MAT' =
+			VAR v = [Projeção % Meta MAT]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: f982b458-d7df-5e51-a45e-d980ad3eaae9
+
+	measure 'Exibir · Meta MAT Semana' =
+			VAR v = [Meta MAT Semana]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: d9320e43-844b-5918-a17b-a72750369ec5
+
+	measure 'Exibir · MAT Realizado Semana' =
+			VAR v = [MAT Realizado Semana]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: baa94340-a468-5be4-9dd4-01c35a05201e
+
+	measure 'Exibir · MAT a cada 100 INS' =
+			VAR v = [MAT a cada 100 INS]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0.0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: cdb41de5-722a-5a41-874a-0569551fa0ce
+
+	measure 'Exibir · % Acumulado INS' =
+			VAR v = [% Acumulado INS]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: ed6f81af-c6b0-5cb5-bb60-963e9ca14986
+
+	measure 'Exibir · Participação Top 20%' =
+			VAR v = [Participação Top 20%]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 2b7d2650-812b-5004-ac79-a811cfd25394
+
+	measure 'Exibir · Consultores sem INS' =
+			VAR v = [Consultores sem INS]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: ab970d9e-9ce9-5a89-afad-cf2aac68ebfd
+
+	measure 'Exibir · Total Semanas' =
+			VAR v = [Total Semanas]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 9534616d-8162-5440-8d3c-41294153637f
+
+	measure 'Exibir · Semanas com Ação' =
+			VAR v = [Semanas com Ação]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: de256b71-eba8-5b2b-9938-cab3ab041d64
+
+	measure 'Exibir · Plano Preenchido' =
+			VAR v = [Plano Preenchido]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 6030ad79-42be-59d1-aff5-ef31381572db
+
+	measure 'Exibir · Ações Planejadas' =
+			VAR v = [Ações Planejadas]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 44bf8ad0-a392-5aec-b992-2cc9a7a2570b
+
+	measure 'Exibir · Ações Iniciadas' =
+			VAR v = [Ações Iniciadas]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 5e6f9a16-18e6-5db0-bd42-c9e86fcdf5bc
+
+	measure 'Exibir · Ações Vencidas' =
+			VAR v = [Ações Vencidas]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 2d9064fc-9f6a-5e2a-8291-1b2738ac8cfb
+
+	measure 'Exibir · Ações Concluídas' =
+			VAR v = [Ações Concluídas]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 8a419616-31c3-5796-bc4a-0292ac01db7b
+
+	measure 'Exibir · Ações Realizadas' =
+			VAR v = [Ações Realizadas]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 5fc0e2de-d504-5625-9b49-4b6b6e8c61bc
+
+	measure 'Exibir · Ações Realizadas Parcialmente' =
+			VAR v = [Ações Realizadas Parcialmente]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 79cadc56-81ac-5c70-a322-d646761c6105
+
+	measure 'Exibir · Ações Não Realizadas' =
+			VAR v = [Ações Não Realizadas]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: d5717c5c-fb5c-5d90-8c43-7ea695691967
+
+	measure 'Exibir · Taxa de Realização' =
+			VAR v = [Taxa de Realização]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 549a0d2d-cce6-53fb-912b-bb6a2872fae7
+
+	measure 'Exibir · Ações Atrasadas' =
+			VAR v = [Ações Atrasadas]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 53a1e69c-0d52-5c1c-9e76-65326c61c3b2
+
+	measure 'Exibir · Ações com Fechamento' =
+			VAR v = [Ações com Fechamento]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 5d188743-2ed6-557a-963b-91d425c43b7f
+
+	measure 'Exibir · Execução' =
+			VAR v = [Execução]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: cf89983c-0dbb-58d3-b55c-19df3838e17f
+
+	measure 'Exibir · Disciplina de Registro' =
+			VAR v = [Disciplina de Registro]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: da6dd5f9-bfd9-5685-b120-16a656854c90
+
+	measure 'Exibir · Vencidas Fechadas' =
+			VAR v = [Vencidas Fechadas]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 7e97b465-41a4-557d-95b5-c23a4e2ed169
+
+	measure 'Exibir · % Vencidas Fechadas' =
+			VAR v = [% Vencidas Fechadas]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: aaa3c34a-4fc2-5ad5-88a3-d669cb58edce
+
+	measure 'Exibir · Atraso Médio (dias)' =
+			VAR v = [Atraso Médio (dias)]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0.0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: b5aba8c0-fa92-56b4-a6dd-7c4c60376d0b
+
+	measure 'Exibir · Dias em Atraso' =
+			VAR v = [Dias em Atraso]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: d578f8b4-e82f-51e7-af8f-ff377d311d72
+
+	measure 'Exibir · Meta INS em Atraso' =
+			VAR v = [Meta INS em Atraso]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: af454923-c3e9-5a6e-b296-3b49bb4949b5
+
+	measure 'Exibir · INS das Vencidas' =
+			VAR v = [INS das Vencidas]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 016c8366-fe70-5b92-aa47-4840aae1cec6
+
+	measure 'Exibir · Leitura Vencidas' = COALESCE ( [Leitura Vencidas], "–" )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 0000ce62-306b-532f-861e-ef16de2854f7
+
+	measure 'Exibir · Execução das Ações' =
+			VAR v = [Execução das Ações]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: c4bc9f50-9c6f-59c3-8bba-75294dd1ee21
+
+	measure 'Exibir · INS das Ações' =
+			VAR v = [INS das Ações]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 3e7d47e8-6c7b-5eff-9fab-088b64c33429
+
+	measure 'Exibir · Meta INS das Ações' =
+			VAR v = [Meta INS das Ações]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 38ace81a-de6b-5bc3-a75b-9a0822c5439a
+
+	measure 'Exibir · Atingimento INS das Ações' =
+			VAR v = [Atingimento INS das Ações]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: f4a539ef-cf35-570e-879a-ccf119977d63
+
+	measure 'Exibir · MAT das Ações' =
+			VAR v = [MAT das Ações]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: ac8b48f8-d9bb-5812-9b48-6aef321f91de
+
+	measure 'Exibir · INS por Ação' =
+			VAR v = [INS por Ação]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0.0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 5e4cee60-86db-5947-9a35-44f161b0cfea
+
+	measure 'Exibir · Ações Programadas' =
+			VAR v = [Ações Programadas]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: fdb939c6-8e46-5424-840b-a7414bbfd517
+
+	measure 'Exibir · HC Ativo' =
+			VAR v = [HC Ativo]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: eb6e2416-ddd6-5dd4-9aaa-51e1ac9319d8
+
+	measure 'Exibir · Consultores em Ação' =
+			VAR v = [Consultores em Ação]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 78564750-bee0-5c8b-9a21-8dd99b59d306
+
+	measure 'Exibir · Consultores só com Ação Futura' =
+			VAR v = [Consultores só com Ação Futura]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: cfbc2b28-f7eb-5f66-8345-63776a64b616
+
+	measure 'Exibir · Consultores sem Ação' =
+			VAR v = [Consultores sem Ação]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: cef02f1a-62d5-5946-bbd7-7c9f6bd68a35
+
+	measure 'Exibir · % Equipe em Ação' =
+			VAR v = [% Equipe em Ação]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 3e24dabc-a064-52f4-b36b-ee093e3f7cb9
+
+	measure 'Exibir · % Equipe sem Ação' =
+			VAR v = [% Equipe sem Ação]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: c4ce3251-1687-5eec-b49f-c773f3d542f3
+
+	measure 'Exibir · Ações por Consultor em Ação' =
+			VAR v = [Ações por Consultor em Ação]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0.0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 2e141d52-5b55-51b7-822f-56c7f0739e84
+
+	measure 'Exibir · Situação na Equipe' = COALESCE ( [Situação na Equipe], "–" )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 9491a130-fc75-5b00-af61-d1a713a0859a
+
+	measure 'Exibir · Pendência na Equipe' = COALESCE ( [Pendência na Equipe], "–" )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 8d8b9ed8-0bcd-5177-90e9-1cb172bf0fa3
+
+	measure 'Exibir · Próxima Ação' =
+			VAR v = [Próxima Ação]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "dd/MM/yyyy" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 36cf8657-d267-57ce-af4a-e0c3d20a39d0
+
+	measure 'Exibir · Ações Futuras Pendentes' =
+			VAR v = [Ações Futuras Pendentes]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 6ef03e75-29c2-5378-b804-dff500c80d78
+
+	measure 'Exibir · Semanas sem Ação' =
+			VAR v = [Semanas sem Ação]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 97fe51dd-59a9-5561-bf03-bdaf10d22489
+
+	measure 'Exibir · Estados com Operação' =
+			VAR v = [Estados com Operação]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 321c2cf8-7f25-5cff-a13d-793b0750c69a
+
+	measure 'Exibir · Unidades' =
+			VAR v = [Unidades]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 30d47e97-012c-5441-8c59-ebae0c73bb85
+
+	measure 'Exibir · Unidades Localizadas' =
+			VAR v = [Unidades Localizadas]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: b669b33f-4240-5100-a6f7-83b411807211
+
+	measure 'Exibir · Unidades sem UF' =
+			VAR v = [Unidades sem UF]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 36fddd99-846e-5531-a963-525965b9a667
+
+	measure 'Exibir · % Unidades Localizadas' =
+			VAR v = [% Unidades Localizadas]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 81e512d6-d3d5-5285-9a8c-af2454e5093d
+
+	measure 'Exibir · Referência 85%' =
+			VAR v = [Referência 85%]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 87f65321-371a-5099-bc38-afaad8075551
+
+	measure 'Exibir · Referência 90%' =
+			VAR v = [Referência 90%]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 275af204-0e29-5f27-80f6-173574a22641
+
+	measure 'Exibir · Máximo 100%' =
+			VAR v = [Máximo 100%]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 8f3b4331-9365-5a01-b901-d936fab27bc8
+
+	measure 'Exibir · Ganho de Ritmo' =
+			VAR v = [Ganho de Ritmo]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "+0%;-0%;0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 617ad6f2-d494-5e09-b607-8655cedcf765
+
+	measure 'Exibir · Projeção Simulada' =
+			VAR v = [Projeção Simulada]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: c83c79f7-effd-58db-af22-06e8eac6c6fe
+
+	measure 'Exibir · Projeção Simulada % Meta' =
+			VAR v = [Projeção Simulada % Meta]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 64116ff4-39bf-5cd5-9464-b97e4abd687c
+
+	measure 'Exibir · Diferença Simulada' =
+			VAR v = [Diferença Simulada]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "+#,0;-#,0;0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: c9c4ddb5-baf1-557e-930f-87b5412d20b7
+
+	measure 'Exibir · Ganho Necessário' =
+			VAR v = [Ganho Necessário]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "+0%;-0%;0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 2cb123e9-c55e-5b56-930f-b8cce25bb1d0
+
+	measure 'Exibir · INS Realizado Acumulado' =
+			VAR v = [INS Realizado Acumulado]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: c3578f23-fbf5-5e9c-ae6f-7fbbeed66be5
+
+	measure 'Exibir · Pace Ideal Acumulado' =
+			VAR v = [Pace Ideal Acumulado]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: c8d97892-c95a-5616-8a34-380dce544b53
+
+	measure 'Exibir · Projeção Acumulada' =
+			VAR v = [Projeção Acumulada]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: fbd3acc0-3168-5ced-be99-bd30f9d7c441
+
+	measure 'Exibir · Meta (linha)' =
+			VAR v = [Meta (linha)]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 62493f4a-35f0-558c-b4c9-a0d94e0ccd67
+
+	measure 'Exibir · INS no Dia' =
+			VAR v = [INS no Dia]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 6888279e-5604-526e-8c47-1e38bf853855
+
+	measure 'Exibir · Pace do Dia' =
+			VAR v = [Pace do Dia]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0.0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: cd5cc923-edc3-5f72-9f30-8bb01b99a345
+
+	measure 'Exibir · Ações Cadastradas' =
+			VAR v = [Ações Cadastradas]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 6c4e6c4c-be87-59bf-8e6b-031d76c2da48
+
+	measure 'Exibir · Projeção INS' =
+			VAR v = [Projeção INS]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 296ee6df-1f1b-517e-b3f2-230d8c36f267
+
+	measure 'Exibir · Realizado INS' =
+			VAR v = [Realizado INS]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: aa3de875-45f9-5479-adb5-08d15105a44a
+
+	measure 'Exibir · Projeção INS Fechadas' =
+			VAR v = [Projeção INS Fechadas]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 75c2786e-9b9f-5a34-a8e3-d6e27ce363d9
+
+	measure 'Exibir · Atingimento INS' =
+			VAR v = [Atingimento INS]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: e5c63cc5-4854-5afe-b274-54ae1e3e1efb
+
+	measure 'Exibir · Projeção MAT' =
+			VAR v = [Projeção MAT]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 8cc2da6e-9f3b-5523-af68-653ae45e2d53
+
+	measure 'Exibir · Realizado MAT' =
+			VAR v = [Realizado MAT]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 76fd7090-2201-5c0b-a32b-d77321dd38ba
+
+	measure 'Exibir · Projeção MAT Fechadas' =
+			VAR v = [Projeção MAT Fechadas]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 6b95aebe-b7b1-51d8-9fb0-8248953811f4
+
+	measure 'Exibir · Atingimento MAT' =
+			VAR v = [Atingimento MAT]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 3b8ad54a-6a44-596f-9f9b-d4392e273ee9
+
+	measure 'Exibir · Conversão Prevista' =
+			VAR v = [Conversão Prevista]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0.0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: dda8b116-4307-51c8-b7ef-9a264885f5d7
+
+	measure 'Exibir · Conversão Realizada' =
+			VAR v = [Conversão Realizada]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0.0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: de7587e9-0640-5506-ae76-3fe35c5c4a68
+
+	measure 'Exibir · Ações Finalizadas' =
+			VAR v = [Ações Finalizadas]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 430802f3-179b-5685-9def-1dc44cf3930f
+
+	measure 'Exibir · Qtd Planejadas' =
+			VAR v = [Qtd Planejadas]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: b75543ad-f2ef-5fbf-88d2-98de8b22ceb2
+
+	measure 'Exibir · Qtd Realizadas' =
+			VAR v = [Qtd Realizadas]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 9aae75f4-4e7c-54cf-9daa-4ecb7006a494
+
+	measure 'Exibir · Qtd Parciais' =
+			VAR v = [Qtd Parciais]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 4ff2be53-5b78-553a-a76a-ae107bc418fe
+
+	measure 'Exibir · Qtd Não Realizadas' =
+			VAR v = [Qtd Não Realizadas]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: b5c7db6a-61a0-54d9-8b45-184c42776961
+
+	measure 'Exibir · Fechamento das Ações' =
+			VAR v = [Fechamento das Ações]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 95405c0c-f864-563a-b3ab-241620885fb5
+
+	measure 'Exibir · Ações de Conversão' =
+			VAR v = [Ações de Conversão]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 4cae68ac-2653-5dc1-9f03-25133d45c497
+
+	measure 'Exibir · Ações de Captação' =
+			VAR v = [Ações de Captação]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 9124cbb1-c3de-5eb5-b3d5-ed321a82d222
+
+	measure 'Exibir · Projeção MAT Conversão' =
+			VAR v = [Projeção MAT Conversão]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 1f36e4be-c5fe-5dbd-959d-c82502b35f6e
+
+	measure 'Exibir · Realizado MAT Conversão' =
+			VAR v = [Realizado MAT Conversão]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: fdcb5332-905a-518f-8b83-24c10c3dd899
+
+	measure 'Exibir · Atingimento MAT Conversão' =
+			VAR v = [Atingimento MAT Conversão]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: bddb450e-29b3-5c6d-9ccb-2c7a5463593f
+
+	measure 'Exibir · Custo Previsto' =
+			VAR v = [Custo Previsto]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "\R$ #,##0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: b35c9e30-71a7-554e-9623-e55844bc87be
+
+	measure 'Exibir · Custo Realizado' =
+			VAR v = [Custo Realizado]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "\R$ #,##0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 2f39f96d-5133-5254-ab11-dafa41fc68fe
+
+	measure 'Exibir · Custo Previsto das Fechadas' =
+			VAR v = [Custo Previsto das Fechadas]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: b6b6fa9b-cca3-5bed-bbba-802c7cc9fbc6
+
+	measure 'Exibir · Estouro de Custo' =
+			VAR v = [Estouro de Custo]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "+\R$ #,##0;-\R$ #,##0;\R$ 0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: e052a764-e14a-550f-a1c7-835d7a9224c2
+
+	measure 'Exibir · % Estouro de Custo' =
+			VAR v = [% Estouro de Custo]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "+0%;-0%;0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 65f7362c-7ba1-524d-a9df-a3fc6cf39499
+
+	measure 'Exibir · Custo por INS Previsto' =
+			VAR v = [Custo por INS Previsto]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0.00" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 0a4fe08c-abab-5d72-a95a-b87a2709a37a
+
+	measure 'Exibir · Custo por MAT Previsto' =
+			VAR v = [Custo por MAT Previsto]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0.00" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: f942090c-81a2-50f0-b1aa-24432a9ea997
+
+	measure 'Exibir · Custo por INS Realizado' =
+			VAR v = [Custo por INS Realizado]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "\R$ #,##0.00" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 63cf8d2b-a315-5f64-9b52-2c684ee1b3d0
+
+	measure 'Exibir · Custo por MAT Realizado' =
+			VAR v = [Custo por MAT Realizado]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "\R$ #,##0.00" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: af96a364-b4b1-5b53-b264-9aed330f4ff3
+
+	measure 'Exibir · Consultores com Plano' =
+			VAR v = [Consultores com Plano]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: c5ac031a-b71b-55be-a98e-4a3696a7e5a3
+
+	measure 'Exibir · Consultores sem Plano' =
+			VAR v = [Consultores sem Plano]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: f5cb297b-bb55-5755-8e1f-57c5f72b633b
+
+	measure 'Exibir · % Consultores com Plano' =
+			VAR v = [% Consultores com Plano]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: bcbc71eb-58ab-5fc4-8fdb-bbb88ca425ea
+
+	measure 'Exibir · Ações por Consultor com Plano' =
+			VAR v = [Ações por Consultor com Plano]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0.0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 3b694c4d-7599-5d40-97de-07c420002fa7
+
+	measure 'Exibir · Unidades Ativas' =
+			VAR v = [Unidades Ativas]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 8d363ecf-2293-57c8-9961-ebf436d26897
+
+	measure 'Exibir · Unidades com Plano' =
+			VAR v = [Unidades com Plano]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 121bd6ba-ec52-5865-9f2e-deca550da741
+
+	measure 'Exibir · Unidades sem Plano' =
+			VAR v = [Unidades sem Plano]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: beb3553f-efe8-5939-884a-6e01263f1fc2
+
+	measure 'Exibir · Sem Plano (lista)' = COALESCE ( [Sem Plano (lista)], "–" )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: c3643bce-0e90-5ec0-9e15-8383af5867b0
+
+	measure 'Exibir · Ações pelo Consultor' =
+			VAR v = [Ações pelo Consultor]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 2f81d22d-9271-5bf1-9613-8d2255c13f59
+
+	measure 'Exibir · Ações pelo Coordenador' =
+			VAR v = [Ações pelo Coordenador]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: fae29eb7-69ba-5897-8abf-5de39137a3d8
+
+	measure 'Exibir · Ações por Outra Pessoa' =
+			VAR v = [Ações por Outra Pessoa]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: bf9ded76-b52f-572e-aa21-497fcb1a1bae
+
+	measure 'Exibir · % Cadastro no Prazo' =
+			VAR v = [% Cadastro no Prazo]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "0%" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 6c55bdf5-5bd0-5bfa-9c6c-a0f00ffada5a
+
+	measure 'Exibir · Ações no Produto' =
+			VAR v = [Ações no Produto]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 923a7f32-1ac4-5692-888c-5ff899a40135
+
+	measure 'Exibir · Consultores no Produto' =
+			VAR v = [Consultores no Produto]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: bbeac7dd-0f65-5e56-a39e-063792ed53e1
+
+	measure 'Exibir · Ações na Modalidade' =
+			VAR v = [Ações na Modalidade]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 78d49d1b-d206-5509-b812-91da29ef7ecb
+
+	measure 'Exibir · Consultores na Modalidade' =
+			VAR v = [Consultores na Modalidade]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: ab06d339-edb0-5dfa-b3c6-2d6393ab021f
+
+	measure 'Exibir · Produtos sem Ação' =
+			VAR v = [Produtos sem Ação]
+			RETURN IF ( ISBLANK ( v ), "–", FORMAT ( v, "#,0" ) )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 433bece8-fda6-525c-9e26-5c2ef60bf5c0
+
+	measure 'Exibir · Fundo Ações no Produto' = COALESCE ( [Fundo Ações no Produto], "–" )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: ef406ede-6965-55c0-8917-ee09db820d2a
+
+	measure 'Exibir · Pior Regional' = COALESCE ( [Pior Regional], "–" )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: b5018837-b130-5cb2-86c7-ddfa1a89df76
+
+	measure 'Exibir · Maior Gap Coordenador' = COALESCE ( [Maior Gap Coordenador], "–" )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 0268f4c0-c5bf-5600-b314-482d83937c6c
+
+	measure 'Exibir · Ação Mais Eficiente' = COALESCE ( [Ação Mais Eficiente], "–" )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 1885b350-b9ca-5343-84d7-a9a2be4581b3
+
+	measure 'Exibir · Resumo Pendências' = COALESCE ( [Resumo Pendências], "–" )
+		displayFolder: 9 · Exibição (cartões)
+		lineageTag: 5791bd01-3d8e-5350-82fa-f9be1b5fbe74
+
+	column Coluna
+		dataType: string
+		isHidden
+		lineageTag: 50ef0098-6831-50cc-8adc-c83abc6abb13
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Coluna]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Medidas = calculated
+		mode: import
+		source = ROW ( "Coluna", "" )
+
+	annotation PBI_ResultType = Table
+

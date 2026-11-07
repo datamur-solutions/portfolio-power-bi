@@ -1,0 +1,297 @@
+table Ações
+	lineageTag: 3b32c64e-ee05-5061-8037-283f436232cd
+
+	column IdAção
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 221d72b8-0cc0-54d6-98c9-f659d04da4cf
+		summarizeBy: none
+		sourceColumn: IdAção
+
+		annotation SummarizationSetBy = Automatic
+
+	column IdSemana
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 820fd0be-9c1e-5da1-b3e5-8fd79a53ce72
+		summarizeBy: none
+		sourceColumn: IdSemana
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nº Ação'
+		dataType: int64
+		formatString: 0
+		lineageTag: 0f0ed440-5d02-5799-9544-c607c5884706
+		summarizeBy: none
+		sourceColumn: Nº Ação
+
+		annotation SummarizationSetBy = Automatic
+
+	column Título
+		dataType: string
+		lineageTag: c59dc026-f79a-5f65-8bb0-0a827240c50a
+		summarizeBy: none
+		sourceColumn: Título
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tipo
+		dataType: string
+		lineageTag: e9d55775-eb63-532b-9762-af5eab8e6e99
+		summarizeBy: none
+		sourceColumn: Tipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Alavanca
+		dataType: string
+		lineageTag: 0a63aaa7-1cae-5016-b762-960b4e33be57
+		summarizeBy: none
+		sourceColumn: Alavanca
+
+		annotation SummarizationSetBy = Automatic
+
+	column Local
+		dataType: string
+		lineageTag: 66f7698e-f005-57c5-b5ae-8c4ecc4a0853
+		summarizeBy: none
+		sourceColumn: Local
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Como Será Feita'
+		dataType: string
+		lineageTag: 6666932a-f836-57a0-ab9a-c843175087a6
+		summarizeBy: none
+		sourceColumn: Como Será Feita
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		dataType: string
+		lineageTag: 0f7e9d5d-03fc-5a9e-80dc-46de7f203639
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dias Programados'
+		dataType: string
+		lineageTag: 20b616c1-514a-5bc5-8563-25ed202b3623
+		summarizeBy: none
+		sourceColumn: Dias Programados
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nº Dias Programados'
+		dataType: int64
+		formatString: 0
+		lineageTag: 62652d83-9d81-5750-8044-2f3535c3c003
+		summarizeBy: sum
+		sourceColumn: Nº Dias Programados
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Produtos da Ação'
+		dataType: string
+		lineageTag: cc9d0db6-3bea-5384-b8f6-8253dc781e6d
+		summarizeBy: none
+		sourceColumn: Produtos da Ação
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Modalidades da Ação'
+		dataType: string
+		lineageTag: 37dec07f-f64f-5ebe-b75a-aa966643267a
+		summarizeBy: none
+		sourceColumn: Modalidades da Ação
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Meta INS'
+		dataType: double
+		formatString: #,0
+		lineageTag: a0d6ad4b-1017-51d5-8a10-21a8f0bce18f
+		summarizeBy: sum
+		sourceColumn: Meta INS
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Meta MAT'
+		dataType: double
+		formatString: #,0
+		lineageTag: 280b3910-d050-5979-b236-dd172a93bcc5
+		summarizeBy: sum
+		sourceColumn: Meta MAT
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Real INS'
+		dataType: double
+		formatString: #,0
+		lineageTag: 4e0780b3-a3e2-5622-8ead-542e7a254757
+		summarizeBy: sum
+		sourceColumn: Real INS
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Real MAT'
+		dataType: double
+		formatString: #,0
+		lineageTag: 2fe162c1-65aa-5fca-bbac-f3fa8da374ea
+		summarizeBy: sum
+		sourceColumn: Real MAT
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Custo Previsto'
+		dataType: double
+		formatString: #,0.00
+		lineageTag: bc218134-5323-5629-9f93-184d6782d39f
+		summarizeBy: sum
+		sourceColumn: Custo Previsto
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Custo Realizado'
+		dataType: double
+		formatString: #,0.00
+		lineageTag: baa08cfa-f446-5a33-a6b9-add8ff1a61dc
+		summarizeBy: sum
+		sourceColumn: Custo Realizado
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Objetivo da Ação'
+		dataType: string
+		lineageTag: 5c751308-4494-572a-ac67-b6c7f99f8ea4
+		summarizeBy: none
+		sourceColumn: Objetivo da Ação
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Cadastrado por'
+		dataType: string
+		lineageTag: ed2c7461-4018-5ac4-8e2a-5f8ea92ad8d8
+		summarizeBy: none
+		sourceColumn: Cadastrado por
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Criado por'
+		dataType: string
+		lineageTag: 0a1f6529-3ef6-57e7-b843-4d71948cecc9
+		summarizeBy: none
+		sourceColumn: Criado por
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Prazo do Cadastro'
+		dataType: string
+		lineageTag: 17ad924c-bed8-5ec0-98ee-ec68cfe93053
+		summarizeBy: none
+		sourceColumn: Prazo do Cadastro
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tem Fechamento'
+		dataType: boolean
+		lineageTag: 357dee0b-5242-5d17-b7b2-953a2608aa57
+		summarizeBy: none
+		sourceColumn: Tem Fechamento
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data Início'
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: c482aa16-8456-5b58-8627-2fa2a79d223a
+		summarizeBy: none
+		sourceColumn: Data Início
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Data Fim'
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: d92b3ac7-38cc-50b2-b04a-25ddb83f813a
+		summarizeBy: none
+		sourceColumn: Data Fim
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Observações
+		dataType: string
+		lineageTag: 38951cee-98d6-587e-a26b-b6660139dda6
+		summarizeBy: none
+		sourceColumn: Observações
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Criado em'
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: 480cbc64-8da8-5112-adbf-232f943dd9f4
+		summarizeBy: none
+		sourceColumn: Criado em
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Dias Válidos'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 15feadf8-6921-5311-925d-bbc3f7636d8c
+		summarizeBy: none
+		sourceColumn: Dias Válidos
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Ações = m
+		mode: import
+		source =
+				let
+				    A = #"Ações Expandidas",
+				    Nomes = {"Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"},
+				    C1 = Table.AddColumn(A, "Dias Programados", each Text.Combine(List.Transform([DiasAcao], (d) => Nomes{Date.DayOfWeek(d, Day.Monday)} & " " & Date.ToText(d, [Format = "dd/MM"])), ", "), type text),
+				    C2 = Table.AddColumn(C1, "Nº Dias Programados", each List.Count([DiasAcao]), Int64.Type),
+				    C3 = Table.AddColumn(C2, "Tipo", each if [TipoAcao] = "" then "(tipo não informado)" else [TipoAcao], type text),
+				    C4 = Table.AddColumn(C3, "Produtos da Ação", each Text.Combine(List.Transform([ListaProdutos], (k) => Record.Field([Grad = "Graduação", Pos = "Pós-graduação", Tec = "Técnico", Prof = "Profissionalizante"], k)), ", "), type text),
+				    C5a = Table.AddColumn(C4, "Modalidades da Ação", each Text.Combine(List.Transform([ListaModalidades], (k) => Record.Field([Pres = "Presencial", Semi = "Semipresencial", EAD = "EAD"], k)), ", "), type text),
+				    // quem cadastrou: pelo e-mail (API) ou pelo nome (exportação), comparado com o consultor e o coordenador gravados na ação
+				    Igual = (a as nullable text, b as nullable text) as logical => a <> null and b <> null and Text.Trim(a) <> "" and Text.Lower(Text.Trim(a)) = Text.Lower(Text.Trim(b)),
+				    C5b = Table.AddColumn(C5a, "Cadastrado por", each
+				        if [CriadoPorEmail] = "" and [CriadoPorNome] = "" then "Não informado"
+				        else if Igual([CriadoPorEmail], [EmailConsultor]) or Igual([CriadoPorNome], [Consultor]) then "Consultor"
+				        else if Igual([CriadoPorEmail], [EmailCoordenador]) or Igual([CriadoPorNome], [Coordenador]) then "Coordenador"
+				        else "Outra pessoa", type text),
+				    // rito: a ação deve ser cadastrada até o dia de início
+				    C5 = Table.AddColumn(C5b, "Prazo do Cadastro", each if [Criado] = null then "Sem data" else if [Criado] <= [DataInicio] then "No prazo" else "Após o início", type text),
+				    C6 = Table.AddColumn(C5, "Objetivo da Ação", each
+				        let o = Text.Lower([Objetivo]) in if Text.Contains(o, "convers") or Text.Contains(o, "matr") then "Conversão (matrículas)"
+				        else if Text.Contains(o, "capta") or Text.Contains(o, "inscr") then "Captação (inscritos)" else "Não informado", type text),
+				    Final = Table.SelectColumns(C6, {"IdAcao", "IdSemana", "NumAcao", "Titulo", "Tipo", "Alavanca", "Local", "Como", "StatusN", "Dias Programados", "Nº Dias Programados",
+				        "Produtos da Ação", "Modalidades da Ação", "MetaInscritos", "MetaMatriculas", "RealInscritos", "RealMatriculas", "CustoPrevisto", "CustoRealizado",
+				        "Objetivo da Ação", "Cadastrado por", "CriadoPorNome", "Prazo do Cadastro", "TemFechamento",
+				        "DataInicio", "Fim", "Observacoes", "Criado"}),
+				    Nomes2 = Table.RenameColumns(Final, {{"IdAcao", "IdAção"}, {"NumAcao", "Nº Ação"}, {"Titulo", "Título"}, {"Como", "Como Será Feita"}, {"StatusN", "Status"},
+				        {"MetaInscritos", "Meta INS"}, {"MetaMatriculas", "Meta MAT"}, {"RealInscritos", "Real INS"}, {"RealMatriculas", "Real MAT"},
+				        {"CustoPrevisto", "Custo Previsto"}, {"CustoRealizado", "Custo Realizado"}, {"CriadoPorNome", "Criado por"}, {"TemFechamento", "Tem Fechamento"}, {"DataInicio", "Data Início"}, {"Fim", "Data Fim"}, {"Observacoes", "Observações"}, {"Criado", "Criado em"}}),
+				    ComDiasUteis = Table.AddColumn(Nomes2, "Dias Válidos", each List.Max({1, [Nº Dias Programados]}), Int64.Type),
+				    Tipos = Table.TransformColumnTypes(ComDiasUteis, {{"IdAção", Int64.Type}, {"IdSemana", Int64.Type}, {"Nº Ação", Int64.Type}, {"Meta INS", type number},
+				        {"Meta MAT", type number}, {"Real INS", type number}, {"Real MAT", type number}, {"Custo Previsto", type number}, {"Custo Realizado", type number},
+				        {"Tem Fechamento", type logical}, {"Data Início", type date}, {"Data Fim", type date}, {"Criado em", type date}, {"Dias Válidos", Int64.Type}})
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

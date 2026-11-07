@@ -1,0 +1,392 @@
+table Semanas
+	lineageTag: 15371ec9-bdae-5fbc-a50f-c265b191ec5d
+
+	column IdSemana
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 820fd0be-9c1e-5da1-b3e5-8fd79a53ce72
+		summarizeBy: none
+		sourceColumn: IdSemana
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Chave Consultor'
+		dataType: string
+		isHidden
+		lineageTag: 9d9c3284-424e-532b-a5f0-590cd80fd416
+		summarizeBy: none
+		sourceColumn: Chave Consultor
+
+		annotation SummarizationSetBy = Automatic
+
+	column Matrícula
+		dataType: string
+		lineageTag: 5a9f75e5-08d9-5d60-b2a1-ab7b08fd56ad
+		summarizeBy: none
+		sourceColumn: Matrícula
+
+		annotation SummarizationSetBy = Automatic
+
+	column Consultor
+		dataType: string
+		lineageTag: cee96a48-a51c-5df3-99e3-5d9ccbc2a671
+		summarizeBy: none
+		sourceColumn: Consultor
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Email Consultor'
+		dataType: string
+		isHidden
+		lineageTag: b18f7549-e060-52da-a04c-c8ae54690ce8
+		summarizeBy: none
+		sourceColumn: Email Consultor
+
+		annotation SummarizationSetBy = Automatic
+
+	column Regional
+		dataType: string
+		lineageTag: badc62c9-466d-5e24-b2d5-79c4c7498c55
+		summarizeBy: none
+		sourceColumn: Regional
+
+		annotation SummarizationSetBy = Automatic
+
+	column Gerente
+		dataType: string
+		lineageTag: 2eded90e-6d1c-5512-a0f5-76ace1e0109b
+		summarizeBy: none
+		sourceColumn: Gerente
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Email Gerente'
+		dataType: string
+		isHidden
+		lineageTag: 00560706-e9b7-5f90-948f-27c2ce592c33
+		summarizeBy: none
+		sourceColumn: Email Gerente
+
+		annotation SummarizationSetBy = Automatic
+
+	column Unidade
+		dataType: string
+		lineageTag: d2961295-ba67-5a50-85e2-23297abd13fa
+		summarizeBy: none
+		sourceColumn: Unidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column Filial
+		dataType: string
+		lineageTag: e24331fd-d844-5fdd-9869-89dde64a9d61
+		summarizeBy: none
+		sourceColumn: Filial
+
+		annotation SummarizationSetBy = Automatic
+
+	column UF
+		dataType: string
+		lineageTag: e93ddc80-e556-51e2-9866-dab193c47f75
+		dataCategory: StateOrProvince
+		summarizeBy: none
+		sourceColumn: UF
+
+		annotation SummarizationSetBy = Automatic
+
+	column Estado
+		dataType: string
+		lineageTag: 21a8a0cb-2f1a-5104-bd6f-1f8f203382ac
+		dataCategory: StateOrProvince
+		summarizeBy: none
+		sourceColumn: Estado
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cidade
+		dataType: string
+		lineageTag: bd989a1b-8894-50db-b479-3dcd089fc345
+		dataCategory: City
+		summarizeBy: none
+		sourceColumn: Cidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Origem UF'
+		dataType: string
+		lineageTag: 60553664-02f4-5e8c-bd23-d633353df036
+		summarizeBy: none
+		sourceColumn: Origem UF
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Local Estado'
+		dataType: string
+		isHidden
+		lineageTag: 4597ca4d-27d2-52bf-87e0-6fe495969ffc
+		dataCategory: StateOrProvince
+		summarizeBy: none
+		sourceColumn: Local Estado
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Local Cidade'
+		dataType: string
+		isHidden
+		lineageTag: 47d64115-9864-5df3-a15a-dbbbbea0af0c
+		dataCategory: Place
+		summarizeBy: none
+		sourceColumn: Local Cidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column Coordenador
+		dataType: string
+		lineageTag: 58828e30-d814-52b6-a9ba-2c4b7c2ce6db
+		summarizeBy: none
+		sourceColumn: Coordenador
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Email Coordenador'
+		dataType: string
+		isHidden
+		lineageTag: 950079c7-32cd-5dc2-894f-4725bb53d54c
+		summarizeBy: none
+		sourceColumn: Email Coordenador
+
+		annotation SummarizationSetBy = Automatic
+
+	column Função
+		dataType: string
+		lineageTag: 2e36ee13-7f13-56cc-a64d-fdc239fe4e89
+		summarizeBy: none
+		sourceColumn: Função
+
+		annotation SummarizationSetBy = Automatic
+
+	column Situação
+		dataType: string
+		lineageTag: 449caaff-1a06-5e76-be12-022ca073ef1b
+		summarizeBy: none
+		sourceColumn: Situação
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ativo
+		dataType: boolean
+		lineageTag: 8b7177b6-09cd-5d71-863e-07f3446a2c5c
+		summarizeBy: none
+		sourceColumn: Ativo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mês
+		dataType: string
+		lineageTag: 4c0868c2-193e-5f59-a1d8-e6f75df9b1e6
+		summarizeBy: none
+		sourceColumn: Mês
+		sortByColumn: 'Mês (data)'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês (data)'
+		dataType: dateTime
+		isHidden
+		formatString: dd/MM/yyyy
+		lineageTag: 266b52f8-f163-5362-b9d0-65b5b6bb1637
+		summarizeBy: none
+		sourceColumn: Mês (data)
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Semana
+		dataType: string
+		lineageTag: ed7daab5-fb9d-5988-a3f8-c23b2970728a
+		summarizeBy: none
+		sourceColumn: Semana
+
+		annotation SummarizationSetBy = Automatic
+
+	column Período
+		dataType: string
+		lineageTag: 3f080d2b-8c4e-5a88-ac1f-db7ecab1da01
+		summarizeBy: none
+		sourceColumn: Período
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nº Ações'
+		dataType: int64
+		formatString: 0
+		lineageTag: e1adf86b-8b6b-5e32-88f8-e9b81821299b
+		summarizeBy: sum
+		sourceColumn: Nº Ações
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tem Ação'
+		dataType: boolean
+		lineageTag: d711b4c8-1b58-5751-ab78-93cd49daddd1
+		summarizeBy: none
+		sourceColumn: Tem Ação
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ações da Semana'
+		dataType: string
+		lineageTag: 24557c4e-6b1c-5f60-bd30-b45310f7634a
+		summarizeBy: none
+		sourceColumn: Ações da Semana
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Status do Plano'
+		dataType: string
+		lineageTag: 992c0c45-9774-51a8-8d9d-33b117be7869
+		summarizeBy: none
+		sourceColumn: Status do Plano
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Meta INS'
+		dataType: double
+		formatString: #,0
+		lineageTag: a0d6ad4b-1017-51d5-8a10-21a8f0bce18f
+		summarizeBy: sum
+		sourceColumn: Meta INS
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'INS Ações'
+		dataType: double
+		isHidden
+		formatString: #,0
+		lineageTag: e1268fb7-01c3-5738-a3e2-823f0dbd5695
+		summarizeBy: sum
+		sourceColumn: INS Ações
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Custo Previsto Semana'
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: 6c305f57-c9c3-5fdf-b39c-b52997cce0b2
+		summarizeBy: sum
+		sourceColumn: Custo Previsto Semana
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Custo Realizado Semana'
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: 6ee09491-4706-5566-ba5b-997cf8d7f694
+		summarizeBy: sum
+		sourceColumn: Custo Realizado Semana
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Produtos da Semana'
+		dataType: string
+		lineageTag: 17d04e7d-ac65-508c-9bcb-158f8ea55362
+		summarizeBy: none
+		sourceColumn: Produtos da Semana
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Modalidades da Semana'
+		dataType: string
+		lineageTag: aab5f053-c005-5326-b3cf-5f421563a7df
+		summarizeBy: none
+		sourceColumn: Modalidades da Semana
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data Início'
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: c482aa16-8456-5b58-8627-2fa2a79d223a
+		summarizeBy: none
+		sourceColumn: Data Início
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Data Fim'
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: d92b3ac7-38cc-50b2-b04a-25ddb83f813a
+		summarizeBy: none
+		sourceColumn: Data Fim
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Dias Válidos'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 15feadf8-6921-5311-925d-bbc3f7636d8c
+		summarizeBy: none
+		sourceColumn: Dias Válidos
+
+		annotation SummarizationSetBy = Automatic
+
+	column Observações
+		dataType: string
+		lineageTag: 38951cee-98d6-587e-a26b-b6660139dda6
+		summarizeBy: none
+		sourceColumn: Observações
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Semanas = m
+		mode: import
+		source =
+				let
+				    S = #"Semanas Base",
+				    Estados = [AC = "Acre", AL = "Alagoas", AP = "Amapá", AM = "Amazonas", BA = "Bahia", CE = "Ceará", DF = "Distrito Federal", ES = "Espírito Santo", GO = "Goiás", MA = "Maranhão", MT = "Mato Grosso", MS = "Mato Grosso do Sul", MG = "Minas Gerais", PA = "Pará", PB = "Paraíba", PR = "Paraná", PE = "Pernambuco", PI = "Piauí", RJ = "Rio de Janeiro", RN = "Rio Grande do Norte", RS = "Rio Grande do Sul", RO = "Rondônia", RR = "Roraima", SC = "Santa Catarina", SP = "São Paulo", SE = "Sergipe", TO = "Tocantins"],
+				    Soma = (t as table, c as text) as number => List.Sum({0} & List.RemoveNulls(Table.Column(t, c))),
+				    Nomes = (chaves as list, nomes as record) as text => Text.Combine(List.Transform(chaves, (k) => Record.Field(nomes, k)), ", "),
+				    C1 = Table.AddColumn(S, "Nº Ações", each Table.RowCount([Acoes]), Int64.Type),
+				    C2 = Table.AddColumn(C1, "Tem Ação", each [Nº Ações] > 0, type logical),
+				    C3 = Table.AddColumn(C2, "Ações da Semana", each Text.Combine(List.Distinct(List.Select([Acoes][TipoAcao], each _ <> "")), " + "), type text),
+				    C4 = Table.AddColumn(C3, "Status do Plano", each
+				        let st = [Acoes][StatusN] in
+				        if List.IsEmpty(st) then "Sem plano" else if List.AllTrue(List.Transform(st, each _ <> "Planejada")) then "Fechada"
+				        else if List.AnyTrue(List.Transform(st, each _ <> "Planejada")) then "Em andamento" else "Planejada", type text),
+				    C5 = Table.AddColumn(C4, "Meta INS", each Soma([Acoes], "MetaInscritos"), type number),
+				    C6 = Table.AddColumn(C5, "INS Ações", each Soma([Acoes], "RealInscritos"), type number),
+				    C7 = Table.AddColumn(C6, "Custo Previsto Semana", each Soma([Acoes], "CustoPrevisto"), type number),
+				    C8 = Table.AddColumn(C7, "Custo Realizado Semana", each Soma([Acoes], "CustoRealizado"), type number),
+				    C9 = Table.AddColumn(C8, "Produtos da Semana", each Nomes(List.Distinct(List.Combine([Acoes][ListaProdutos])), [Grad = "Graduação", Pos = "Pós-graduação", Tec = "Técnico", Prof = "Profissionalizante"]), type text),
+				    C10 = Table.AddColumn(C9, "Modalidades da Semana", each Nomes(List.Distinct(List.Combine([Acoes][ListaModalidades])), [Pres = "Presencial", Semi = "Semipresencial", EAD = "EAD"]), type text),
+				    C11 = Table.AddColumn(C10, "Mês", each MesTexto([MesData]), type text),
+				    C12 = Table.AddColumn(C11, "Semana", each "S" & Text.From([SemanaN]), type text),
+				    C13 = Table.AddColumn(C12, "Período", each if [N] = 1 then Date.ToText([Inicio], [Format = "dd/MM"]) else Date.ToText([Inicio], [Format = "dd/MM"]) & " a " & Date.ToText([Fim], [Format = "dd/MM"]), type text),
+				    Locais = Table.Buffer(Table.AddColumn(Table.Distinct(Table.SelectColumns(C13, {"Unidade", "Filial"})), "Loc", each Localizar([Unidade], [Filial]))),
+				    Loc = Table.NestedJoin(C13, {"Unidade", "Filial"}, Locais, {"Unidade", "Filial"}, "JL", JoinKind.LeftOuter),
+				    C14 = Table.ExpandRecordColumn(Table.ExpandTableColumn(Loc, "JL", {"Loc"}), "Loc", {"UF", "Estado", "Cidade", "Origem"}, {"UF", "Estado", "Cidade", "Origem UF"}),
+				    C15 = Table.AddColumn(Table.AddColumn(C14, "Local Estado", each if [UF] = "" then "" else [Estado] & ", Brasil", type text),
+				        "Local Cidade", each if [Cidade] = "" then "" else [Cidade] & ", " & [UF] & ", Brasil", type text),
+				    C16 = Table.AddColumn(C15, "Observações", each Text.Combine(List.Select([Acoes][Observacoes], each _ <> ""), " | "), type text),
+				    Final = Table.SelectColumns(C16, {"IdSemana", "Chave", "Matricula", "Consultor", "EmailConsultor", "Regional", "Gerente", "EmailGerente", "Unidade", "Filial", "UF", "Estado", "Cidade", "Origem UF", "Local Estado", "Local Cidade",
+				        "Coordenador", "EmailCoordenador", "Funcao", "Situacao", "Ativo", "Mês", "MesData", "Semana", "Período", "Nº Ações", "Tem Ação", "Ações da Semana", "Status do Plano",
+				        "Meta INS", "INS Ações", "Custo Previsto Semana", "Custo Realizado Semana", "Produtos da Semana", "Modalidades da Semana", "Inicio", "Fim", "N", "Observações"}),
+				    Nomes2 = Table.RenameColumns(Final, {{"Chave", "Chave Consultor"}, {"Matricula", "Matrícula"}, {"EmailConsultor", "Email Consultor"}, {"EmailGerente", "Email Gerente"},
+				        {"EmailCoordenador", "Email Coordenador"}, {"Funcao", "Função"}, {"Situacao", "Situação"}, {"MesData", "Mês (data)"}, {"Inicio", "Data Início"},
+				        {"Fim", "Data Fim"}, {"N", "Dias Válidos"}}),
+				    Tipos = Table.TransformColumnTypes(Nomes2, {{"IdSemana", Int64.Type}, {"Mês (data)", type date}, {"Data Início", type date}, {"Data Fim", type date},
+				        {"Dias Válidos", Int64.Type}, {"Ativo", type logical}})
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

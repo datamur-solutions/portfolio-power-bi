@@ -1,0 +1,115 @@
+table Dias
+	lineageTag: 2b5c002e-747c-5430-ac8b-dba9742130f2
+
+	column IdSemana
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 820fd0be-9c1e-5da1-b3e5-8fd79a53ce72
+		summarizeBy: none
+		sourceColumn: IdSemana
+
+		annotation SummarizationSetBy = Automatic
+
+	column Data
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: b047856f-cb7a-53cc-8795-746485a7171e
+		summarizeBy: none
+		sourceColumn: Data
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Nº Dia'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3f81b868-8c16-5728-80c5-dc26d74c5c1f
+		summarizeBy: none
+		sourceColumn: Nº Dia
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dia da Semana'
+		dataType: string
+		lineageTag: 7d47d828-6687-5b5b-9d10-93ee75b0017a
+		summarizeBy: none
+		sourceColumn: Dia da Semana
+		sortByColumn: 'Nº Dia'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Foi
+		dataType: string
+		isHidden
+		lineageTag: cc8aab1c-75bb-5197-b00e-56a6e55f4a89
+		summarizeBy: none
+		sourceColumn: Foi
+
+		annotation SummarizationSetBy = Automatic
+
+	column INS
+		dataType: double
+		isHidden
+		formatString: #,0
+		lineageTag: dc06e750-d1fb-50da-9068-8b78c8be0a03
+		summarizeBy: sum
+		sourceColumn: INS
+
+		annotation SummarizationSetBy = Automatic
+
+	column Motivo
+		dataType: string
+		isHidden
+		lineageTag: dc13ee39-c4fb-5330-8578-637ce5cac8bd
+		summarizeBy: none
+		sourceColumn: Motivo
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Meta INS Dia'
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: 1feb6f1c-3d2b-5f3f-93e0-790a1ab58c90
+		summarizeBy: sum
+		sourceColumn: Meta INS Dia
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tem Ação'
+		dataType: boolean
+		isHidden
+		lineageTag: d711b4c8-1b58-5751-ab78-93cd49daddd1
+		summarizeBy: none
+		sourceColumn: Tem Ação
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dias = m
+		mode: import
+		source =
+				let
+				    S = #"Semanas Base",
+				    Nomes = {"Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"},
+				    L = Table.AddColumn(S, "D", (r) =>
+				        let
+				            acs = Table.ToRecords(r[Acoes]),
+				            semana = r[DiasLista],
+				            diasAcao = (a) => let ds = List.Select(DiasUteis(a[DataInicio], a[Fim]), each List.Contains(semana, _)) in if List.IsEmpty(ds) then semana else ds,
+				            metaDia = (d as date) as number => List.Sum({0} & List.Transform(acs, (a) => let ds = diasAcao(a) in if List.Contains(ds, d) then a[MetaInscritos] / List.Count(ds) else 0)),
+				            insDia = (d as date) as number => List.Sum({0} & List.Transform(acs, (a) => let ds = diasAcao(a), v = a[RealInscritos] in if v <> null and ds{0} = d then v else 0))
+				        in
+				            List.Transform(semana, (d) => [IdSemana = r[IdSemana], Data = d, #"Nº Dia" = Date.DayOfWeek(d, Day.Monday) + 1,
+				                #"Dia da Semana" = Nomes{Date.DayOfWeek(d, Day.Monday)}, Foi = "", INS = insDia(d), Motivo = "", #"Meta INS Dia" = metaDia(d),
+				                #"Tem Ação" = not List.IsEmpty(acs)])),
+				    Tabela = Table.FromRecords(List.Combine(L[D]), {"IdSemana", "Data", "Nº Dia", "Dia da Semana", "Foi", "INS", "Motivo", "Meta INS Dia", "Tem Ação"}, MissingField.UseNull),
+				    Tipos = Table.TransformColumnTypes(Tabela, {{"IdSemana", Int64.Type}, {"Data", type date}, {"Nº Dia", Int64.Type}, {"Dia da Semana", type text}, {"Foi", type text},
+				        {"INS", type number}, {"Motivo", type text}, {"Meta INS Dia", type number}, {"Tem Ação", type logical}})
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

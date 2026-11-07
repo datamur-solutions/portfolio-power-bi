@@ -1,0 +1,23 @@
+table DIM_CURSO
+	lineageTag: d64607a3-1b3f-412d-a306-e6cf9e088521
+
+	column ds_curso_ic
+		lineageTag: 8abdc46d-40f4-4608-a782-45985d822b5b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: CAPCOM[ds_curso_ic]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_CURSO = calculated
+		mode: import
+		source =
+				
+				FILTER(
+				    DISTINCT('CAPCOM'[ds_curso_ic]),
+				    NOT(ISBLANK('CAPCOM'[ds_curso_ic]))
+				        && 'CAPCOM'[ds_curso_ic] <> ""
+				)
+
+	annotation PBI_Id = f3a0f7e9317c49a58b7e24bda6085383
+

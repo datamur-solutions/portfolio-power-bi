@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "cacf51d51a400a154330",
+  "position": {
+    "x": 233.33333333333334,
+    "y": 383.33333333333337,
+    "z": 19000,
+    "height": 923.3333333333334,
+    "width": 870,
+    "tabOrder": 20000
+  },
+  "visualGroup": {
+    "displayName": "AGRUPAMENTO NOVO",
+    "groupMode": "ScaleMode"
+  },
+  "isHidden": true
+}

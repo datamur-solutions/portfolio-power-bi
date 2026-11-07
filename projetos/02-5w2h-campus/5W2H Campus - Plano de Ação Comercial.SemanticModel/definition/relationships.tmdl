@@ -1,0 +1,41 @@
+relationship 3cd6ba34-a5db-551e-8d3b-37731c900125
+	fromColumn: Dias.IdSemana
+	toColumn: Semanas.IdSemana
+
+relationship 6430e9e7-6912-53f8-b676-7c131a4caafd
+	fromColumn: MatProduto.IdSemana
+	toColumn: Semanas.IdSemana
+
+relationship 2e232af6-8391-5d10-9894-e47af92b8e5c
+	fromColumn: MatProduto.Produto
+	toColumn: dProduto.Chave
+
+relationship e1b6a50e-28c4-533a-a7e6-89d7f01a3195
+	fromColumn: Dias.Data
+	toColumn: dCalendario.Data
+
+relationship 0147ec86-fbbe-5373-b476-b42915eef78e
+	crossFilteringBehavior: bothDirections
+	fromColumn: Ações.IdSemana
+	toColumn: Semanas.IdSemana
+
+relationship 269e0d5e-22de-580b-88ff-a64c3dac3975
+	fromColumn: AgendaAções.IdAção
+	toColumn: Ações.IdAção
+
+relationship 280a11d6-e4b3-599a-97bf-430ef079ac2f
+	fromColumn: AgendaAções.Data
+	toColumn: dCalendario.Data
+
+relationship 4b2cffb0-6527-59f5-bbbb-f9f59c8f5eca
+	fromColumn: MatModalidade.IdSemana
+	toColumn: Semanas.IdSemana
+
+relationship 6ddeff9b-7ae8-5af5-832a-3c5ea97dee8e
+	fromColumn: MatModalidade.Modalidade
+	toColumn: dModalidade.Chave
+
+relationship eeef2a04-7e48-5a48-b844-836d5a11d12d
+	fromColumn: Semanas.'Chave Consultor'
+	toColumn: Consultores.Chave
+

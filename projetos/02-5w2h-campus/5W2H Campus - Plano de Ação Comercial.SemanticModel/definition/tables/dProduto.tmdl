@@ -1,0 +1,56 @@
+table dProduto
+	lineageTag: ae89ffa8-fa6b-5076-976f-9ea90958efe0
+
+	column Chave
+		dataType: string
+		isHidden
+		lineageTag: bc0e653d-6bbf-5e83-abf8-74b1fccf36cb
+		summarizeBy: none
+		sourceColumn: Chave
+
+		annotation SummarizationSetBy = Automatic
+
+	column Produto
+		dataType: string
+		lineageTag: 102f5533-37bf-5c0d-a2a7-cf9d4f564a9a
+		summarizeBy: none
+		sourceColumn: Produto
+		sortByColumn: Ordem
+
+		annotation SummarizationSetBy = Automatic
+
+	column Grupo
+		dataType: string
+		lineageTag: e9cab322-1604-585c-bab1-da14b306b0c8
+		summarizeBy: none
+		sourceColumn: Grupo
+		sortByColumn: Ordem
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordem
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3e88d7c9-ec54-50d6-a11a-d3329be2fd21
+		summarizeBy: none
+		sourceColumn: Ordem
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dProduto = m
+		mode: import
+		source =
+				let
+				    Tabela = #table(type table [Chave = text, Produto = text, Grupo = text, Ordem = Int64.Type], {
+				        {"Grad", "Graduação", "Graduação", 1},
+				        {"Pos", "Pós-graduação", "Pós-graduação", 2},
+				        {"Tec", "Técnico", "Técnico", 3},
+				        {"Prof", "Profissionalizante", "Profissionalizante", 4},
+				        {"NaoInformado", "Não informado", "Não informado", 9}
+				    })
+				in
+				    Tabela
+
+	annotation PBI_ResultType = Table
+

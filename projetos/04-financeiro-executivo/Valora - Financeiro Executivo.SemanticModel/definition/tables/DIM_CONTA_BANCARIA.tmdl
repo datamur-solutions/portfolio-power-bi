@@ -1,0 +1,54 @@
+table DIM_CONTA_BANCARIA
+	lineageTag: 70a9d40b-509f-4e43-a6f7-2df2dd9c3615
+
+	column ContaBancariaID
+		dataType: string
+		lineageTag: c5e86cf3-9884-462e-b4de-f18edfafb9ca
+		summarizeBy: none
+		sourceColumn: ContaBancariaID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ContaBancaria
+		dataType: string
+		lineageTag: ccbcdb5a-8714-4092-a917-1ff6d437ec5b
+		summarizeBy: none
+		sourceColumn: ContaBancaria
+
+		annotation SummarizationSetBy = Automatic
+
+	column Banco
+		dataType: string
+		lineageTag: 7cd0163b-704d-4287-9c69-c032ccc0edac
+		summarizeBy: none
+		sourceColumn: Banco
+
+		annotation SummarizationSetBy = Automatic
+
+	column TipoConta
+		dataType: string
+		lineageTag: 15b6e03b-d608-446e-bd79-7be3045022b0
+		summarizeBy: none
+		sourceColumn: TipoConta
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_CONTA_BANCARIA = m
+		mode: import
+		source =
+				let
+				    // DIM_CONTA_BANCARIA: base fictícia embutida no modelo (csv compactado)
+				    Bin = Binary.Decompress(Binary.FromText(Text.Combine({
+				        "Zc47DsIwDIDhHal38AEy8LoADQMMTHABkxphKY0jN1SI6zAgztGL0ddQYEuc/5NjJSTMMThUxv3W2OnddAcxJ47Sz7OZzeeLoYFSai4pJIGoHBxH9EMPB1IuGIO0pWqbUA+XI1RydB5oNYqdKD/aR/oWq1FcxF8RCLiMUnXKikRSTFwjHG8erDbvgtPPwrXZRM8Om1fzFCgIHPId/z45ibLZBw=="
+				    }), BinaryEncoding.Base64), Compression.Deflate),
+				    Fonte = Csv.Document(Bin, [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Cabecalhos = Table.PromoteHeaders(Fonte, [PromoteAllScalars = true]),
+				    Nulos = Table.TransformColumns(Cabecalhos, List.Transform(Table.ColumnNames(Cabecalhos), (c) => {c, (v) => if v = "" then null else v})),
+				    Colunas = Table.SelectColumns(Nulos, {"ContaBancariaID", "ContaBancaria", "Banco", "TipoConta"}, MissingField.UseNull),
+				    Tipos = Table.TransformColumnTypes(Colunas, {{"ContaBancariaID", type text}, {"ContaBancaria", type text}, {"Banco", type text}, {"TipoConta", type text}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+
+

@@ -1,0 +1,75 @@
+{
+  "name": "Valora · Casa & Tecnologia",
+  "dataColors": [
+    "#0F6B4E",
+    "#D9A441",
+    "#2BA37A",
+    "#1F3A5F",
+    "#7FC8A9",
+    "#D97757",
+    "#5B6B73",
+    "#B8D8C8",
+    "#8A6D3B",
+    "#1F2933"
+  ],
+  "foreground": "#1F2933",
+  "background": "#FFFFFF",
+  "tableAccent": "#0F6B4E",
+  "good": "#16A34A",
+  "neutral": "#D9A441",
+  "bad": "#DC2626",
+  "maximum": "#0F6B4E",
+  "center": "#7FC8A9",
+  "minimum": "#E8F3EE",
+  "textClasses": {
+    "callout": {
+      "fontFace": "Segoe UI Semibold",
+      "color": "#12392C"
+    },
+    "title": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 12,
+      "color": "#1F2933"
+    },
+    "label": {
+      "fontFace": "Segoe UI",
+      "fontSize": 9,
+      "color": "#5B6B73"
+    }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [
+          {
+            "show": false
+          }
+        ],
+        "border": [
+          {
+            "show": false
+          }
+        ],
+        "dropShadow": [
+          {
+            "show": false
+          }
+        ]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#F3F6F4"
+              }
+            },
+            "transparency": 0
+          }
+        ]
+      }
+    }
+  }
+}

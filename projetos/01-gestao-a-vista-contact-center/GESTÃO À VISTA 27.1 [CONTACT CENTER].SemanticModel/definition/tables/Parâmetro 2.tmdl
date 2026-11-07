@@ -1,0 +1,52 @@
+table 'Parâmetro 2'
+	lineageTag: 1cbd3b1b-bd12-446e-b8cd-2464102f956b
+
+	column Parâmetro
+		lineageTag: eda69151-de75-4eec-b1ca-d051331ec9a7
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Parâmetro Pedido'
+
+		relatedColumnDetails
+			groupByColumn: 'Parâmetro Campos'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parâmetro Campos'
+		isHidden
+		lineageTag: 258351d0-ef77-41a7-8f4a-28f9dac16287
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Parâmetro Pedido'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parâmetro Pedido'
+		isHidden
+		formatString: 0
+		lineageTag: c259914b-83f7-46c1-9421-0a873fa1e0d0
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Parâmetro 2' = calculated
+		mode: import
+		source =
+				{
+				    ("INSCRITOS", NAMEOF('TB CALL CENTER'[INSCRITOS]), 0),
+				    ("FUNIL | TRABALHADOS", NAMEOF('TB CALL CENTER'[FUNIL | TRABALHADOS]), 1),
+				    ("FUNIL | TENTATIVAS", NAMEOF('TB CALL CENTER'[FUNIL | TENTATIVAS]), 2),
+				    ("FUNIL | EFETIVOS", NAMEOF('TB CALL CENTER'[FUNIL | EFETIVOS]), 3),
+				    ("VENDAS", NAMEOF('TB CALL CENTER'[VENDAS]), 4),
+				    ("MATRICULADOSCC", NAMEOF('TB CALL CENTER'[MATRICULADOSCC]), 5)
+				}
+
+	annotation PBI_Id = 3759ea127ea64637bf13688ae231479a
+

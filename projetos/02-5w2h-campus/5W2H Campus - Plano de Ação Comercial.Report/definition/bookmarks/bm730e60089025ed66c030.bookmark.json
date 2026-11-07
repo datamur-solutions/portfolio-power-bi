@@ -1,0 +1,192 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/2.1.0/schema.json",
+  "displayName": "Filtros · fechar · Cobertura de consultores",
+  "name": "bm730e60089025ed66c030",
+  "options": {
+    "applyOnlyToTargetVisuals": true,
+    "targetVisualNames": [
+      "fbf7b7445e401b0a9845",
+      "e914d5c98204456ad193",
+      "a8018ff2040ae85fd16e",
+      "7ff6426f8c5d38ab449c",
+      "2091117abb48781b0378",
+      "0d29782b6724f1c71933",
+      "8af24ef03c5336e61d66",
+      "dff09ae1e2e98f7b3dfa",
+      "acfa0c4e702316fe6d8c",
+      "bffeff99d79123896c36",
+      "7775898001f1183ce3d7",
+      "92ed409b8c6658fbdeb2",
+      "83b504d39d5467dacb9a",
+      "8a6fc08d384d97572171",
+      "57b2d0b4822af028cd49",
+      "5564fb189254d19546df",
+      "929ebb3166896c96864c",
+      "4d0dab0010ba9c5ba95e",
+      "32b4a8385b591c9b33c0"
+    ],
+    "suppressData": true
+  },
+  "explorationState": {
+    "version": "1.0",
+    "activeSection": "p_equipe",
+    "sections": {
+      "p_equipe": {
+        "visualContainers": {
+          "fbf7b7445e401b0a9845": {
+            "singleVisual": {
+              "visualType": "textbox",
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "e914d5c98204456ad193": {
+            "singleVisual": {
+              "visualType": "actionButton",
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "a8018ff2040ae85fd16e": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "7ff6426f8c5d38ab449c": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "2091117abb48781b0378": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "0d29782b6724f1c71933": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "8af24ef03c5336e61d66": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "dff09ae1e2e98f7b3dfa": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "acfa0c4e702316fe6d8c": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "bffeff99d79123896c36": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "7775898001f1183ce3d7": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "92ed409b8c6658fbdeb2": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "83b504d39d5467dacb9a": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "8a6fc08d384d97572171": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "57b2d0b4822af028cd49": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "5564fb189254d19546df": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "929ebb3166896c96864c": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "4d0dab0010ba9c5ba95e": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "32b4a8385b591c9b33c0": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

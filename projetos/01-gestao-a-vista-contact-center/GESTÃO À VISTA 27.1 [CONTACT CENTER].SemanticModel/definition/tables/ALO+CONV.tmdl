@@ -1,0 +1,49 @@
+table ALO+CONV
+	lineageTag: dc97dd6b-5ef3-4584-8206-dd276d4e1374
+
+	column Parâmetro
+		lineageTag: e73bad7b-04e9-41d1-91a5-b28ee1deab55
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Parâmetro Pedido'
+
+		relatedColumnDetails
+			groupByColumn: 'Parâmetro Campos'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parâmetro Campos'
+		isHidden
+		lineageTag: ef357c4d-1e11-4326-8146-f8cddfa98e7e
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Parâmetro Pedido'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parâmetro Pedido'
+		isHidden
+		formatString: 0
+		lineageTag: 883a436f-16de-43e0-98bf-a00f9cdc70e3
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ALO+CONV = calculated
+		mode: import
+		source =
+				{
+				    ("CONVERSÃO", NAMEOF('TB CALL CENTER'[conv% por inscritos]), 0),
+				    ("ALO ", NAMEOF('TB CALL CENTER'[FUNIL | % ATENDIDO/BASE]),1),
+				    ("VENDA P. EFETIVO ", NAMEOF('TB CALL CENTER'[FUNIL | % CONV VENDA]),2)
+				}
+
+	annotation PBI_Id = dc23870456934170874c7f02bfaffbde
+

@@ -1,0 +1,23 @@
+table DIM_EPS
+	lineageTag: 671ae7fd-ceda-4dcd-bd4d-0b98c752863d
+
+	column EPS
+		lineageTag: e8fa7f5a-95f9-4ffb-8da2-da72f62155dc
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: TB CALL CENTER[EPS]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_EPS = calculated
+		mode: import
+		source =
+				
+				FILTER(
+				    DISTINCT('TB CALL CENTER'[EPS]),
+				    NOT(ISBLANK('TB CALL CENTER'[EPS]))
+				        && 'TB CALL CENTER'[EPS] <> ""
+				)
+
+	annotation PBI_Id = 1c26cd997bfa425fb1c30439470dc4b5
+

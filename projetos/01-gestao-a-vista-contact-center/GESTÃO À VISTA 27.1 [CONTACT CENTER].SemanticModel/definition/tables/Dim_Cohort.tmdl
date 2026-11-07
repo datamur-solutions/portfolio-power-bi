@@ -1,0 +1,115 @@
+table Dim_Cohort
+	lineageTag: 353fdfc1-aaae-4877-b40f-c6169f3740da
+
+	measure 'COHORT | EXIBIR D' =
+			
+			VAR CohortAtual =
+			    SELECTEDVALUE('Dim_Cohort'[COHORT])
+			
+			VAR OrdemAtual =
+			    SELECTEDVALUE('Dim_Cohort'[ORDEM])
+			
+			VAR DataSafra =
+			    SELECTEDVALUE(Dim_Data[Date])
+			
+			VAR DiasPassados =
+			    DATEDIFF(
+			        DataSafra,
+			        DATE(2026, 10, 24),
+			        DAY
+			    )
+			
+			VAR OrdemPermitida =
+			    DiasPassados + 1
+			
+			RETURN
+			SWITCH(
+			    TRUE(),
+			
+			    -- Linha principal da data
+			    ISBLANK(CohortAtual),
+			        1,
+			
+			    -- Segurança
+			    ISBLANK(DataSafra),
+			        BLANK(),
+			
+			    -- Não permite datas futuras
+			    DataSafra > DATE(2026, 10, 23),
+			        BLANK(),
+			
+			    -- D0, D1, D2... somente até o dia já alcançado
+			    OrdemAtual <= OrdemPermitida,
+			        1,
+			
+			    BLANK()
+			)
+		formatString: 0
+		lineageTag: eb193b4b-a6d2-4f74-b3f3-87a6e4e957eb
+
+	measure 'COHORT | EXIBIR DATA' =
+			
+			VAR MailingData =
+			    CALCULATE(
+			        [COHORT | SAFRA],
+			        REMOVEFILTERS('Dim_Cohort')
+			    )
+			
+			RETURN
+			IF(
+			    NOT ISBLANK(MailingData)
+			        && MailingData > 0,
+			    1,
+			    BLANK()
+			)
+		formatString: 0
+		lineageTag: 0c1a732e-3090-43b6-8d50-6733422486d2
+
+	column COHORT
+		lineageTag: e82b9e1f-6e98-4e77-b406-9fb0ac108df6
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [COHORT]
+		sortByColumn: ORDEM
+
+		annotation SummarizationSetBy = Automatic
+
+	column ORDEM
+		formatString: 0
+		lineageTag: 63ee645d-9d97-43c4-a95f-a169ab78848f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ORDEM]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Cohort = calculated
+		mode: import
+		source =
+				
+				DATATABLE(
+				    "COHORT", STRING,
+				    "ORDEM", INTEGER,
+				    {
+				        {"D0", 1},
+				        {"D1", 2},
+				        {"D2", 3},
+				        {"D3", 4},
+				        {"D4", 5},
+				        {"D5", 6},
+				        {"D6", 7},
+				        {"D7", 8},
+				        {"D8", 9},
+				        {"D9", 10},
+				        {"D10", 11},
+				        {"D11", 12},
+				        {"D12", 13},
+				        {"D13", 14},
+				        {"D14", 15},
+				        {"D15", 16},
+				        {"D15+", 17}
+				    }
+				)
+
+	annotation PBI_Id = 967379bc7f6c43c3991fdb66c5b412e1
+

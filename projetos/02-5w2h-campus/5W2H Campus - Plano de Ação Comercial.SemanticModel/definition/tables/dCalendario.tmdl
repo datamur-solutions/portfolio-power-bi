@@ -1,0 +1,89 @@
+table dCalendario
+	lineageTag: 365e2a4b-a16d-558b-8896-3af01637a1e2
+
+	column Data
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: b047856f-cb7a-53cc-8795-746485a7171e
+		summarizeBy: none
+		sourceColumn: Data
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Dia
+		dataType: string
+		lineageTag: 9493c7b4-4e43-5889-b992-2b9a53eff642
+		summarizeBy: none
+		sourceColumn: Dia
+		sortByColumn: Data
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dia da Semana'
+		dataType: string
+		lineageTag: 7d47d828-6687-5b5b-9d10-93ee75b0017a
+		summarizeBy: none
+		sourceColumn: Dia da Semana
+		sortByColumn: 'Nº Dia'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nº Dia'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3f81b868-8c16-5728-80c5-dc26d74c5c1f
+		summarizeBy: none
+		sourceColumn: Nº Dia
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Semana do Mês'
+		dataType: string
+		lineageTag: 355a508a-7805-5953-b394-5cebb4acda0a
+		summarizeBy: none
+		sourceColumn: Semana do Mês
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mês
+		dataType: string
+		lineageTag: 4c0868c2-193e-5f59-a1d8-e6f75df9b1e6
+		summarizeBy: none
+		sourceColumn: Mês
+		sortByColumn: 'Mês (data)'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês (data)'
+		dataType: dateTime
+		isHidden
+		formatString: dd/MM/yyyy
+		lineageTag: 266b52f8-f163-5362-b9d0-65b5b6bb1637
+		summarizeBy: none
+		sourceColumn: Mês (data)
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition dCalendario = m
+		mode: import
+		source =
+				let
+				    S = #"Semanas Base",
+				    Datas = List.Sort(List.Distinct(List.Combine(S[DiasLista]) & List.Combine(#"Ações Expandidas"[DiasAcao]))),
+				    Nomes = {"Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"},
+				    Linhas = List.Transform(Datas, (d) =>
+				        [Data = d, Dia = Date.ToText(d, [Format = "dd/MM"]), #"Dia da Semana" = Nomes{Date.DayOfWeek(d, Day.Monday)}, #"Nº Dia" = Date.DayOfWeek(d, Day.Monday) + 1,
+				         #"Semana do Mês" = "S" & Text.From(SemanaDoMes(d)), Mês = MesTexto(d), #"Mês (data)" = Date.StartOfMonth(d)]),
+				    Tabela = Table.FromRecords(Linhas, {"Data", "Dia", "Dia da Semana", "Nº Dia", "Semana do Mês", "Mês", "Mês (data)"}, MissingField.UseNull),
+				    Tipos = Table.TransformColumnTypes(Tabela, {{"Data", type date}, {"Dia", type text}, {"Dia da Semana", type text}, {"Nº Dia", Int64.Type}, {"Semana do Mês", type text},
+				        {"Mês", type text}, {"Mês (data)", type date}})
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

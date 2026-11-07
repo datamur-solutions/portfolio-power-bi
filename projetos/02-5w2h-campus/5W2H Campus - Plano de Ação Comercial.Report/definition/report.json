@@ -1,0 +1,370 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.3.0/schema.json",
+  "themeCollection": {
+    "customTheme": {
+      "name": "TemaEduNova5W2H.json",
+      "reportVersionAtImport": {
+        "visual": "1.8.91",
+        "report": "2.0.91",
+        "page": "1.3.91"
+      },
+      "type": "RegisteredResources"
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "a7d2ab480a94cd544919",
+        "displayName": "Tipo de ação",
+        "ordinal": 0,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Ações"
+              }
+            },
+            "Property": "Tipo"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User"
+      },
+      {
+        "name": "241c67e1ff5958e874da",
+        "displayName": "Alavanca",
+        "ordinal": 1,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Ações"
+              }
+            },
+            "Property": "Alavanca"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User"
+      },
+      {
+        "name": "82f7fe965eec413ec521",
+        "displayName": "Objetivo",
+        "ordinal": 2,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Ações"
+              }
+            },
+            "Property": "Objetivo da Ação"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User"
+      },
+      {
+        "name": "eaf88e763fe63925bf0f",
+        "displayName": "Status da ação",
+        "ordinal": 3,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Ações"
+              }
+            },
+            "Property": "Status"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User"
+      },
+      {
+        "name": "2e4d8fb3a7e4df703e02",
+        "displayName": "Gerente",
+        "ordinal": 4,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Semanas"
+              }
+            },
+            "Property": "Gerente"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User"
+      },
+      {
+        "name": "bc87715bf7b67ded9264",
+        "displayName": "Modalidade",
+        "ordinal": 5,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dModalidade"
+              }
+            },
+            "Property": "Modalidade"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User"
+      },
+      {
+        "name": "4f38b3a5c355ebaa11ee",
+        "displayName": "Cadastrado por",
+        "ordinal": 6,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Ações"
+              }
+            },
+            "Property": "Cadastrado por"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User"
+      },
+      {
+        "name": "c50f42d958f05ea1143a",
+        "displayName": "Prazo do cadastro",
+        "ordinal": 7,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Ações"
+              }
+            },
+            "Property": "Prazo do Cadastro"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User"
+      },
+      {
+        "name": "ffed026c932c8feaf56a",
+        "displayName": "Função",
+        "ordinal": 8,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Semanas"
+              }
+            },
+            "Property": "Função"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User"
+      },
+      {
+        "name": "0691a1c434290b16226f",
+        "displayName": "Situação do consultor",
+        "ordinal": 9,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Semanas"
+              }
+            },
+            "Property": "Situação"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User"
+      },
+      {
+        "name": "9a57df1c27b44be955a4",
+        "displayName": "Consultor ativo no cadastro",
+        "ordinal": 10,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Consultores"
+              }
+            },
+            "Property": "Ativo"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User"
+      },
+      {
+        "name": "753ec588d8faa66c0df6",
+        "displayName": "Busca · consultor",
+        "ordinal": 11,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Semanas"
+              }
+            },
+            "Property": "Consultor"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User"
+      },
+      {
+        "name": "5fc5248372394bb06627",
+        "displayName": "Busca · matrícula",
+        "ordinal": 12,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Semanas"
+              }
+            },
+            "Property": "Matrícula"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User"
+      },
+      {
+        "name": "f0ddcb761587e4b11998",
+        "displayName": "Busca · unidade",
+        "ordinal": 13,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Semanas"
+              }
+            },
+            "Property": "Unidade"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User"
+      },
+      {
+        "name": "84094ea0255b570761e4",
+        "displayName": "UF",
+        "ordinal": 14,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Semanas"
+              }
+            },
+            "Property": "UF"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User"
+      }
+    ],
+    "filterSortOrder": "Custom"
+  },
+  "objects": {
+    "outspacePane": [
+      {
+        "properties": {
+          "expanded": {
+            "expr": {
+              "Literal": {
+                "Value": "false"
+              }
+            }
+          },
+          "visible": {
+            "expr": {
+              "Literal": {
+                "Value": "true"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "publicCustomVisuals": [
+    "deneb7E15AEF80B9E4D4F8E12924291ECE89A"
+  ],
+  "resourcePackages": [
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "fundo_p_conv.png",
+          "path": "fundo_p_conv.png",
+          "type": "Image"
+        },
+        {
+          "name": "fundo_p_custo.png",
+          "path": "fundo_p_custo.png",
+          "type": "Image"
+        },
+        {
+          "name": "fundo_p_diag.png",
+          "path": "fundo_p_diag.png",
+          "type": "Image"
+        },
+        {
+          "name": "fundo_p_equipe.png",
+          "path": "fundo_p_equipe.png",
+          "type": "Image"
+        },
+        {
+          "name": "fundo_p_exec.png",
+          "path": "fundo_p_exec.png",
+          "type": "Image"
+        },
+        {
+          "name": "fundo_p_geral.png",
+          "path": "fundo_p_geral.png",
+          "type": "Image"
+        },
+        {
+          "name": "fundo_p_ins.png",
+          "path": "fundo_p_ins.png",
+          "type": "Image"
+        },
+        {
+          "name": "fundo_p_mapa.png",
+          "path": "fundo_p_mapa.png",
+          "type": "Image"
+        },
+        {
+          "name": "fundo_p_prod.png",
+          "path": "fundo_p_prod.png",
+          "type": "Image"
+        },
+        {
+          "name": "fundo_p_ref.png",
+          "path": "fundo_p_ref.png",
+          "type": "Image"
+        },
+        {
+          "name": "fundo_p_venc.png",
+          "path": "fundo_p_venc.png",
+          "type": "Image"
+        },
+        {
+          "name": "TemaEduNova5W2H.json",
+          "path": "TemaEduNova5W2H.json",
+          "type": "CustomTheme"
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "useEnhancedTooltips": false
+  }
+}

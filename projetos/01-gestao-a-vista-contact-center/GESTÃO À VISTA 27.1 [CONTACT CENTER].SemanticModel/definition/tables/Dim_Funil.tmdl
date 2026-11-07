@@ -1,0 +1,60 @@
+table Dim_Funil
+	lineageTag: 7e7184d0-1ffc-4476-ae8a-4c11060abfb4
+
+	column Etapa
+		lineageTag: a0b03a66-5060-4211-8f0e-b2d557129cde
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Etapa]
+		sortByColumn: Ordem
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordem
+		formatString: 0
+		lineageTag: 0b533ab2-4155-44b2-b29a-a1042ba1a0ee
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Ordem]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tipo
+		lineageTag: fa39f4ea-0351-4dd5-a827-907410af42ca
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Tipo]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Funil = calculated
+		mode: import
+		source =
+				
+				DATATABLE(
+				    "Etapa", STRING,
+				    "Ordem", INTEGER,
+				    "Tipo", STRING,
+				    {
+				        {"MAILING", 1, "VOLUME"},
+				        {"TRABALHADOS", 2, "VOLUME"},
+				        {"TENTATIVAS", 3, "VOLUME"},
+				        {"ATENDIDOS", 4, "VOLUME"},
+				        {"EFETIVOS", 5, "VOLUME"},
+				        {"VENDAS", 6, "VOLUME"},
+				        {"MATRICULAS", 7, "VOLUME"},
+				
+				        {"SPIN", 8, "INDICADOR"},
+				        {"% TRAB", 9, "INDICADOR"},
+				        {"HITRATE", 10, "INDICADOR"},
+				        {"% ATENDIDO/BASE", 11, "INDICADOR"},
+				        {"% EFETIVO/ATENDIDO", 12, "INDICADOR"},
+				        {"% EFETIVO/BASE", 13, "INDICADOR"},
+				        {"% CONV VENDA", 14, "INDICADOR"},
+				        {"% RET", 15, "INDICADOR"},
+				        {"% CONV MAT", 16, "INDICADOR"}
+				    }
+				)
+
+	annotation PBI_Id = fffcf95e86a24e848da3f48c106e9253
+

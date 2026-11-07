@@ -1,0 +1,23 @@
+table DIM_PRODUTO
+	lineageTag: 5d017ad3-e252-4a11-a461-536ca2315c8e
+
+	column tipo_curso
+		lineageTag: 6879ef8d-be5f-416f-afb3-e265616cf2ae
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: CAPCOM[tipo_curso]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_PRODUTO = calculated
+		mode: import
+		source =
+				
+				FILTER(
+				    DISTINCT('CAPCOM'[tipo_curso]),
+				    NOT(ISBLANK('CAPCOM'[tipo_curso]))
+				        && 'CAPCOM'[tipo_curso] <> ""
+				)
+
+	annotation PBI_Id = b21deaeecb8c44c3bd896481937ecc0e
+
