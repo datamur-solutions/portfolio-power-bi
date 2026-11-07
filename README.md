@@ -4,7 +4,7 @@
 
 # Portfólio de Business Intelligence · Power BI
 
-Sou **SEU NOME**, analista de Planejamento e Inteligência Comercial e fundador da **DataMur Solutions**.
+Sou **Murillo Jesus**, analista de Planejamento e Inteligência Comercial e fundador da **DataMur Solutions**.
 Construo painéis que acompanham o funil de conversão (de inscrito a matriculado), a operação de times
 comerciais e de contact center e a saúde financeira da empresa, sempre com foco em **decisão**: o que
 está fora da meta, onde está o gap e qual alavanca move o resultado.
@@ -13,7 +13,7 @@ está fora da meta, onde está o gap e qual alavanca move o resultado.
 > fictícios**, gerados para portfólio. A estrutura do modelo, as regras de negócio e as análises
 > reproduzem o trabalho real, sem nenhuma informação de empresas ou clientes.
 
-📫 **Contato:** [LinkedIn](https://www.linkedin.com/in/SEU-LINKEDIN) · SEU-EMAIL
+📫 **Contato:** [LinkedIn](https://www.linkedin.com/in/murillo-mateus-832202230/) · [murillomateus@gmail.com](mailto:murillomateus@gmail.com)
 
 ---
 
